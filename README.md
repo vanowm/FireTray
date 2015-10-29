@@ -1,4 +1,4 @@
-FireRray - patched for KDE
+FireTray - patched for KDE
 =======
 
 Overview
