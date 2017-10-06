@@ -1,6 +1,8 @@
 FireTray - patched for KDE
 =======
 
+**[THIS PROJECT IS DISCONTINUED](https://foudil.fr/blog/209/the-web-is-not-the-platform/)**
+
 Overview
 --------
 
