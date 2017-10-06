@@ -155,7 +155,7 @@ firetray.Handler.setIconTooltip = function(toolTipStr) {
 //
 // sajan
 firetray.Handler.setIconText = function(text, color) { 
-	log.error("NOT SUPPORTED: " + text);
+	//log.error("NOT SUPPORTED: " + text);
 
 	if (text > 99) {
 		text = "max";
@@ -163,7 +163,7 @@ firetray.Handler.setIconText = function(text, color) {
 
 	appind.app_indicator_set_icon_full(
 		firetray.AppIndicator.indicator,
-		"unread/unread-" + text,
+		"unread-" + text,
 		firetray.Handler.app.name);
 };
 

@@ -19,7 +19,7 @@ for N in `seq 1 100`; do
 		cat unread-XXX.svg | sed "s/%MAIL_COUNT%/99+/" > ${TMP_FILE}.svg
 	fi
 
-	inkscape -z -d $DENSITY ${TMP_FILE}.svg -e ${TMP_FILE}.png
+	#inkscape -z -d $DENSITY ${TMP_FILE}.svg -e ${TMP_FILE}.png
 
-	rm ${TMP_FILE}.svg
+	#rm ${TMP_FILE}.svg
 done
