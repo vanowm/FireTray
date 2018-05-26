@@ -1,4 +1,4 @@
-FireTray - patched for KDE
+FireTray - patched for KDE - patched for OpenSuSE
 =======
 
 **[THIS PROJECT IS DISCONTINUED](https://foudil.fr/blog/209/the-web-is-not-the-platform/)**
