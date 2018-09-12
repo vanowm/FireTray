@@ -6,11 +6,17 @@ FireTray - patched for KDE - patched for OpenSuSE
 Hopefully I can revive this great add-on for TB60.  
 Still not fully functional but we got an icon in the tray again :-)  
 
-Still not working:  
+Working:  
+
+Preferences menu  
+Tray icon  
+Open/close thunderbird clicking on the icon  
+
+Still NOT working:  
 
 Getting accounts  
 Unread / new messages check  
-And probably a lot of other stuff  
+And probably a lot of other stuff 
 
 For now I will only work on the Linux version.  
 
