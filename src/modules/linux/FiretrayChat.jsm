@@ -321,12 +321,15 @@ firetray.Chat = {
       log.debug("globalConnected="+globalConnected);
       return globalConnected;
 
-    } catch (e if e instanceof Components.Exception &&
-             e.result === Components.results.NS_ERROR_XPC_JAVASCRIPT_ERROR_WITH_DETAILS &&
-             /_items is undefined/.test(e.message)) {
-      return false;             // ignore
     } catch(e) {
-      log.error(e); return false;
+      if (e instanceof Components.Exception  ) {
+        if (e.result === Components.results.NS_ERROR_XPC_JAVASCRIPT_ERROR_WITH_DETAILS &&
+             /_items is undefined/.test(e.message)) {
+          return false;             // ignore
+        }
+      } else {
+        log.error(e); return false;
+      }
     }
   }
 
