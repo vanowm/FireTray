@@ -162,7 +162,7 @@ function ctypes_library(aName, aABIs, aDefines, aGlobal) {
     let lib = {
       declare: function() {
         try {
-          args = [];
+          var args = [];
           args.push(arguments[0]);
           // FIXME: ugly hack. We'll see when we need WinCbABI
           if (this.ABI === 'dll') {
@@ -170,8 +170,8 @@ function ctypes_library(aName, aABIs, aDefines, aGlobal) {
           } else {
             args.push(ctypes.default_abi);
           }
-          for (let arg of Object.values(Array.prototype.slice.call(arguments, 1))) { 
-//          for each (let arg in Array.prototype.slice.call(arguments, 1)) {
+//        for each (let arg in Array.prototype.slice.call(arguments, 1)) {
+          for (let arg of Array.prototype.slice.call(arguments, 1)) { 
             args.push(arg);
           }
 
