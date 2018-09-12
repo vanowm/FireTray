@@ -175,7 +175,7 @@ if (gtk.gtk_get_major_version() == 3 && gtk.gtk_get_minor_version() >= 8) { // g
       alpha_bak: alpha_bak
     };
   },
-  dropPixBuf: function() {
+  dropPixBuf: function*() {
     gobject.g_object_unref(this.pixBuffer.pixbuf);
     log.debug("pixbuf unref'd");
     this.pixBuffer = {};
@@ -189,7 +189,7 @@ if (gtk.gtk_get_major_version() == 3 && gtk.gtk_get_minor_version() >= 8) { // g
         if (pixbuf.pixels.contents[i]-ALPHA_STEP>0)
           pixbuf.pixels.contents[i] -= ALPHA_STEP;
       gtk.gtk_status_icon_set_from_pixbuf(firetray.ChatStatusIcon.trayIcon, pixbuf.pixbuf);
-//      yield true;
+      yield true;
     }
 
     for (let a=255; a>0; a-=ALPHA_STEP) {
@@ -198,9 +198,8 @@ if (gtk.gtk_get_major_version() == 3 && gtk.gtk_get_minor_version() >= 8) { // g
           pixbuf.pixels.contents[i] += ALPHA_STEP;
         }
       gtk.gtk_status_icon_set_from_pixbuf(firetray.ChatStatusIcon.trayIcon, pixbuf.pixbuf);
-//      yield true;
+      yield true;
     }
-    return true;
   },
 
   fadeStep: function() {
