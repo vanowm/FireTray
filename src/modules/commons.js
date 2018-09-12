@@ -231,24 +231,24 @@ firetray.Utils = {
   XPath: function(ref, xpath) {
     var doc = ref.ownerDocument || ref;
 
-    const XPathResult = Ci.nsIDOMXPathResult;
+//    const XPathResult = Ci.nsIDOMXPathResult;
     try {
       let that = this;
       var result = doc.evaluate(xpath, ref, that._nsResolver,
-                                XPathResult.ANY_TYPE, null);
+                                0, null);
     } catch (x) {
       log.error(x);
     }
     log.debug("XPathResult="+result.resultType);
 
     switch (result.resultType) {
-    case XPathResult.NUMBER_TYPE:
+    case 1:
       return result.numberValue;
-    case XPathResult.BOOLEAN_TYPE:
-      return result.booleanValue;
-    case XPathResult.STRING_TYPE:
+    case 2:
       return result.stringValue;
-    } // else XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
+    case 3:
+      return result.booleanValue;
+    } // else 4:
 
     var list = [];
     try {
