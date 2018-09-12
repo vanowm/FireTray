@@ -9,14 +9,14 @@ Still not fully functional but we got an icon in the tray again :-)
 Working:  
 
 Preferences menu  
-Tray icon  
+Tray icon (when there is no mail...)  
 Open/close thunderbird clicking on the icon  
 
 Still NOT working:  
 
-Getting accounts  
-Unread / new messages check  
-And probably a lot of other stuff 
+Tray icon (when there is mail...)  
+
+
 
 For now I will only work on the Linux version.  
 
