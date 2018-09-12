@@ -209,29 +209,30 @@ if (gtk.gtk_get_major_version() == 3 && gtk.gtk_get_minor_version() >= 8) { // g
           { notify: firetray.ChatStatusIcon.fadeStep },
           ALPHA_STEP_SLEEP_MILLISECONDS, Ci.nsITimer.TYPE_ONE_SHOT);
 
-    } catch (e if e instanceof StopIteration) {
+    } catch (e) {
+      if (e instanceof StopIteration) {
+        if (firetray.ChatStatusIcon.events['stop-fade']) {
+            log.debug("stop-fade");
+            delete firetray.ChatStatusIcon.events['stop-fade'];
+            delete firetray.ChatStatusIcon.generators['fade'];
+            firetray.ChatStatusIcon.setIconImage(firetray.ChatStatusIcon.themedIconNameCurrent);
+            firetray.ChatStatusIcon.dropPixBuf();
+            return;
+        }
 
-      if (firetray.ChatStatusIcon.events['stop-fade']) {
-        log.debug("stop-fade");
-        delete firetray.ChatStatusIcon.events['stop-fade'];
-        delete firetray.ChatStatusIcon.generators['fade'];
-        firetray.ChatStatusIcon.setIconImage(firetray.ChatStatusIcon.themedIconNameCurrent);
-        firetray.ChatStatusIcon.dropPixBuf();
-        return;
-      }
+        if (firetray.ChatStatusIcon.events['icon-changed']) {
+            delete firetray.ChatStatusIcon.events['icon-changed'];
+            firetray.ChatStatusIcon.dropPixBuf();
+            firetray.ChatStatusIcon.buildPixBuf();
+            firetray.ChatStatusIcon.timers['fade-loop'].initWithCallback(
+            { notify: firetray.ChatStatusIcon.fadeLoop },
+            FADE_OVER_SLEEP_MILLISECONDS, Ci.nsITimer.TYPE_ONE_SHOT);
 
-      if (firetray.ChatStatusIcon.events['icon-changed']) {
-        delete firetray.ChatStatusIcon.events['icon-changed'];
-        firetray.ChatStatusIcon.dropPixBuf();
-        firetray.ChatStatusIcon.buildPixBuf();
-        firetray.ChatStatusIcon.timers['fade-loop'].initWithCallback(
-          { notify: firetray.ChatStatusIcon.fadeLoop },
-          FADE_OVER_SLEEP_MILLISECONDS, Ci.nsITimer.TYPE_ONE_SHOT);
-
-      } else {
-        firetray.ChatStatusIcon.timers['fade-loop'].initWithCallback(
-          { notify: firetray.ChatStatusIcon.fadeLoop },
-          FADE_OVER_SLEEP_MILLISECONDS, Ci.nsITimer.TYPE_ONE_SHOT);
+        } else {
+            firetray.ChatStatusIcon.timers['fade-loop'].initWithCallback(
+            { notify: firetray.ChatStatusIcon.fadeLoop },
+            FADE_OVER_SLEEP_MILLISECONDS, Ci.nsITimer.TYPE_ONE_SHOT);
+        }
       }
     };
   },
