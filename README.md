@@ -3,16 +3,16 @@ FireTray - patched for KDE - patched for OpenSuSE
 
 =================
 
-Hopefully I can revive this great add-on for TB60.
-Still not fully functional but we got an icon in the tray again :-)
+Hopefully I can revive this great add-on for TB60.  
+Still not fully functional but we got an icon in the tray again :-)  
 
-Still not working:
+Still not working:  
 
-Getting accounts
-Unread / new messages check
-And probably a lot of other stuff
+Getting accounts  
+Unread / new messages check  
+And probably a lot of other stuff  
 
-For now I will only work on the Linux version.
+For now I will only work on the Linux version.  
 
 ==================
 
