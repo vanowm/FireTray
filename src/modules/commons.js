@@ -230,7 +230,6 @@ firetray.Utils = {
   XPath: function(ref, xpath) {
     var doc = ref.ownerDocument || ref;
 
-//    const XPathResult = Ci.nsIDOMXPathResult;
     try {
       let that = this;
       var result = doc.evaluate(xpath, ref, that._nsResolver,
