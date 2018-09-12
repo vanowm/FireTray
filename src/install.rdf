@@ -9,7 +9,7 @@
     <em:name>FireTray</em:name>
     <em:version>0.6.1-p20171006</em:version> <!-- change FIRETRAY_VERSION accordingly ! -->
     <em:creator>Hua Luo, Francesco Solero, Foudil BRÉTEL</em:creator>
-    <em:contributor>Hua Luo, Francesco Solero (Firetray original authors), Maxime Rijnders</em:contributor>
+    <em:contributor>Hua Luo, Francesco Solero (Firetray original authors)</em:contributor>
     <em:homepageURL>https://github.com/foudfou/firetray</em:homepageURL>
     <em:description>A system tray extension.</em:description>
     <em:optionsURL>chrome://firetray/content/options.xul</em:optionsURL>
@@ -77,6 +77,7 @@
     <em:contributor>Roland Tapken</em:contributor>
     <em:contributor>David Prévot</em:contributor>
     <em:contributor>Scott Furry</em:contributor>
+    <em:contributor>Maxime Rijnders</em:contributor>
 
     <em:translator>Lyubomir Vasilev [bg-BG]</em:translator>
     <em:translator>SoftcatalàAljullu,ellibre [ca-AD]</em:translator>
