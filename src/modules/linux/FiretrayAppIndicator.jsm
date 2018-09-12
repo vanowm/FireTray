@@ -80,11 +80,12 @@ firetray.AppIndicator = {
 
   attachMiddleClickCallback: function() {
     let pref = firetray.Utils.prefService.getIntPref("middle_click");
+    let item;
     if (pref === FIRETRAY_MIDDLE_CLICK_ACTIVATE_LAST) {
-      var item = firetray.PopupMenu.menuItem.activateLast;
+      item = firetray.PopupMenu.menuItem.activateLast;
       firetray.PopupMenu.showItem(firetray.PopupMenu.menuItem.activateLast);
     } else if (pref === FIRETRAY_MIDDLE_CLICK_SHOW_HIDE) {
-      var item = firetray.PopupMenu.menuItem.showHide;
+      item = firetray.PopupMenu.menuItem.showHide;
       firetray.PopupMenu.hideItem(firetray.PopupMenu.menuItem.activateLast);
     } else {
       log.error("Unknown pref value for 'middle_click': "+pref);
