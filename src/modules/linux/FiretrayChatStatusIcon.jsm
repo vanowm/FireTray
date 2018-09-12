@@ -175,13 +175,13 @@ if (gtk.gtk_get_major_version() == 3 && gtk.gtk_get_minor_version() >= 8) { // g
       alpha_bak: alpha_bak
     };
   },
-  dropPixBuf: function*() {
+  dropPixBuf: function() {
     gobject.g_object_unref(this.pixBuffer.pixbuf);
     log.debug("pixbuf unref'd");
     this.pixBuffer = {};
   },
 
-  fadeGenerator: function() {
+  fadeGenerator: function*() {
     let pixbuf = firetray.ChatStatusIcon.pixBuffer;
 
     for (let a=255; a>0; a-=ALPHA_STEP) {
