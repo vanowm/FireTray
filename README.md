@@ -6,7 +6,7 @@ FireTray - patched for KDE - patched for OpenSuSE
 Working:  
 
 Preferences menu  
-Tray icon, except new message count
+Tray icon, except new message count  
 Open/close thunderbird clicking on the icon  
 
 Still NOT working:  
