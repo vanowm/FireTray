@@ -3,19 +3,15 @@ FireTray - patched for KDE - patched for OpenSuSE
 
 =================
 
-Hopefully I can revive this great add-on for TB60.  
-Still not fully functional but we got an icon in the tray again :-)  
-
 Working:  
 
 Preferences menu  
-Tray icon (when there is no mail...)  
+Tray icon, except new message count
 Open/close thunderbird clicking on the icon  
 
 Still NOT working:  
 
-Tray icon (when there is mail...)  
-
+Tray icon with new message count
 
 
 For now I will only work on the Linux version.  
