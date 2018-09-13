@@ -228,11 +228,22 @@ firetray.Handler.setIconText = function(text, color) {
 
   try {
     // build background from image
-    let specialIcon = gdk.gdk_pixbuf_new_from_file(
-      firetray.GtkStatusIcon.FILENAME_BLANK, null); // GError **error);
-    let dest = gdk.gdk_pixbuf_copy(specialIcon);
-    let w = gdk.gdk_pixbuf_get_width(specialIcon);
-    let h = gdk.gdk_pixbuf_get_height(specialIcon);
+    let icon_name = "mail-unread";
+//    let icon_name = "thunderbird";
+    let icon_theme = gtk.gtk_icon_theme_get_for_screen(gdk.gdk_screen_get_default());
+
+    // get pixbuf
+    let arry = gobject.gchar.ptr.array()(2);
+    arry[0] = gobject.gchar.array()(icon_name);
+    arry[1] = null;
+    log.debug("icon name="+icon_name+", theme="+icon_theme+", arry="+arry);
+    let icon_info = gtk.gtk_icon_theme_choose_icon(icon_theme, arry, 22, gtk.GTK_ICON_LOOKUP_FORCE_SIZE);
+
+    // create pixbuf
+    let dest = gdk.gdk_pixbuf_copy(gtk.gtk_icon_info_load_icon(icon_info, null));
+
+    let w = gdk.gdk_pixbuf_get_width(dest);
+    let h = gdk.gdk_pixbuf_get_height(dest);
 
     // prepare colors/alpha
 /* FIXME: draw everything with cairo when dropping gtk2 support. Use
