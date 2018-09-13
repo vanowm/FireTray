@@ -367,12 +367,12 @@ firetray.Messaging = {
  */
 firetray.Messaging.Accounts = function*(sortByTypeAndName) {
   if (typeof(sortByTypeAndName) === "undefined") {
-    this.sortByTypeAndName = false;
+    sortByTypeAndName = false;
   } else if (typeof(sortByTypeAndName) !== "boolean") {
     throw new TypeError();
   }
 
-  log.debug("sortByTypeAndName="+sortByTypeAndName);
+  log.debug("sortByTypeAndName=" + sortByTypeAndName);
 
   /* NOTE: sort() not provided by nsIMsgAccountManager.accounts
    (nsISupportsArray or nsIArray if xulrunner >= 20.0). Should be OK to
