@@ -1,22 +1,6 @@
 FireTray - patched for KDE - patched for OpenSuSE
 =======
 
-=================
-
-Working:  
-
-Preferences menu  
-Tray icon, except new message count  
-Open/close thunderbird clicking on the icon  
-
-Still NOT working:  
-
-Tray icon with new message count
-
-
-For now I will only work on the Linux version.  
-
-==================
 
 Overview
 --------
