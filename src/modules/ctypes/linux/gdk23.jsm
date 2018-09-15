@@ -228,6 +228,7 @@ function gdk23_defines(lib) {
   lib.lazy_bind("gdk_pixbuf_get_rowstride", ctypes.int, this.GdkPixbuf.ptr);
   lib.lazy_bind("gdk_pixbuf_get_byte_length", gobject.gsize, this.GdkPixbuf.ptr);
   lib.lazy_bind("gdk_pixbuf_copy", this.GdkPixbuf.ptr, this.GdkPixbuf.ptr);
+  lib.lazy_bind("gdk_pixbuf_save", gobject.gboolean, this.GdkPixbuf.ptr, gobject.gchar.ptr, gobject.gchar.ptr, glib.GError.ptr.ptr, gobject.gchar.ptr);
 
   lib.lazy_bind("gdk_screen_get_system_visual", this.GdkVisual.ptr, this.GdkScreen.ptr);
   lib.lazy_bind("gdk_screen_get_system_colormap", this.GdkColormap.ptr, this.GdkScreen.ptr);
