@@ -7,13 +7,18 @@ const Ci = Components.interfaces;
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/ctypes.jsm");
+Cu.import("resource://gre/modules/osfile.jsm")
 Cu.import("resource://firetray/commons.js"); // first for Handler.app !
 Cu.import("resource://firetray/ctypes/linux/gobject.jsm");
 // FIXME: can't subscribeLibsForClosing([appind])
 // https://bugs.launchpad.net/ubuntu/+source/firefox/+bug/1393256
 Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/appindicator.jsm");
+Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gdk.jsm");
 Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gtk.jsm");
-firetray.Handler.subscribeLibsForClosing([gobject, gtk]);
+Cu.import("resource://firetray/ctypes/linux/cairo.jsm");
+Cu.import("resource://firetray/ctypes/linux/pango.jsm");
+Cu.import("resource://firetray/ctypes/linux/pangocairo.jsm");
+firetray.Handler.subscribeLibsForClosing([gobject, gdk, gtk, cairo, pango, pangocairo]);
 
 let log = firetray.Logging.getLogger("firetray.AppIndicator");
 
@@ -25,7 +30,9 @@ firetray.AppIndicator = {
   initialized: false,
   callbacks: {},
   indicator: null,
-
+  tempfile: null,
+  MIN_FONT_SIZE: 4,
+  
   init: function() {
     this.indicator = appind.app_indicator_new(
       FIRETRAY_APPINDICATOR_ID,
@@ -33,14 +40,9 @@ firetray.AppIndicator = {
       appind.APP_INDICATOR_CATEGORY_COMMUNICATIONS
     );
 
-
-    //appind.app_indicator_set_icon_theme_path(this.indicator, firetray.StatusIcon.THEME_ICON_PATH);
-    appind.app_indicator_set_icon_theme_path(this.indicator, 
-       Components.classes["@mozilla.org/file/directory_service;1"].getService( Components.interfaces.nsIProperties).get("ProfD", Components.interfaces.nsIFile).path 
-       + "/extensions/{9533f794-00b4-4354-aa15-c2bbda6989f8}/chrome/skin/icons/"
-    );
-
-
+    this.tempfile = Components.classes["@mozilla.org/file/directory_service;1"].getService( Components.interfaces.nsIProperties).get("TmpD", Components.interfaces.nsIFile).path 
+       + "/thunderbird.png";
+  
     appind.app_indicator_set_status(this.indicator,
                                     appind.APP_INDICATOR_STATUS_ACTIVE);
     appind.app_indicator_set_menu(this.indicator,
@@ -64,6 +66,7 @@ firetray.AppIndicator = {
     log.debug("Disabling AppIndicator");
     gobject.g_object_unref(this.indicator);
     this.initialized = false;
+    OS.File.remove(this.tempfile);
   },
 
   addCallbacks: function() {
@@ -82,11 +85,13 @@ firetray.AppIndicator = {
     let pref = firetray.Utils.prefService.getIntPref("middle_click");
     let item;
     if (pref === FIRETRAY_MIDDLE_CLICK_ACTIVATE_LAST) {
+      log.debug("MiddleClick=Last");
       item = firetray.PopupMenu.menuItem.activateLast;
-      firetray.PopupMenu.showItem(firetray.PopupMenu.menuItem.activateLast);
+//      firetray.PopupMenu.showItem(firetray.PopupMenu.menuItem.activateLast);
     } else if (pref === FIRETRAY_MIDDLE_CLICK_SHOW_HIDE) {
+      log.debug("MiddleClick=ShowHide");
       item = firetray.PopupMenu.menuItem.showHide;
-      firetray.PopupMenu.hideItem(firetray.PopupMenu.menuItem.activateLast);
+//      firetray.PopupMenu.hideItem(firetray.PopupMenu.menuItem.showHide);
     } else {
       log.error("Unknown pref value for 'middle_click': "+pref);
       return false;
@@ -156,16 +161,152 @@ firetray.Handler.setIconTooltip = function(toolTipStr) {
 //
 // sajan
 firetray.Handler.setIconText = function(text, color) { 
-	//log.error("NOT SUPPORTED: " + text);
+    log.debug("setIconText: " + text);
 
-	if (text > 99) {
-		text = "max";
-	}
+    log.debug("setIconText, Name: " + firetray.StatusIcon.defaultNewMailIconName);
 
-	appind.app_indicator_set_icon_full(
-		firetray.AppIndicator.indicator,
-		"unread-" + text,
-		firetray.Handler.app.name);
+    log.debug("setIconText, Temp: " + firetray.AppIndicator.tempfile);
+    
+    let icon_theme = gtk.gtk_icon_theme_get_for_screen(gdk.gdk_screen_get_default());
+    let arry = gobject.gchar.ptr.array()(2);
+    arry[0] = gobject.gchar.array()(firetray.StatusIcon.defaultNewMailIconName);
+    arry[1] = null;
+    let icon_info = gtk.gtk_icon_theme_choose_icon(icon_theme, arry, 22, gtk.GTK_ICON_LOOKUP_FORCE_SIZE);
+    let dest = gdk.gdk_pixbuf_copy(gtk.gtk_icon_info_load_icon(icon_info, null));
+
+    
+ 
+    let w = gdk.gdk_pixbuf_get_width(dest);
+    let h = gdk.gdk_pixbuf_get_height(dest);
+
+    // prepare colors/alpha
+/* FIXME: draw everything with cairo when dropping gtk2 support. Use
+ gdk_pixbuf_get_from_surface(). */
+if (firetray.Handler.app.widgetTk == "gtk2") {
+    var colorMap = gdk.gdk_screen_get_system_colormap(gdk.gdk_screen_get_default());
+    var visual = gdk.gdk_colormap_get_visual(colorMap);
+    var visualDepth = visual.contents.depth;
+    log.debug("colorMap="+colorMap+" visual="+visual+" visualDepth="+visualDepth);
+}
+    let fore = new gdk.GdkColor;
+    fore.pixel = fore.red = fore.green = fore.blue = 0;
+    let back = new gdk.GdkColor;
+    back.pixel = back.red = back.green = back.blue = 0xFEFE;
+    let alpha  = new gdk.GdkColor;
+    alpha.pixel = alpha.red = alpha.green = alpha.blue = 0xFFFF;
+    if (!fore || !alpha)
+      log.warn("Undefined fore or alpha GdkColor");
+    gdk.gdk_color_parse(color, fore.address());
+    if(fore.red == alpha.red && fore.green == alpha.green && fore.blue == alpha.blue) {
+      alpha.red=0; // make sure alpha is different from fore
+    }
+if (firetray.Handler.app.widgetTk == "gtk2") {
+    gdk.gdk_colormap_alloc_color(colorMap, fore.address(), true, true);
+    gdk.gdk_colormap_alloc_color(colorMap, back.address(), true, true);
+    gdk.gdk_colormap_alloc_color(colorMap, alpha.address(), true, true);
+}
+
+    // build text rectangle
+    let cr;
+if (firetray.Handler.app.widgetTk == "gtk2") {
+    var pm = gdk.gdk_pixmap_new(null, w, h, visualDepth);
+    var pmDrawable = ctypes.cast(pm, gdk.GdkDrawable.ptr);
+    cr = gdk.gdk_cairo_create(pmDrawable);
+} else {
+    // FIXME: gtk3 text position is incorrect.
+    var surface = cairo.cairo_image_surface_create(cairo.CAIRO_FORMAT_ARGB32, w, h);
+    cr = cairo.cairo_create(surface);
+}
+
+    gdk.gdk_cairo_set_source_color(cr, alpha.address());
+    cairo.cairo_rectangle(cr, 0, 0, w, h);
+    cairo.cairo_set_source_rgb(cr, 1, 1, 1);
+    cairo.cairo_fill(cr);
+
+//    gdk.gdk_cairo_set_source_color(cr, back.address());
+//    cairo.cairo_rectangle(cr, 0, 0, w/2, h/2);
+//    cairo.cairo_fill(cr);
+   
+    // build text
+    let scratch = gtk.gtk_window_new(gtk.GTK_WINDOW_TOPLEVEL);
+    let layout = gtk.gtk_widget_create_pango_layout(scratch, null);
+    gtk.gtk_widget_destroy(scratch);
+    let fnt = pango.pango_font_description_from_string("Sans 32");
+    pango.pango_font_description_set_weight(fnt, pango.PANGO_WEIGHT_SEMIBOLD);
+    pango.pango_layout_set_spacing(layout, 0);
+    pango.pango_layout_set_font_description(layout, fnt);
+    log.debug("layout="+layout);
+    log.debug("text="+text);
+    pango.pango_layout_set_text(layout, text,-1);
+    let tw = new ctypes.int;
+    let th = new ctypes.int;
+    let sz;
+    let border = 4;
+    pango.pango_layout_get_pixel_size(layout, tw.address(), th.address());
+    log.debug("tw="+tw.value+" th="+th.value);
+    // fit text to the icon by decreasing font size
+    while ( tw.value > (w - border) || th.value > (h - border) ) {
+      sz = pango.pango_font_description_get_size(fnt);
+      if (sz < firetray.AppIndicator.MIN_FONT_SIZE) {
+        sz = firetray.AppIndicator.MIN_FONT_SIZE;
+        break;
+      }
+      sz -= pango.PANGO_SCALE;
+      pango.pango_font_description_set_size(fnt, sz);
+      pango.pango_layout_set_font_description(layout, fnt);
+      pango.pango_layout_get_pixel_size(layout, tw.address(), th.address());
+    }
+    log.debug("tw="+tw.value+" th="+th.value+" sz="+sz);
+    pango.pango_font_description_free(fnt);
+    // center text
+    let px = (w-tw.value)/2;
+    let py = (h-th.value)/2;
+    log.debug("px="+px+" py="+py);
+
+    // draw text on pixmap
+    gdk.gdk_cairo_set_source_color(cr, fore.address());
+    cairo.cairo_move_to(cr, px, py);
+    pangocairo.pango_cairo_show_layout(cr, layout);
+    cairo.cairo_destroy(cr);
+    gobject.g_object_unref(layout);
+
+    let buf = null;
+if (firetray.Handler.app.widgetTk == "gtk2") {
+    buf = gdk.gdk_pixbuf_get_from_drawable(null, pmDrawable, null, 0, 0, 0, 0, w, h);
+    gobject.g_object_unref(pm);
+}
+else {
+    buf = gdk.gdk_pixbuf_get_from_surface(surface, 0, 0, w, h);
+    cairo.cairo_surface_destroy(surface);
+}
+    log.debug("alpha="+alpha);
+    let alphaRed = gobject.guint16(alpha.red);
+    let alphaRed_guchar = ctypes.cast(alphaRed, gobject.guchar);
+    let alphaGreen = gobject.guint16(alpha.green);
+    let alphaGreen_guchar = ctypes.cast(alphaGreen, gobject.guchar);
+    let alphaBlue = gobject.guint16(alpha.blue);
+    let alphaBlue_guchar = ctypes.cast(alphaBlue, gobject.guchar);
+    let bufAlpha = gdk.gdk_pixbuf_add_alpha(buf, true, alphaRed_guchar, alphaGreen_guchar, alphaBlue_guchar);
+    gobject.g_object_unref(buf);
+
+    // merge the rendered text on top
+    gdk.gdk_pixbuf_composite(bufAlpha,dest,0,0,w,h,0,0,1,1,gdk.GDK_INTERP_BILINEAR,255);
+    gobject.g_object_unref(bufAlpha);
+
+    // Workaround
+    gdk.gdk_pixbuf_save(dest, firetray.AppIndicator.tempfile, "png", null, null);
+
+    appind.app_indicator_set_icon_full(
+      firetray.AppIndicator.indicator,
+      firetray.StatusIcon.defaultNewMailIconName,
+      firetray.Handler.app.name);
+
+    appind.app_indicator_set_icon_full(
+      firetray.AppIndicator.indicator,
+      firetray.AppIndicator.tempfile,
+      firetray.Handler.app.name);
+    
+    return true;
 };
 
 firetray.Handler.setIconVisibility = function(visible) {
