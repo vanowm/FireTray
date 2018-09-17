@@ -240,13 +240,13 @@ firetray.Utils = {
     log.debug("XPathResult="+result.resultType);
 
     switch (result.resultType) {
-    case 1:
+    case result.NUMBER_TYPE:
       return result.numberValue;
-    case 2:
+    case result.STRING_TYPE:
       return result.stringValue;
-    case 3:
+    case result.BOOLEAN_TYPE:
       return result.booleanValue;
-    } // else 4:
+    } // else 4, UNORDERED_NODE_ITERATOR_TYPE
 
     var list = [];
     try {
