@@ -55,6 +55,8 @@
 <!ENTITY mail_notification_type.tooltip "aka. Biff">
 <!ENTITY mail_notification_unread_count.label "Afficher le nouveau compte de messages">
 <!ENTITY mail_notification_unread_count.accesskey "N">
+<!ENTITY mail_notification_blank_icon.label "afficher l'icône vide">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "afficher l'icône de nouveau message">
 <!ENTITY mail_notification_newmail_icon.accesskey "f">
 <!ENTITY mail_notification_mail_icon_custom.label "afficher l'icône personnalisée">

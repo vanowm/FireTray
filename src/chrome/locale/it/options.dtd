@@ -55,6 +55,8 @@
 <!ENTITY mail_notification_type.tooltip "Talvolta chiamata anche 'Biff'">
 <!ENTITY mail_notification_unread_count.label "Visualizza il contatore dei nuovi messaggi">
 <!ENTITY mail_notification_unread_count.accesskey "U">
+<!ENTITY mail_notification_blank_icon.label "Visualizza icona vuota">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "Visualizza l'icona per i nuovi messaggi">
 <!ENTITY mail_notification_newmail_icon.accesskey "N">
 <!ENTITY mail_notification_mail_icon_custom.label "Visualizza icona personalizzata">

@@ -53,6 +53,8 @@
 <!ENTITY mail_notification_type.tooltip "aka. Biff">
 <!ENTITY mail_notification_unread_count.label "показувати лічильник нових повідомлень">
 <!ENTITY mail_notification_unread_count.accesskey "н">
+<!ENTITY mail_notification_blank_icon.label "показати порожню піктограму">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "показувати значок нових повідомлень">
 <!ENTITY mail_notification_newmail_icon.accesskey "з">
 <!ENTITY mail_notification_mail_icon_custom.label "показувати вибраний значок">

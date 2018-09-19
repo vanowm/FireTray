@@ -55,6 +55,8 @@
 <!ENTITY mail_notification_type.tooltip "beter bekend als Biff">
 <!ENTITY mail_notification_unread_count.label "aantal nieuwe berichten weergeven">
 <!ENTITY mail_notification_unread_count.accesskey "O">
+<!ENTITY mail_notification_blank_icon.label "leeg pictogram weergeven">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "pictogram nieuw bericht weergeven">
 <!ENTITY mail_notification_newmail_icon.accesskey "N">
 <!ENTITY mail_notification_mail_icon_custom.label "aangepast pictogram weergeven">

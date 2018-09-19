@@ -59,6 +59,8 @@
 <!ENTITY mail_notification_type.tooltip "aka. Dymek">
 <!ENTITY mail_notification_unread_count.label "pokazuj ilość nowych wiadomośći">
 <!ENTITY mail_notification_unread_count.accesskey "l">
+<!ENTITY mail_notification_blank_icon.label "Pokaż pustą ikonę">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "pokazuj ikonę nowych wiadomości">
 <!ENTITY mail_notification_newmail_icon.accesskey "h">
 <!ENTITY mail_notification_mail_icon_custom.label "pokazuj własną ikonę">

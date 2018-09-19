@@ -59,6 +59,8 @@
 <!ENTITY mail_notification_type.tooltip "známy ako Biff">
 <!ENTITY mail_notification_unread_count.label "zobraziť počet správ">
 <!ENTITY mail_notification_unread_count.accesskey "P">
+<!ENTITY mail_notification_blank_icon.label "zobraziť prázdnu ikonu">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "zobraziť ikonu novej pošty">
 <!ENTITY mail_notification_newmail_icon.accesskey "N">
 <!ENTITY mail_notification_mail_icon_custom.label "zobraziť vlastnú ikonu">
