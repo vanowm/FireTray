@@ -258,8 +258,8 @@ var firetrayUIOptions = {
   },
 
   initNotificationSettings: function() {
-    document.getElementById("ui_radio_mail_notification_unread_count").value =
-      FIRETRAY_NOTIFICATION_MESSAGE_COUNT;
+    document.getElementById("ui_radio_mail_notification_blank_icon").value =
+      FIRETRAY_NOTIFICATION_BLANK_ICON;
     document.getElementById("ui_radio_mail_notification_newmail_icon").value =
       FIRETRAY_NOTIFICATION_NEWMAIL_ICON;
     document.getElementById("ui_radio_mail_notification_mail_icon_custom").value =
@@ -331,10 +331,6 @@ var firetrayUIOptions = {
   disableNotificationMaybe: function(notificationSetting) {
     log.debug("disableNotificationMaybe: "+notificationSetting);
 
-    let iconTextColor = document.getElementById("icon_text_color");
-    this.disableChildren(iconTextColor,
-      (notificationSetting !== FIRETRAY_NOTIFICATION_MESSAGE_COUNT));
-
     if (firetray.Handler.support['winnt']) {
       let newMailIconNames = document.getElementById("newmail_icon_names");
       this.disableNChildren(newMailIconNames, 2,
@@ -355,7 +351,7 @@ var firetrayUIOptions = {
 
     let mailNotifyRadio = document.getElementById("ui_radiogroup_mail_notification");
     let mailNotificationType = +mailNotifyRadio.getItemAtIndex(mailNotifyRadio.selectedIndex).value;
-    if (msgCountTypeIsNewMessages && (mailNotificationType === FIRETRAY_NOTIFICATION_MESSAGE_COUNT)) {
+    if (msgCountTypeIsNewMessages && (mailNotificationType === FIRETRAY_NOTIFICATION_BLANK_ICON)) {
       mailNotifyRadio.selectedIndex = this.radioGetIndexByValue(mailNotifyRadio, FIRETRAY_NOTIFICATION_NEWMAIL_ICON);
       if (firetray.Handler.support['winnt']) {
         let newMailIconNames = document.getElementById("newmail_icon_names");

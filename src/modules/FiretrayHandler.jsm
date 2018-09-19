@@ -334,6 +334,7 @@ firetray.Handler = {
   loadIcons: function() {},
   loadImageCustom: function(prefname) {},
   setIconImageDefault: function() {},
+  setIconImageBlank: function() {},
   setIconImageNewMail: function() {},
   setIconImageCustom: function(prefname) {},
   setIconText: function(text, color) {},
@@ -800,9 +801,8 @@ firetray.VersionChangeHandler = {
 
   correctMailNotificationType: function() {
     let msgCountType = firetray.Utils.prefService.getIntPref('message_count_type');
-    let mailNotificationType = firetray.Utils.prefService.getIntPref('mail_notification_type');
-    if (msgCountType === FIRETRAY_MESSAGE_COUNT_TYPE_NEW &&
-        mailNotificationType === FIRETRAY_NOTIFICATION_MESSAGE_COUNT) {
+    let mailUnreadCountEnabled = firetray.Utils.prefService.getIntPref('mail_unread_count_enabled');
+    if (msgCountType === FIRETRAY_MESSAGE_COUNT_TYPE_NEW && mailUnreadCountEnabled) {
       firetray.Utils.prefService.setIntPref('mail_notification_type',
         FIRETRAY_NOTIFICATION_NEWMAIL_ICON);
       log.warn("mail notification type set to newmail icon.");

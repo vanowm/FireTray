@@ -227,12 +227,15 @@ firetray.Messaging = {
       firetray.Handler.setIconTooltipDefault();
 
     } else if (msgCount > 0) {
+      let prefMailUnreadCountEnabled = firetray.Utils.prefService.getBoolPref('mail_unread_count_enabled');
       let prefMailNotification = firetray.Utils.prefService.getIntPref('mail_notification_type');
+      
+      log.debug("msgCount prefMailUnreadCount="+prefMailUnreadCountEnabled);
       log.debug("msgCount prefMailNotification="+prefMailNotification);
+ 
       switch (prefMailNotification) {
-      case FIRETRAY_NOTIFICATION_MESSAGE_COUNT:
-        let prefIconTextColor = firetray.Utils.prefService.getCharPref("icon_text_color");
-        firetray.Handler.setIconText(msgCount.toString(), prefIconTextColor);
+      case FIRETRAY_NOTIFICATION_BLANK_ICON:
+        firetray.Handler.setIconImageBlank();
         break;
       case FIRETRAY_NOTIFICATION_NEWMAIL_ICON:
         firetray.Handler.setIconImageNewMail();
@@ -242,6 +245,11 @@ firetray.Messaging = {
         break;
       default:
         log.error("Unknown notification mode: "+prefMailNotification);
+      }
+     
+      if (prefMailUnreadCountEnabled) {
+        let prefIconTextColor = firetray.Utils.prefService.getCharPref("icon_text_color");
+        firetray.Handler.setIconText(msgCount.toString(), prefIconTextColor);
       }
 
       firetray.Handler.setIconTooltip(localizedTooltip);
