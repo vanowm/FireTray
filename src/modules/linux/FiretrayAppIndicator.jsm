@@ -218,10 +218,6 @@ if (firetray.Handler.app.widgetTk == "gtk2") {
     cairo.cairo_rectangle(cr, 0, 0, w, h);
     cairo.cairo_set_source_rgb(cr, 1, 1, 1);
     cairo.cairo_fill(cr);
-
-//    gdk.gdk_cairo_set_source_color(cr, back.address());
-//    cairo.cairo_rectangle(cr, 0, 0, w/2, h/2);
-//    cairo.cairo_fill(cr);
    
     // build text
     let scratch = gtk.gtk_window_new(gtk.GTK_WINDOW_TOPLEVEL);
