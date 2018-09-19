@@ -30,7 +30,7 @@ if ("undefined" == typeof(firetray.Handler))
 const ICON_CHROME_PATH = "chrome://firetray/skin/icons/winnt";
 const ICON_CHROME_FILES = {
   'blank-icon': { use:'tray', path:ICON_CHROME_PATH+"/blank-icon.bmp" },
-  'mail-unread': { use:'tray', path:ICON_CHROME_PATH+"/mail-unread.ico" },
+  'mail-unread': { use:'tray', path:ICON_CHROME_PATH+"/mail-unread.bmp" },
   'prefs': { use:'menu', path:ICON_CHROME_PATH+"/gtk-preferences.bmp" },
   'quit': { use:'menu', path:ICON_CHROME_PATH+"/application-exit.bmp" },
   'new-wnd': { use:'menu', path:ICON_CHROME_PATH+"/document-new.bmp" },
