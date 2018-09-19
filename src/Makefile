@@ -95,8 +95,6 @@ chrome_sources := $(chrome_sources_js)								\
                $(wildcard $(chrome_source_root)/skin/*.css)					\
                $(wildcard $(chrome_source_root)/skin/icons/*.gif)				\
                $(wildcard $(chrome_source_root)/skin/icons/*.png)				\
-               $(wildcard $(chrome_source_root)/skin/icons/unread/*.png)				\
-               $(wildcard $(chrome_source_root)/skin/icons/unread/*.svg)				\
                $(wildcard $(chrome_source_root)/skin/icons/*.svg)				\
                $(wildcard $(chrome_source_root)/skin/icons/linux/hicolor/22x22/*/*.png)		\
                $(wildcard $(chrome_source_root)/skin/icons/winnt/*.bmp)				\
