@@ -7,7 +7,7 @@ const Ci = Components.interfaces;
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/ctypes.jsm");
-Cu.import("resource://gre/modules/osfile.jsm")
+Cu.import("resource://gre/modules/osfile.jsm");
 Cu.import("resource://firetray/commons.js"); // first for Handler.app !
 Cu.import("resource://firetray/ctypes/linux/gobject.jsm");
 // FIXME: can't subscribeLibsForClosing([appind])
@@ -40,8 +40,7 @@ firetray.AppIndicator = {
       appind.APP_INDICATOR_CATEGORY_COMMUNICATIONS
     );
 
-    this.tempfile = Components.classes["@mozilla.org/file/directory_service;1"].getService( Components.interfaces.nsIProperties).get("TmpD", Components.interfaces.nsIFile).path 
-       + "/thunderbird.png";
+    this.tempfile = OS.Path.join( OS.Constants.Path.tmpDir, 'thunderbird-unread.png' );
   
     appind.app_indicator_set_status(this.indicator,
                                     appind.APP_INDICATOR_STATUS_ACTIVE);
@@ -164,7 +163,6 @@ firetray.Handler.setIconText = function(text, color) {
     log.debug("setIconText: " + text);
 
     log.debug("setIconText, Name: " + firetray.StatusIcon.defaultNewMailIconName);
-
     log.debug("setIconText, Temp: " + firetray.AppIndicator.tempfile);
     
     let icon_theme = gtk.gtk_icon_theme_get_for_screen(gdk.gdk_screen_get_default());
@@ -173,8 +171,6 @@ firetray.Handler.setIconText = function(text, color) {
     arry[1] = null;
     let icon_info = gtk.gtk_icon_theme_choose_icon(icon_theme, arry, 22, gtk.GTK_ICON_LOOKUP_FORCE_SIZE);
     let dest = gdk.gdk_pixbuf_copy(gtk.gtk_icon_info_load_icon(icon_info, null));
-
-    
  
     let w = gdk.gdk_pixbuf_get_width(dest);
     let h = gdk.gdk_pixbuf_get_height(dest);
