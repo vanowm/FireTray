@@ -166,19 +166,38 @@
                     accesskey="&mail_notification_enabled.accesskey;"
                     preference="pref_mail_notification_enabled"
                     oncommand="firetrayUIOptions.toggleNotifications(this.checked)"/>
-
-          <radiogroup id="ui_message_count_type" preference="pref_message_count_type"
+            
+          <groupbox id="ui_mail_unread_count" flex="1">
+            <hbox>
+              <checkbox id="ui_mail_unread_count_enabled"
+                    label="&mail_notification_unread_count.label;"
+                    accesskey="&mail_notification_unread_count.accesskey;"
+                    preference="pref_mail_unread_count_enabled"
+                    oncommand="firetrayUIOptions.updateNotificationSettings()"/>
+              <hbox id="icon_text_color" align="center">
+                <label value="&icon_text_color;" accesskey="&icon_text_color.accesskey;"
+                         control="btn_icon_text_color"
+                         observes="broadcaster-notification-disabled"/>
+                <colorpicker id="btn_icon_text_color" type="button"
+                               preference="pref_icon_text_color"
+                               onchange="firetray.Messaging.updateIcon();"
+                               observes="broadcaster-notification-disabled"/>
+              </hbox>
+            </hbox>
+            <radiogroup id="ui_message_count_type" preference="pref_message_count_type"
                       oncommand="firetrayUIOptions.updateMessageCountSettings()">
-            <hbox align="center" flex="1">
-              <label control="ui_message_count_type" observes="broadcaster-notification-disabled"
+              <hbox align="center" flex="1">
+                <label control="ui_message_count_type" observes="broadcaster-notification-disabled"
                      value="&message_count_type.label;" accesskey="&message_count_type.accesskey;" />
-              <radio id="ui_message_count_type_unread" label="&message_count_type_unread;"
+                <radio id="ui_message_count_type_unread" label="&message_count_type_unread;"
                      observes="broadcaster-notification-disabled"/>
-              <radio id="ui_message_count_type_new" label="&message_count_type_new;"
+                <radio id="ui_message_count_type_new" label="&message_count_type_new;"
                      tooltiptext="&message_count_type_new.tooltip;"
                      observes="broadcaster-notification-disabled"/>
-            </hbox>
-          </radiogroup>
+              </hbox>
+            </radiogroup>
+          </groupbox>
+
 
           <groupbox id="ui_mail_notification" flex="1">
             <caption>
@@ -187,23 +206,6 @@
                      tooltiptext="&mail_notification_type.tooltip;"
                      observes="broadcaster-notification-disabled" />
             </caption>
-            
-            <hbox>
-              <checkbox id="ui_mail_unread_count_enabled"
-                    label="&mail_notification_unread_count.label;"
-                    accesskey="&mail_notification_unread_count.accesskey;"
-                    preference="pref_mail_unread_count_enabled"
-                    oncommand="firetrayUIOptions.updateNotificationSettings()"/>
-               <hbox id="icon_text_color" align="center">
-                  <label value="&icon_text_color;" accesskey="&icon_text_color.accesskey;"
-                         control="btn_icon_text_color"
-                         observes="broadcaster-notification-disabled"/>
-                  <colorpicker id="btn_icon_text_color" type="button"
-                               preference="pref_icon_text_color"
-                               onchange="firetray.Messaging.updateIcon();"
-                               observes="broadcaster-notification-disabled"/>
-                </hbox>
-            </hbox>
 
             <radiogroup id="ui_radiogroup_mail_notification" preference="pref_mail_notification_type">
               <hbox>
