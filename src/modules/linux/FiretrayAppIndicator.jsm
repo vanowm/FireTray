@@ -41,7 +41,7 @@ firetray.AppIndicator = {
     );
 
     this.tempfile = OS.Path.join( OS.Constants.Path.tmpDir, 'thunderbird-unread.png' );
-  
+
     appind.app_indicator_set_status(this.indicator,
                                     appind.APP_INDICATOR_STATUS_ACTIVE);
     appind.app_indicator_set_menu(this.indicator,
@@ -162,15 +162,34 @@ firetray.Handler.setIconTooltip = function(toolTipStr) {
 firetray.Handler.setIconText = function(text, color) { 
     log.debug("setIconText: " + text);
 
-    log.debug("setIconText, Name: " + firetray.StatusIcon.defaultNewMailIconName);
     log.debug("setIconText, Temp: " + firetray.AppIndicator.tempfile);
-    
-    let icon_theme = gtk.gtk_icon_theme_get_for_screen(gdk.gdk_screen_get_default());
-    let arry = gobject.gchar.ptr.array()(2);
-    arry[0] = gobject.gchar.array()(firetray.StatusIcon.defaultNewMailIconName);
-    arry[1] = null;
-    let icon_info = gtk.gtk_icon_theme_choose_icon(icon_theme, arry, 22, gtk.GTK_ICON_LOOKUP_FORCE_SIZE);
-    let dest = gdk.gdk_pixbuf_copy(gtk.gtk_icon_info_load_icon(icon_info, null));
+
+    let dest = null;
+    let pref = firetray.Utils.prefService.getIntPref("mail_notification_type");
+    switch (pref) {
+      case FIRETRAY_NOTIFICATION_BLANK_ICON:
+        log.debug("setIconText, Name: blank-icon");
+        log.error("Not implemented, mode:"+pref);
+        return;
+        break;
+      case FIRETRAY_NOTIFICATION_NEWMAIL_ICON:
+        log.debug("setIconText, Name: " + firetray.StatusIcon.defaultNewMailIconName);
+        let icon_theme = gtk.gtk_icon_theme_get_for_screen(gdk.gdk_screen_get_default());
+        let arry = gobject.gchar.ptr.array()(2);
+        arry[0] = gobject.gchar.array()(firetray.StatusIcon.defaultNewMailIconName);
+        arry[1] = null;
+        let icon_info = gtk.gtk_icon_theme_choose_icon(icon_theme, arry, 22, gtk.GTK_ICON_LOOKUP_FORCE_SIZE);
+        dest = gdk.gdk_pixbuf_copy(gtk.gtk_icon_info_load_icon(icon_info, null));
+        break;
+      case FIRETRAY_NOTIFICATION_CUSTOM_ICON:
+        log.debug("setIconText, Name: custom-icon");
+        log.error("Not implemented, mode:"+pref);
+        return;
+        break;
+      default:
+        log.error("Unknown notification mode: "+pref);
+        return;
+    }
  
     let w = gdk.gdk_pixbuf_get_width(dest);
     let h = gdk.gdk_pixbuf_get_height(dest);
