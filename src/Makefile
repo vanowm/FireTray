@@ -112,6 +112,7 @@ modules_sources := $(wildcard $(modules_dir)/*.js)			\
 		$(wildcard $(modules_dir)/ctypes/linux/*.jsm)		\
 		$(wildcard $(modules_dir)/ctypes/linux/gtk?/*.jsm)	\
 		$(wildcard $(modules_dir)/ctypes/winnt/*.jsm)		\
+		$(wildcard $(modules_dir)/icons/*.jsm)			\
 		$(wildcard $(modules_dir)/linux/*.jsm)			\
 		$(wildcard $(modules_dir)/winnt/*.jsm)
 
