@@ -70,7 +70,8 @@ function kernel32_defines(lib) {
   lib.lazy_bind("ReadFile", win32.BOOL, win32.HANDLE, win32.LPVOID, win32.DWORD, win32.LPDWORD, win32.LPOVERLAPPED);
   lib.lazy_bind("WriteFile", win32.BOOL, win32.HANDLE, win32.LPCVOID, win32.DWORD, win32.LPDWORD,  win32.LPOVERLAPPED);
   lib.lazy_bind("CloseHandle", win32.BOOL, win32.HANDLE);
-
+  lib.lazy_bind("DeleteFileW", win32.BOOL, win32.LPCWSTR);
+  
   this.GENERIC_ALL        = 0x10000000;
   this.GENERIC_EXECUTE    = 0x20000000;
   this.GENERIC_WRITE      = 0x40000000;
