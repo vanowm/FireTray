@@ -1,7 +1,7 @@
 FireTray
 =======
 
-This branch has only been tested with openSuSE 15.0 with Thumderbird 52.9.1 and 60.0.
+This branch has only been tested with openSuSE 15.0 with Thumderbird 52.9.1 and 60.0.  
 The windows version still needs to be patched.
 
 Overview
