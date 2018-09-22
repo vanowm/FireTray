@@ -59,6 +59,38 @@ function kernel32_defines(lib) {
 
   lib.lazy_bind("GetStartupInfoW", ctypes.void_t, this.LPSTARTUPINFO);
 
+  this.SECURITY_ATTRIBUTES = ctypes.StructType("SECURITY_ATTRIBUTES", [
+   { "nLength": win32.DWORD },
+   { "lpSecurityDescriptor": win32.LPVOID },
+   { "bInheritHandle": win32.BOOL }
+  ]);
+  this.LPSECURITY_ATTRIBUTES = this.SECURITY_ATTRIBUTES.ptr;
+  
+  lib.lazy_bind("CreateFileW", win32.HANDLE, win32.LPCWSTR, win32.DWORD, win32.DWORD, this.LPSECURITY_ATTRIBUTES, win32.DWORD, win32.DWORD, win32.HANDLE);
+  lib.lazy_bind("ReadFile", win32.BOOL, win32.HANDLE, win32.LPVOID, win32.DWORD, win32.LPDWORD, win32.LPOVERLAPPED);
+  lib.lazy_bind("WriteFile", win32.BOOL, win32.HANDLE, win32.LPCVOID, win32.DWORD, win32.LPDWORD,  win32.LPOVERLAPPED);
+  lib.lazy_bind("CloseHandle", win32.BOOL, win32.HANDLE);
+
+  this.GENERIC_ALL        = 0x10000000;
+  this.GENERIC_EXECUTE    = 0x20000000;
+  this.GENERIC_WRITE      = 0x40000000;
+  this.GENERIC_READ       = 0x80000000;
+  
+  this.CREATE_NEW         = 1;
+  this.CREATE_ALWAYS      = 2;
+  this.OPEN_EXISTING      = 3;
+  this.OPEN_ALWAYS        = 4;
+  this.TRUNCATE_EXISTING  = 5;
+  
+  this.FILE_ATTRIBUTE_READONLY  = 0x0001
+  this.FILE_ATTRIBUTE_HIDDEN    = 0x0002
+  this.FILE_ATTRIBUTE_SYSTEM    = 0x0004
+  this.FILE_ATTRIBUTE_ARCHIVE   = 0x0020
+  this.FILE_ATTRIBUTE_TEMPORARY = 0x0100
+  this.FILE_ATTRIBUTE_NORMAL    = 0x0080
+  this.FILE_ATTRIBUTE_OFFLINE   = 0x1000
+  this.FILE_ATTRIBUTE_ENCRYPTED = 0x4000
+
 }
 
 new ctypes_library(KERNEL32_LIBNAME, KERNEL32_ABIS, kernel32_defines, this);
