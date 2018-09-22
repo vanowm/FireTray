@@ -1,13 +1,15 @@
-FireTray - patched for KDE - patched for OpenSuSE
+FireTray
 =======
 
+This branch has only been tested with openSuSE 15.0 with Thumderbird 52.9.1 and 60.0.
+The windows version still needs to be patched.
 
 Overview
 --------
 
 This is a fork of [foudfou/FireTray](https://github.com/foudfou/FireTray)
 
-The original FireTray has been "brutally" patched to display the number of unread messages in KDE system tray.
+The original FireTray has been patched to display the number of unread messages in KDE/Windows system tray.
 
 It is a workaround for issues:
 * [foudfou/FireTray #143](https://github.com/foudfou/FireTray/issues/143)
