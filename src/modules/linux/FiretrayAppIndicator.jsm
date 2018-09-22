@@ -9,6 +9,7 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/ctypes.jsm");
 Cu.import("resource://gre/modules/osfile.jsm");
 Cu.import("resource://firetray/commons.js"); // first for Handler.app !
+Cu.import("resource://firetray/icons.jsm");
 Cu.import("resource://firetray/ctypes/linux/gobject.jsm");
 // FIXME: can't subscribeLibsForClosing([appind])
 // https://bugs.launchpad.net/ubuntu/+source/firefox/+bug/1393256
@@ -127,6 +128,36 @@ firetray.Handler.setIconImageDefault = function() {
                                      firetray.Handler.app.name);
 };
 
+firetray.Handler.setIconImageBlank = function() {
+  log.debug("setIconImageBlank");
+  let byte_buf = gobject.guchar.array()(EMBEDDED_ICON_FILES['blank-icon'].bin);
+  let loader = gdk.gdk_pixbuf_loader_new();
+  if (loader != null) {
+    gdk.gdk_pixbuf_loader_write(loader,byte_buf,byte_buf.length,null);
+    gdk.gdk_pixbuf_loader_close(loader,null);
+    let dest = gdk.gdk_pixbuf_loader_get_pixbuf(loader);
+    if (dest != null) {
+      gobject.g_object_ref(dest);
+
+      gdk.gdk_pixbuf_save(dest, firetray.AppIndicator.tempfile, "png", null, null);
+
+      gobject.g_object_unref(dest);
+      gobject.g_object_unref(loader);
+
+      appind.app_indicator_set_icon_full(
+        firetray.AppIndicator.indicator,
+        firetray.AppIndicator.tempfile,
+        firetray.Handler.app.name);
+    } else {
+      gobject.g_object_unref(loader);
+
+      firetray.Handler.setIconImageDefault();     
+    }
+  } else {
+      firetray.Handler.setIconImageDefault();    
+  }
+};
+
 firetray.Handler.setIconImageNewMail = function() {
   log.debug("setIconImageNewMail");
   appind.app_indicator_set_icon_full(
@@ -161,7 +192,6 @@ firetray.Handler.setIconTooltip = function(toolTipStr) {
 // sajan
 firetray.Handler.setIconText = function(text, color) { 
     log.debug("setIconText: " + text);
-
     log.debug("setIconText, Temp: " + firetray.AppIndicator.tempfile);
 
     let dest = null;
@@ -169,28 +199,63 @@ firetray.Handler.setIconText = function(text, color) {
     switch (pref) {
       case FIRETRAY_NOTIFICATION_BLANK_ICON:
         log.debug("setIconText, Name: blank-icon");
-        log.error("Not implemented, mode:"+pref);
-        return;
+        
+        let byte_buf = gobject.guchar.array()(EMBEDDED_ICON_FILES['blank-icon'].bin);
+        let loader = gdk.gdk_pixbuf_loader_new();
+        gdk.gdk_pixbuf_loader_write(loader,byte_buf,byte_buf.length,null);
+        gdk.gdk_pixbuf_loader_close(loader,null);
+        dest = gdk.gdk_pixbuf_loader_get_pixbuf(loader);
+        
+        if (dest != null) {
+          gobject.g_object_ref(dest)
+          log.debug("setIconText: Ref dest");
+        }
+        
+        if (loader != null) {
+          gobject.g_object_unref(loader)
+          log.debug("setIconText: UnRef loader");
+        }
+        
         break;
       case FIRETRAY_NOTIFICATION_NEWMAIL_ICON:
         log.debug("setIconText, Name: " + firetray.StatusIcon.defaultNewMailIconName);
+        
         let icon_theme = gtk.gtk_icon_theme_get_for_screen(gdk.gdk_screen_get_default());
         let arry = gobject.gchar.ptr.array()(2);
         arry[0] = gobject.gchar.array()(firetray.StatusIcon.defaultNewMailIconName);
         arry[1] = null;
         let icon_info = gtk.gtk_icon_theme_choose_icon(icon_theme, arry, 22, gtk.GTK_ICON_LOOKUP_FORCE_SIZE);
         dest = gdk.gdk_pixbuf_copy(gtk.gtk_icon_info_load_icon(icon_info, null));
+        
+       if (dest != null) {
+          gobject.g_object_ref(dest);
+          log.debug("setIconText: Ref dest");
+        }
+ 
         break;
       case FIRETRAY_NOTIFICATION_CUSTOM_ICON:
         log.debug("setIconText, Name: custom-icon");
-        log.error("Not implemented, mode:"+pref);
-        return;
+        let custom_icon = firetray.Utils.prefService.getCharPref("mail_icon_custom");
+        log.debug("setIconText, Custom path: "+custom_icon);
+
+        dest = gdk.gdk_pixbuf_new_from_file(custom_icon,null);
+       
+        if (dest != null) {
+          gobject.g_object_ref(dest);
+          log.debug("setIconText: Ref dest");
+        }
+ 
         break;
       default:
         log.error("Unknown notification mode: "+pref);
         return;
     }
  
+    if (dest == null) {
+      log.error("Cannot load icon");
+      return;
+    }
+    
     let w = gdk.gdk_pixbuf_get_width(dest);
     let h = gdk.gdk_pixbuf_get_height(dest);
 
@@ -304,9 +369,9 @@ else {
     gdk.gdk_pixbuf_composite(bufAlpha,dest,0,0,w,h,0,0,1,1,gdk.GDK_INTERP_BILINEAR,255);
     gobject.g_object_unref(bufAlpha);
 
-    // Workaround
+    // Workaround, appindicator only loads files
     gdk.gdk_pixbuf_save(dest, firetray.AppIndicator.tempfile, "png", null, null);
-
+    
     appind.app_indicator_set_icon_full(
       firetray.AppIndicator.indicator,
       firetray.StatusIcon.defaultNewMailIconName,
@@ -316,6 +381,11 @@ else {
       firetray.AppIndicator.indicator,
       firetray.AppIndicator.tempfile,
       firetray.Handler.app.name);
+
+    if (dest != null) {
+      gobject.g_object_unref(dest);
+      log.debug("setIconText: UnRef dest");
+    }
     
     return true;
 };
