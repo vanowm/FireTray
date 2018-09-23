@@ -12,6 +12,7 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/ctypes.jsm");
+Cu.import("resource://gre/modules/osfile.jsm");
 Cu.import("resource://firetray/ctypes/ctypesMap.jsm");
 Cu.import("resource://firetray/ctypes/winnt/win32.jsm");
 Cu.import("resource://firetray/ctypes/winnt/gdi32.jsm");
@@ -20,23 +21,13 @@ Cu.import("resource://firetray/ctypes/winnt/shell32.jsm");
 Cu.import("resource://firetray/ctypes/winnt/user32.jsm");
 Cu.import("resource://firetray/winnt/FiretrayWin32.jsm");
 Cu.import("resource://firetray/commons.js");
+Cu.import("resource://firetray/icons.jsm");
 firetray.Handler.subscribeLibsForClosing([gdi32, kernel32, shell32, user32]);
 
 let log = firetray.Logging.getLogger("firetray.StatusIcon");
 
 if ("undefined" == typeof(firetray.Handler))
   log.error("This module MUST be imported from/after FiretrayHandler !");
-
-const ICON_CHROME_PATH = "chrome://firetray/skin/icons/winnt";
-const ICON_CHROME_FILES = {
-  'blank-icon': { use:'tray', path:ICON_CHROME_PATH+"/blank-icon.bmp" },
-  'mail-unread': { use:'tray', path:ICON_CHROME_PATH+"/mail-unread.bmp" },
-  'prefs': { use:'menu', path:ICON_CHROME_PATH+"/gtk-preferences.bmp" },
-  'quit': { use:'menu', path:ICON_CHROME_PATH+"/application-exit.bmp" },
-  'new-wnd': { use:'menu', path:ICON_CHROME_PATH+"/document-new.bmp" },
-  'new-msg': { use:'menu', path:ICON_CHROME_PATH+"/gtk-edit.bmp" },
-  'reset': { use:'menu', path:ICON_CHROME_PATH+"/gtk-apply.bmp" },
-};
 
 
 firetray.StatusIcon = {
@@ -93,10 +84,21 @@ firetray.StatusIcon = {
 
     /* we'll take the first icon in the .ico file. To get the icon count in the
      file, pass ctypes.cast(ctypes.int(-1), win32.UINT); */
-    for (let imgName in ICON_CHROME_FILES) {
-      let path = firetray.Utils.chromeToPath(ICON_CHROME_FILES[imgName].path);
+    for (let imgName in EMBEDDED_ICON_FILES) {
+      let path = OS.Path.join(OS.Constants.Path.tmpDir, imgName+'.'+EMBEDDED_ICON_FILES[imgName].type);
+      log.debug("Path: "+path);
+    
+      let byte_buf = ctypes.unsigned_char.array()(EMBEDDED_ICON_FILES[imgName].bin);
+      let hFile = kernel32.CreateFileW(path, kernel32.GENERIC_WRITE, 0, null, kernel32.CREATE_ALWAYS, kernel32.FILE_ATTRIBUTE_NORMAL, null);
+      let written = new win32.DWORD;
+      let status = kernel32.WriteFile(hFile, byte_buf, byte_buf.length, written.address(), null);
+      status = kernel32.CloseHandle(hFile);
+
       let img = this.loadImageFromFile(path);
-      if (img && ICON_CHROME_FILES[imgName].use == 'menu')
+      log.debug("Img Type: "+img['type']);
+      log.debug("Img hImg: "+img['himg']);
+
+      if (img && EMBEDDED_ICON_FILES[imgName].use == 'menu')
         /* Ideally we should rebuild the menu each time it is shown as the menu
          color may change. But let's just consider it's not worth it for
          now. */
@@ -173,6 +175,12 @@ firetray.StatusIcon = {
         map.remove(imgName);
       }
     });
+        
+    for (let imgName in EMBEDDED_ICON_FILES) {
+      let path = OS.Path.join(OS.Constants.Path.tmpDir, imgName+'.'+EMBEDDED_ICON_FILES[imgName].type);
+      kernel32.DeleteFileW(path);
+    }
+
     log.debug("Icons destroyed");
   },
 
