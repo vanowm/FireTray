@@ -95,16 +95,18 @@ firetray.StatusIcon = {
       status = kernel32.CloseHandle(hFile);
 
       let img = this.loadImageFromFile(path);
-      log.debug("Img Type: "+img['type']);
-      log.debug("Img hImg: "+img['himg']);
 
       if (img && EMBEDDED_ICON_FILES[imgName].use == 'menu')
         /* Ideally we should rebuild the menu each time it is shown as the menu
          color may change. But let's just consider it's not worth it for
          now. */
         img.himg = this.makeBitMapTransparent(img.himg);
-      if (img)
+      if (img) {
+        log.debug("Img Type: "+img['type']);
+        log.debug("Img hImg: "+img['himg']);
+
         this[this.IMG_TYPES[img['type']]['map']].insert(imgName, img['himg']);
+      }
     }
   },
 
@@ -362,14 +364,36 @@ firetray.StatusIcon = {
   createTextIcon: function(hWnd, text, color) {
     log.debug("createTextIcon hWnd="+hWnd+" text="+text+" color="+color);
 
-    let blank = this.bitmaps.get('blank-icon');
+    let icon = null;
+    let pref = firetray.Utils.prefService.getIntPref("mail_notification_type");
+    switch (pref) {
+      case FIRETRAY_NOTIFICATION_BLANK_ICON:
+        log.debug("setIconText, Name: blank-icon-bmp");
+        icon = this.bitmaps.get('blank-icon-bmp');
+
+        break;
+      case FIRETRAY_NOTIFICATION_NEWMAIL_ICON:
+        log.debug("setIconText, Name: mail-unread-bmp");
+        icon = this.bitmaps.get('mail-unread-bmp');
+
+        break;
+      case FIRETRAY_NOTIFICATION_CUSTOM_ICON:
+        log.debug("setIconText, Name: custom-icon");
+        icon = this.bitmaps.get('mail-custom');
+
+        break;
+     default:
+        log.error("Unknown notification mode: "+pref);
+        return;
+    }
+
     let bitmap = new win32.BITMAP();
-    let err = gdi32.GetObjectW(blank, win32.BITMAP.size, bitmap.address()); // get bitmap info
+    let err = gdi32.GetObjectW(icon, win32.BITMAP.size, bitmap.address()); // get bitmap info
     let width = bitmap.bmWidth, height = bitmap.bmHeight;
 
     let hdc = user32.GetDC(hWnd); // get device context (DC) for hWnd
     let hdcMem = gdi32.CreateCompatibleDC(hdc); // creates a memory device context (DC) compatible with hdc (need a bitmap)
-    let hBitmap = user32.CopyImage(blank, user32.IMAGE_BITMAP, width, height, 0);
+    let hBitmap = user32.CopyImage(icon, user32.IMAGE_BITMAP, width, height, 0);
     let hBitmapMask = gdi32.CreateCompatibleBitmap(hdc, width, height);
     user32.ReleaseDC(hWnd, hdc);
 
@@ -482,6 +506,11 @@ firetray.Handler.setIconImageDefault = function() {
   else if (appIconType === FIRETRAY_APPLICATION_ICON_TYPE_CUSTOM) {
     firetray.StatusIcon.setIcon({hicon:firetray.StatusIcon.getIconSafe('app-custom')});
   }
+};
+
+firetray.Handler.setIconImageBlank = function() {
+  log.debug("setIconImageBlank");
+  firetray.StatusIcon.setIcon({hicon:firetray.StatusIcon.icons.get('blank-icon')});
 };
 
 firetray.Handler.setIconImageNewMail = function() {

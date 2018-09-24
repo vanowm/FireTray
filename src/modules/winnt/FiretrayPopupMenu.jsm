@@ -91,7 +91,7 @@ firetray.PopupMenu = {
      But for now, we just don't display icons in XP-. */
     if (win32.WINVER >= win32.WIN_VERSIONS["Vista"]) {
       mii.fMask |= user32.MIIM_BITMAP;
-//      mii.hbmpItem = firetray.StatusIcon.bitmaps.get(iconName);
+      mii.hbmpItem = firetray.StatusIcon.bitmaps.get(iconName);
     }
     log.debug("mii="+mii);
     if (!user32.InsertMenuItemW(this.menu, 0, true, mii.address())) {
