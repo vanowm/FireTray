@@ -31,7 +31,7 @@ pref("extensions.firetray.nomail_hides_icon", false);
 pref("extensions.firetray.message_count_type", 0);
 pref("extensions.firetray.mail_notification_enabled", true);
 pref("extensions.firetray.mail_unread_count_enabled", true);
-pref("extensions.firetray.mail_notification_type", 1);
+pref("extensions.firetray.mail_notification_type", 0);
 pref("extensions.firetray.icon_text_color", "#000000");
 pref("extensions.firetray.mail_icon_custom", "");
 pref("extensions.firetray.mail_change_trigger", "");
