@@ -173,7 +173,8 @@
                     label="&mail_notification_unread_count.label;"
                     accesskey="&mail_notification_unread_count.accesskey;"
                     preference="pref_mail_unread_count_enabled"
-                    oncommand="firetrayUIOptions.updateNotificationSettings()"/>
+                    oncommand="firetrayUIOptions.updateNotificationSettings()"
+                    observes="broadcaster-notification-disabled"/>
               <hbox id="icon_text_color" align="center">
                 <label value="&icon_text_color;" accesskey="&icon_text_color.accesskey;"
                          control="btn_icon_text_color"
