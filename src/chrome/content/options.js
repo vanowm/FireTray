@@ -325,7 +325,7 @@ var firetrayUIOptions = {
   updateMessageCountSettings: function() {
     let radioMessageCountType = document.getElementById("ui_message_count_type");
     let messageCountType = +radioMessageCountType.getItemAtIndex(radioMessageCountType.selectedIndex).value;
-    this.disableMessageCountMaybe(messageCountType);
+//    this.disableMessageCountMaybe(messageCountType);
   },
 
   disableNotificationMaybe: function(notificationSetting) {
@@ -370,7 +370,7 @@ var firetrayUIOptions = {
 
       let radioMessageCountType = document.getElementById("ui_message_count_type");
       let messageCountType = +radioMessageCountType.getItemAtIndex(radioMessageCountType.selectedIndex).value;
-      this.disableMessageCountMaybe(messageCountType);
+//      this.disableMessageCountMaybe(messageCountType);
 
     } else {
       document.getElementById("broadcaster-notification-disabled")
@@ -672,7 +672,7 @@ var firetrayUIOptions = {
   },
 
   removeListeners: function() {
-    for (id in this.listeners) {
+    for (let id in this.listeners) {
       let listener = this.listeners[id];
       document.getElementById(id)
         .removeEventListener(listener['evt'], listener['fn'], listener['cap']);
