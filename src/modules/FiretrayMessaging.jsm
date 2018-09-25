@@ -89,7 +89,7 @@ firetray.Messaging = {
     // build current list of account server keys
     let accounts = MailServices.accounts.accounts;
     let accountServerKeys = [];
-    for (let account in fixIterator(MailServices.accounts, Ci.nsIMsgAccount)) {
+    for (let account of fixIterator(MailServices.accounts, Ci.nsIMsgAccount)) {
       accountServerKeys.push(account.incomingServer.key);
     }
 
