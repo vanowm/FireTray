@@ -1,6 +1,8 @@
 /* -*- Mode: js2; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 "use strict";
 
+var EXPORTED_SYMBOLS = [];
+
 Components.utils.import("resource://firetray/commons.js");
 Components.utils.import("resource://firetray/FiretrayHandler.jsm");
 
@@ -125,17 +127,3 @@ var firetrayChrome = { // each new window gets a new firetrayChrome !
   }
 
 };
-
-// should be sufficient for a delayed Startup (no need for window.setTimeout())
-// https://developer.mozilla.org/en/XUL_School/JavaScript_Object_Management.html
-// https://developer.mozilla.org/en/Extensions/Performance_best_practices_in_extensions#Removing_Event_Listeners
-window.addEventListener(
-  'load', function removeOnloadListener(e) {
-    removeEventListener('load', removeOnloadListener, true);
-    firetrayChrome.onLoad(this); },
-  false);
-window.addEventListener(
-  'unload', function removeOnUnloadListener(e) {
-    removeEventListener('unload', removeOnUnloadListener, true);
-    firetrayChrome.onQuit(this); },
-  false);
