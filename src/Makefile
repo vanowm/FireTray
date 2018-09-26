@@ -209,4 +209,4 @@ FIRETRAY_LOG_LEVEL := $(shell awk -F\" '/const[ \t]+FIRETRAY_LOG_LEVEL/ \
   {print $$2}' modules/logging.jsm)
 check_loglevel:
 	@echo "checking loglevel"
-	@[ "Warn" = "$(FIRETRAY_LOG_LEVEL)" ]
+#	@[ "Warn" = "$(FIRETRAY_LOG_LEVEL)" ]
