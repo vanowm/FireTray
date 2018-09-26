@@ -68,6 +68,9 @@ license := LICENSE
 # The install.rdf file.
 install_rdf := install.rdf
 
+# The install.rdf file.
+bootstrap := bootstrap.js
+
 # Version fetched from install.rdf
 VERSION := $(shell awk -F '[<>]' '/em:version/{print $$3}' $(install_rdf))
 
@@ -127,6 +130,7 @@ components_sources := $(wildcard $(components_dir)/*.js)
 xpi_includes := $(license) \
              $(install_rdf) \
              $(chrome_manifest) \
+             $(bootstrap) \
              $(preferences_dir)/prefs.js \
              $(chrome_sources) \
              $(modules_sources) \
