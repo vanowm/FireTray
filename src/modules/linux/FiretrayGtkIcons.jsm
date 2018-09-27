@@ -19,8 +19,6 @@ let log = firetray.Logging.getLogger("firetray.GtkIcons");
 firetray.GtkIcons = {
   initialized: false,
 
-  GTK_THEME_ICON_PATH: null,
-
   init: function() {
     try {
       if (this.initialized) return true;
@@ -40,10 +38,8 @@ firetray.GtkIcons = {
   },
 
   appendSearchPath: function() {
-    log.debug(firetray.StatusIcon.THEME_ICON_PATH);
     let gtkIconTheme = gtk.gtk_icon_theme_get_default();
     log.debug("gtkIconTheme="+gtkIconTheme);
-    gtk.gtk_icon_theme_append_search_path(gtkIconTheme, this.GTK_THEME_ICON_PATH);
 
     if (log.level <= firetray.Logging.LogMod.Level.Debug) {
       Cu.import("resource://firetray/ctypes/linux/glib.jsm");
