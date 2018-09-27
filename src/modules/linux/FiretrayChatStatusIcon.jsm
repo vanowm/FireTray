@@ -31,7 +31,6 @@ const BLINK_TOGGLE_PERIOD_MILLISECONDS = 500;
 
 
 firetray.ChatStatusIcon = {
-  GTK_THEME_ICON_PATH: null,
 
   initialized: false,
   trayIcon: null,
