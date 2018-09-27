@@ -83,9 +83,6 @@ xpi_deployed := $(extension_name).xpi
 # The chrome.manifest file.
 chrome_manifest := chrome.manifest
 
-# The preferences dir.
-preferences_dir := defaults/preferences
-
 # The root of the chrome sources.
 chrome_source_root := chrome
 
@@ -131,7 +128,6 @@ xpi_includes := $(license) \
              $(install_rdf) \
              $(chrome_manifest) \
              $(bootstrap) \
-             $(preferences_dir)/prefs.js \
              $(chrome_sources) \
              $(modules_sources) \
              $(components_sources)
