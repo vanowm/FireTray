@@ -1,5 +1,7 @@
 /* -*- Mode: js2; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 
+var EXPORTED_SYMBOLS = [ "firetrayUIOptions" ];
+
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
@@ -24,8 +26,8 @@ var firetrayUIOptions = {
 
   onLoad: function(e) {
     log.debug("FULL FEATURED="+firetray.Handler.support['full_feat']);
-    this.strings = document.getElementById("firetray-options-strings");
-    this.prefwindow = document.getElementById("firetray-preferences");
+    this.strings = window.document.getElementById("firetray-options-strings");
+    this.prefwindow = window.document.getElementById("firetray-preferences");
     if (!this.prefwindow)
       log.error("pref window not found");
 
@@ -784,7 +786,7 @@ var firetrayUIOptions = {
 
 };
 
-
+/*
 window.addEventListener(
   'load', function (e) {
     removeEventListener('load', arguments.callee, true);
@@ -795,3 +797,4 @@ window.addEventListener(
     removeEventListener('unload', arguments.callee, true);
     firetrayUIOptions.onQuit(e); },
   false);
+*/
