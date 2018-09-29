@@ -1,9 +1,8 @@
 FireTray
 =======
 
-This branch has only been tested on openSuSE 15.0 with Thunderbird 52.9.1 and 60.0.  
-The Windows version still needs to be patched.
-
+This branch has been tested on openSuSE 15.0 with Thunderbird 52.9.1 and 60.0.  
+This branch has been tested on Windows 10 with Thunderbird 52.9.1 and 60.0.  
 
 Overview
 --------
