@@ -3,7 +3,7 @@ FireTray
 
 
 Please switch to the feature-tb60 branch for the latest source.  
-New release have been tested with:  
+New releases have been tested with:  
 
 Windows 10 x64, Thunderbird 52.9.1 and 60.0  
 openSuSE Leap 15.0, KDE, Thunderbird 52.9.1 and 60.0  
