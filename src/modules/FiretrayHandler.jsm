@@ -800,13 +800,6 @@ firetray.VersionChangeHandler = {
   },
 
   correctMailNotificationType: function() {
-    let msgCountType = firetray.Utils.prefService.getIntPref('message_count_type');
-    let mailUnreadCountEnabled = firetray.Utils.prefService.getIntPref('mail_unread_count_enabled');
-    if (msgCountType === FIRETRAY_MESSAGE_COUNT_TYPE_NEW && mailUnreadCountEnabled) {
-      firetray.Utils.prefService.setIntPref('mail_notification_type',
-        FIRETRAY_NOTIFICATION_NEWMAIL_ICON);
-      log.warn("mail notification type set to newmail icon.");
-    }
   },
 
   correctMailServerTypes: function() {
