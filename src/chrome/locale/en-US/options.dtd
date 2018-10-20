@@ -25,6 +25,8 @@
 <!ENTITY show_activates.tooltip "restored windows raise on top and get focus">
 <!ENTITY remember_desktop.label "Restore windows to their original desktop">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Use appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
 
 <!ENTITY show_icon_on_hide.label "Show tray icon only if a window is hidden">
 <!ENTITY show_icon_on_hide.accesskey "w">

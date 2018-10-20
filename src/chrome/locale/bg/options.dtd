@@ -25,6 +25,8 @@
 <!ENTITY show_activates.tooltip "Прозорците минават на преден план и на фокус след като бъдат показани">
 <!ENTITY remember_desktop.label "Показване на прозорците на работния плот, на който са били">
 <!ENTITY remember_desktop.accesskey "р">
+<!ENTITY use_appindicator_icon.label "използвайте икона на appindicator">
+<!ENTITY use_appindicator_icon.accesskey "i">
 
 <!ENTITY show_icon_on_hide.label "Показване на иконката в панела само ако имо скрит прозорец">
 <!ENTITY show_icon_on_hide.accesskey "и">
