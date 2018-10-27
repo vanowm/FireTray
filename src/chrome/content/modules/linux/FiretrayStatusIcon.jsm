@@ -7,13 +7,13 @@ const Ci = Components.interfaces;
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/ctypes.jsm");
-Cu.import("resource://firetray/commons.js"); // first for Handler.app !
-Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gdk.jsm");
-Cu.import("resource://firetray/ctypes/linux/gio.jsm");
-Cu.import("resource://firetray/ctypes/linux/glib.jsm");
-Cu.import("resource://firetray/ctypes/linux/gobject.jsm");
-Cu.import("resource://firetray/ctypes/linux/libc.jsm");
-Cu.import("resource://firetray/ctypes/linux/x11.jsm");
+Cu.import("chrome://firetray/content/modules/commons.js"); // first for Handler.app !
+Cu.import("chrome://firetray/content/modules/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gdk.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/gio.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/glib.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/gobject.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/libc.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/x11.jsm");
 firetray.Handler.subscribeLibsForClosing([gdk, gio, glib, gobject]);
 
 let log = firetray.Logging.getLogger("firetray.StatusIcon");
@@ -34,15 +34,15 @@ firetray.StatusIcon = {
     this.defineIconNames();
 
     if (firetray.Handler.useAppind) {
-      Cu.import("resource://firetray/linux/FiretrayAppIndicator.jsm");
+      Cu.import("chrome://firetray/content/modules/linux/FiretrayAppIndicator.jsm");
     } else {
-      Cu.import("resource://firetray/linux/FiretrayGtkStatusIcon.jsm");
+      Cu.import("chrome://firetray/content/modules/linux/FiretrayGtkStatusIcon.jsm");
     }
 
     // PopupMenu g_connect's some Handler functions. As these are overridden is
     // StatusIcon implementations, PopupMenu must be initialized *after*
     // implemenations are imported.
-    Cu.import("resource://firetray/linux/FiretrayPopupMenu.jsm");
+    Cu.import("chrome://firetray/content/modules/linux/FiretrayPopupMenu.jsm");
     if (!firetray.PopupMenu.init())
       return false;
 
@@ -90,7 +90,7 @@ firetray.StatusIcon = {
   },
 
   appindEnable: function() {
-    Cu.import("resource://firetray/ctypes/linux/"+
+    Cu.import("chrome://firetray/content/modules/ctypes/linux/"+
               firetray.Handler.app.widgetTk+"/appindicator.jsm");
     /* FIXME: Ubuntu14.04/Unity: successfully closing appind crashes FF/TB
      during exit, in Ubuntu's unity-menubar.patch's code.

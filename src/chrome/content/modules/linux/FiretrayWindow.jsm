@@ -16,14 +16,14 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/ctypes.jsm");
-Cu.import("resource://firetray/commons.js"); // first for Handler.app !
-Cu.import("resource://firetray/ctypes/ctypesMap.jsm");
-Cu.import("resource://firetray/ctypes/linux/gobject.jsm");
-Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gdk.jsm");
-Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gtk.jsm");
-Cu.import("resource://firetray/ctypes/linux/libc.jsm");
-Cu.import("resource://firetray/ctypes/linux/x11.jsm");
-Cu.import("resource://firetray/FiretrayWindow.jsm");
+Cu.import("chrome://firetray/content/modules/commons.js"); // first for Handler.app !
+Cu.import("chrome://firetray/content/modules/ctypes/ctypesMap.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/gobject.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gdk.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gtk.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/libc.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/x11.jsm");
+Cu.import("chrome://firetray/content/modules/FiretrayWindow.jsm");
 firetray.Handler.subscribeLibsForClosing([gobject, gdk, gtk, libc, x11, glib]);
 
 let log = firetray.Logging.getLogger("firetray.Window");
@@ -71,8 +71,8 @@ firetray.Window.init = function() {
     log.error("gtk_check_version="+gtkVersionCheck.readString());
 
   if (firetray.Handler.isChatEnabled()) {
-    Cu.import("resource://firetray/linux/FiretrayChat.jsm");
-    Cu.import("resource://firetray/linux/FiretrayChatStatusIcon.jsm");
+    Cu.import("chrome://firetray/content/modules/linux/FiretrayChat.jsm");
+    Cu.import("chrome://firetray/content/modules/linux/FiretrayChatStatusIcon.jsm");
   }
 
   this.initialized = true;

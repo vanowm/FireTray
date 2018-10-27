@@ -8,16 +8,16 @@ const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/ctypes.jsm");
 Cu.import("resource://gre/modules/osfile.jsm");
-Cu.import("resource://firetray/commons.js"); // first for Handler.app !
-Cu.import("resource://firetray/icons.jsm");
-Cu.import("resource://firetray/ctypes/linux/gobject.jsm");
-Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gdk.jsm");
-Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gtk.jsm");
-Cu.import("resource://firetray/ctypes/linux/cairo.jsm");
-Cu.import("resource://firetray/ctypes/linux/gio.jsm");
-Cu.import("resource://firetray/ctypes/linux/pango.jsm");
-Cu.import("resource://firetray/ctypes/linux/pangocairo.jsm");
-Cu.import("resource://firetray/linux/FiretrayGtkIcons.jsm");
+Cu.import("chrome://firetray/content/modules/commons.js"); // first for Handler.app !
+Cu.import("chrome://firetray/content/modules/icons.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/gobject.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gdk.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gtk.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/cairo.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/gio.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/pango.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/linux/pangocairo.jsm");
+Cu.import("chrome://firetray/content/modules/linux/FiretrayGtkIcons.jsm");
 firetray.Handler.subscribeLibsForClosing([gobject, gdk, gtk, cairo, gio, pango,
   pangocairo]);
 
@@ -85,7 +85,7 @@ firetray.GtkStatusIcon = {
   },
 
   addCallbacks: function() {
-    Cu.import("resource://firetray/linux/FiretrayPopupMenu.jsm");
+    Cu.import("chrome://firetray/content/modules/linux/FiretrayPopupMenu.jsm");
     /* NOTE: here we do use a function handler (instead of a function
      definition) because we need the args passed to it ! As a consequence, we
      need to abandon 'this' in PopupMenu.popup() */

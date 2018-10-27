@@ -13,15 +13,15 @@ Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/ctypes.jsm");
 Cu.import("resource://gre/modules/osfile.jsm");
-Cu.import("resource://firetray/ctypes/ctypesMap.jsm");
-Cu.import("resource://firetray/ctypes/winnt/win32.jsm");
-Cu.import("resource://firetray/ctypes/winnt/gdi32.jsm");
-Cu.import("resource://firetray/ctypes/winnt/kernel32.jsm");
-Cu.import("resource://firetray/ctypes/winnt/shell32.jsm");
-Cu.import("resource://firetray/ctypes/winnt/user32.jsm");
-Cu.import("resource://firetray/winnt/FiretrayWin32.jsm");
-Cu.import("resource://firetray/commons.js");
-Cu.import("resource://firetray/icons.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/ctypesMap.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/winnt/win32.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/winnt/gdi32.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/winnt/kernel32.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/winnt/shell32.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/winnt/user32.jsm");
+Cu.import("chrome://firetray/content/modules/winnt/FiretrayWin32.jsm");
+Cu.import("chrome://firetray/content/modules/commons.js");
+Cu.import("chrome://firetray/content/modules/icons.jsm");
 firetray.Handler.subscribeLibsForClosing([gdi32, kernel32, shell32, user32]);
 
 let log = firetray.Logging.getLogger("firetray.StatusIcon");
@@ -53,7 +53,7 @@ firetray.StatusIcon = {
     this.create();
     firetray.Handler.setIconImageDefault();
 
-    Cu.import("resource://firetray/winnt/FiretrayPopupMenu.jsm");
+    Cu.import("chrome://firetray/content/modules/winnt/FiretrayPopupMenu.jsm");
     if (!firetray.PopupMenu.init())
       return false;
 

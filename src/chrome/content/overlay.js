@@ -1,8 +1,8 @@
 /* -*- Mode: js2; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 "use strict";
 
-Components.utils.import("resource://firetray/commons.js");
-Components.utils.import("resource://firetray/FiretrayHandler.jsm");
+Components.utils.import("chrome://firetray/content/modules/commons.js");
+Components.utils.import("chrome://firetray/content/modules/FiretrayHandler.jsm");
 
 if ("undefined" == typeof(Cc)) var Cc = Components.classes;
 if ("undefined" == typeof(Ci)) var Ci = Components.interfaces;

@@ -59,7 +59,7 @@ firetray.Logging = {
     ["resource://gre/modules/Log.jsm",           // FF 27+
      "resource://services-common/log4moz.js",    // FF
      "resource:///app/modules/gloda/log4moz.js", // TB
-     "resource://firetray/log4moz.js"]           // default
+     "chrome://firetray/content/modules/log4moz.js"]           // default
       .forEach(function(file){
         try {Cu.import(file);} catch(x) {}
       }, this);

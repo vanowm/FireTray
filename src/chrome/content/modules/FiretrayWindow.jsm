@@ -7,7 +7,7 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
 
-Cu.import("resource://firetray/commons.js");
+Cu.import("chrome://firetray/content/modules/commons.js");
 
 let log = firetray.Logging.getLogger("firetray.FiretrayWindow");
 

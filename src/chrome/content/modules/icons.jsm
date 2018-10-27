@@ -4,15 +4,15 @@ this.EXPORTED_SYMBOLS = ['EMBEDDED_ICON_FILES'];
 
 const {classes: Cc, interfaces: Ci, results: Cr, utils: Cu} = Components;
 
-Cu.import("resource://firetray/icons/blank-icon.bmp.jsm");
-Cu.import("resource://firetray/icons/blank-icon.ico.jsm");
-Cu.import("resource://firetray/icons/mail-unread.bmp.jsm");
-Cu.import("resource://firetray/icons/mail-unread.ico.jsm");
-Cu.import("resource://firetray/icons/gtk-preferences.bmp.jsm");
-Cu.import("resource://firetray/icons/application-exit.bmp.jsm");
-Cu.import("resource://firetray/icons/document-new.bmp.jsm");
-Cu.import("resource://firetray/icons/gtk-edit.bmp.jsm");
-Cu.import("resource://firetray/icons/gtk-apply.bmp.jsm");
+Cu.import("chrome://firetray/content/modules/icons/blank-icon.bmp.jsm");
+Cu.import("chrome://firetray/content/modules/icons/blank-icon.ico.jsm");
+Cu.import("chrome://firetray/content/modules/icons/mail-unread.bmp.jsm");
+Cu.import("chrome://firetray/content/modules/icons/mail-unread.ico.jsm");
+Cu.import("chrome://firetray/content/modules/icons/gtk-preferences.bmp.jsm");
+Cu.import("chrome://firetray/content/modules/icons/application-exit.bmp.jsm");
+Cu.import("chrome://firetray/content/modules/icons/document-new.bmp.jsm");
+Cu.import("chrome://firetray/content/modules/icons/gtk-edit.bmp.jsm");
+Cu.import("chrome://firetray/content/modules/icons/gtk-apply.bmp.jsm");
 
 const EMBEDDED_ICON_FILES = {
   'blank-icon-bmp': { use: 'tray', type: 'bmp', bin: BLANK_ICON_BMP },

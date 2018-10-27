@@ -6,8 +6,8 @@ const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
 
-Cu.import("resource://firetray/commons.js"); // first for Handler.app !
-Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gtk.jsm");
+Cu.import("chrome://firetray/content/modules/commons.js"); // first for Handler.app !
+Cu.import("chrome://firetray/content/modules/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gtk.jsm");
 firetray.Handler.subscribeLibsForClosing([gtk]);
 
 if ("undefined" == typeof(firetray.StatusIcon))
@@ -42,8 +42,8 @@ firetray.GtkIcons = {
     log.debug("gtkIconTheme="+gtkIconTheme);
 
     if (log.level <= firetray.Logging.LogMod.Level.Debug) {
-      Cu.import("resource://firetray/ctypes/linux/glib.jsm");
-      Cu.import("resource://firetray/ctypes/linux/gobject.jsm");
+      Cu.import("chrome://firetray/content/modules/ctypes/linux/glib.jsm");
+      Cu.import("chrome://firetray/content/modules/ctypes/linux/gobject.jsm");
       firetray.Handler.subscribeLibsForClosing([glib, gobject]);
       let path = new gobject.gchar.ptr.ptr;
       let n_elements = new gobject.gint;

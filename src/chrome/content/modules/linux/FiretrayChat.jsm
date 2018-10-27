@@ -7,9 +7,9 @@ const Ci = Components.interfaces;
 const Cu = Components.utils;
 
 Cu.import("resource:///modules/imServices.jsm");
-Cu.import("resource://firetray/commons.js");
-Cu.import("resource://firetray/linux/FiretrayChatStatusIcon.jsm");
-Cu.import("resource://firetray/linux/FiretrayWindow.jsm");
+Cu.import("chrome://firetray/content/modules/commons.js");
+Cu.import("chrome://firetray/content/modules/linux/FiretrayChatStatusIcon.jsm");
+Cu.import("chrome://firetray/content/modules/linux/FiretrayWindow.jsm");
 
 let log = firetray.Logging.getLogger("firetray.Chat");
 

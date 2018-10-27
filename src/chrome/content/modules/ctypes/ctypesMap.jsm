@@ -7,8 +7,8 @@ const Ci = Components.interfaces;
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/ctypes.jsm");
-Cu.import("resource://firetray/logging.jsm");
-Cu.import("resource://firetray/commons.js");
+Cu.import("chrome://firetray/content/modules/logging.jsm");
+Cu.import("chrome://firetray/content/modules/commons.js");
 
 const FIRETRAY_WINDOW_COUNT_MAX = 64;
 

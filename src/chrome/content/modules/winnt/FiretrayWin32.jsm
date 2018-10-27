@@ -7,10 +7,10 @@ const Ci = Components.interfaces;
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/ctypes.jsm");
-Cu.import("resource://firetray/ctypes/winnt/win32.jsm");
-Cu.import("resource://firetray/ctypes/winnt/kernel32.jsm");
-Cu.import("resource://firetray/ctypes/winnt/user32.jsm");
-Cu.import("resource://firetray/commons.js");
+Cu.import("chrome://firetray/content/modules/ctypes/winnt/win32.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/winnt/kernel32.jsm");
+Cu.import("chrome://firetray/content/modules/ctypes/winnt/user32.jsm");
+Cu.import("chrome://firetray/content/modules/commons.js");
 firetray.Handler.subscribeLibsForClosing([kernel32, user32]);
 
 let log = firetray.Logging.getLogger("firetray.Win32");

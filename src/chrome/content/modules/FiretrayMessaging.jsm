@@ -10,7 +10,7 @@ Cu.import("resource:///modules/iteratorUtils.jsm");
 Cu.import("resource:///modules/mailServices.js");
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/PluralForm.jsm");
-Cu.import("resource://firetray/commons.js");
+Cu.import("chrome://firetray/content/modules/commons.js");
 
 const FLDRS_UNINTERESTING = {
   Archive:   Ci.nsMsgFolderFlags.Archive,   // 0x00004000
