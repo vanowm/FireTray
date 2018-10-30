@@ -8,7 +8,7 @@ const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource:///modules/iteratorUtils.jsm");
-if (Services.appinfo.version >= 61.0) {
+if (Services.appinfo.version >= 64.0) {
   Cu.import("resource:///modules/mailServices.jsm");
 } else {
   Cu.import("resource:///modules/mailServices.js");

@@ -55,7 +55,7 @@ var firetrayUIOptions = {
     }
 
     if (firetray.Handler.inMailApp) {
-      if (Services.appinfo.version >= 61.0) {
+      if (Services.appinfo.version >= 64.0) {
         Cu.import("resource:///modules/mailServices.jsm");
       } else {
         Cu.import("resource:///modules/mailServices.js");
