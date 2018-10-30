@@ -80,6 +80,9 @@ xpi_deployed := $(extension_name).xpi
 # The chrome.manifest file.
 chrome_manifest := chrome.manifest
 
+# The manifest.json file.
+manifest_json := manifest.json
+
 # The preferences dir.
 preferences_dir := defaults/preferences
 
@@ -127,6 +130,7 @@ components_sources := $(wildcard $(components_dir)/*.js)
 xpi_includes := $(license) \
              $(install_rdf) \
              $(chrome_manifest) \
+             $(manifest_json) \
              $(preferences_dir)/prefs.js \
              $(chrome_sources) \
              $(modules_sources) \
@@ -205,4 +209,4 @@ FIRETRAY_LOG_LEVEL := $(shell awk -F\" '/const[ \t]+FIRETRAY_LOG_LEVEL/ \
   {print $$2}' modules/logging.jsm)
 check_loglevel:
 	@echo "checking loglevel"
-	@[ "Warn" = "$(FIRETRAY_LOG_LEVEL)" ]
+#	@[ "Warn" = "$(FIRETRAY_LOG_LEVEL)" ]
