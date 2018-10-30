@@ -7,7 +7,7 @@
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             title="&prefwindow.title;" minwidth="360px">
 
-  <script type="application/x-javascript" src="options.js" />
+  <script type="application/x-javascript" src="chrome://firetray/content/options.js" />
 
   <stringbundleset id="stringbundleset">
     <stringbundle id="firetray-options-strings" src="chrome://firetray/locale/options.properties"/>
