@@ -83,7 +83,6 @@ firetray.Logging = {
 
       // A dump appender outputs to standard out
       let dumpFormatter = new this.LogMod.BasicFormatter()();
-      }
       let dapp = new this.LogMod.DumpAppender(dumpFormatter);
       dapp.level = this.LogMod.Level["Debug"];
       this._logger.addAppender(dapp);
