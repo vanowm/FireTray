@@ -8,7 +8,7 @@ const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/Services.jsm");
 
-const FIRETRAY_LOG_LEVEL = "Warn"; // "All" for debugging
+const FIRETRAY_LOG_LEVEL = "Debug"; // "All" for debugging
 
 const COLOR_NORMAL          = "";
 const COLOR_RESET           = "\0o33[m";
@@ -82,7 +82,7 @@ firetray.Logging = {
       this._logger.addAppender(capp);
 
       // A dump appender outputs to standard out
-      let dumpFormatter = new this.LogMod.BasicFormatter()();
+      let dumpFormatter = new this.LogMod.BasicFormatter();
       let dapp = new this.LogMod.DumpAppender(dumpFormatter);
       dapp.level = this.LogMod.Level["Debug"];
       this._logger.addAppender(dapp);
