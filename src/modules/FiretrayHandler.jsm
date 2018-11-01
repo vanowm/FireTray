@@ -111,8 +111,8 @@ firetray.Handler = {
 
     if (this.inMailApp) {
       try {
-        if (Services.appinfo.version >= 64.0) {
-          Cu.import("resource:///modules/mailServices.jsm");
+        if (Services.appinfo.version >= 63.0) {
+          Cu.import("resource:///modules/MailServices.jsm");
         } else {
           Cu.import("resource:///modules/mailServices.js");
         }
