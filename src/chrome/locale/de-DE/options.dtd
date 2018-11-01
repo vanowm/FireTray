@@ -25,6 +25,8 @@
 <!ENTITY show_activates.accesskey "W">
 <!ENTITY remember_desktop.label "Fenster auf ihre ursprünglichen Arbeitsfläche wiederherstellen">
 <!ENTITY remember_desktop.accesskey "F">
+<!ENTITY use_appindicator_icon.label "Verwende ein Appindicator-Anzeigesymbol">
+<!ENTITY use_appindicator_icon.accesskey "i">
 
 <!ENTITY show_icon_on_hide.label "Leistensymbol nur bei verborgenem Fenster anzeigen">
 <!ENTITY show_icon_on_hide.accesskey "L">

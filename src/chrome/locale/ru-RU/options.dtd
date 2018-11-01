@@ -25,6 +25,8 @@
 <!ENTITY show_activates.tooltip "восстановленные окна появляются поверх других и получают фокус">
 <!ENTITY remember_desktop.label "Восстанавливать окна на исходный рабочий стол">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Use an appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
 
 <!ENTITY show_icon_on_hide.label "Показывать значок в трее только если скрыто окно">
 <!ENTITY show_icon_on_hide.accesskey "w">

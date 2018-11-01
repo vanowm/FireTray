@@ -29,6 +29,7 @@
       <preference id="pref_start_hidden" name="extensions.firetray.start_hidden" type="bool"/>
       <preference id="pref_show_activates" name="extensions.firetray.show_activates" type="bool"/>
       <preference id="pref_remember_desktop" name="extensions.firetray.remember_desktop" type="bool"/>
+      <preference id="pref_appindicator_icon" name="extensions.firetray.with_appindicator" type="bool"/>
     </preferences>
 
     <vbox pack="start" align="left" flex="1">
@@ -59,6 +60,12 @@
                 label="&remember_desktop.label;"
                 accesskey="&remember_desktop.accesskey;"/>
 
+    </vbox>
+
+    <vbox pack="start" align="left" flex="1">
+      <checkbox id="ui_use_appindicator_icon" preference="pref_appindicator_icon"
+                label="&use_appindicator_icon.label;"
+                accesskey="&use_appindicator_icon.accesskey;"/>
     </vbox>
 
   </prefpane>

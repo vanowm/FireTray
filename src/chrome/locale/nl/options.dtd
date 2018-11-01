@@ -24,6 +24,9 @@
 <!ENTITY show_activates.tooltip "herstelde vensters worden vooraan geplaatst en krijgen focus">
 <!ENTITY remember_desktop.label "Desktop onthouden (per venster)">
 <!ENTITY remember_desktop.accesskey "h">
+<!ENTITY use_appindicator_icon.label "Gebruik een appindicator pictogram">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "Systeemvakpictogram alleen weergeven als een venster is verborgen">
 <!ENTITY show_icon_on_hide.accesskey "w">
 <!ENTITY app_icon_type "Pictogramtype toepassing">

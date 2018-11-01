@@ -25,6 +25,8 @@
 <!ENTITY show_activates.tooltip "obnovené okná budú vyvolané do popredia a získajú zameranie">
 <!ENTITY remember_desktop.label "Zapamätať prac. plochu (podľa okna)">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Use an appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
 
 <!ENTITY show_icon_on_hide.label "Zobraziť ikonu lišty, len ak je okno skryté">
 <!ENTITY show_icon_on_hide.accesskey "S">

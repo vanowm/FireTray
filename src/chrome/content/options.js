@@ -34,16 +34,11 @@ var firetrayUIOptions = {
     this.initAppIconType();
     if (firetray.Handler.support['winnt']) {
       this.hideUnsupportedOptions([
-        'ui_show_activates', 'ui_remember_desktop', 'app_icon_default',
+        'ui_show_activates', 'ui_remember_desktop', 'ui_use_appindicator_icon', 'app_icon_default',
         'ui_show_icon_on_hide', 'ui_scroll_hides', 'ui_radiogroup_scroll',
         'ui_scroll_hides', 'ui_middle_click', 'newmail_icon_names'
       ]);
     } else if (firetray.AppIndicator) {
-      //this.hideUnsupportedOptions([
-      //  'app_icon_default', 
-		//  'ui_mail_notification_unread_count',
-      //  'newmail_icon_names'
-      //]);
       this.hideUnsupportedOptions([
         'app_icon_default', 
         'newmail_icon_names'
@@ -91,6 +86,7 @@ var firetrayUIOptions = {
         // windows prefs
       case 'ui_show_activates':
       case 'ui_remember_desktop':
+      case 'ui_use_appindicator_icon':
         // icon prefs
       case 'app_icon_default':
       case 'ui_show_icon_on_hide':

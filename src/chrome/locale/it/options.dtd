@@ -24,6 +24,9 @@
 <!ENTITY show_activates.tooltip "Le finestre ripristinate verranno portate in primo piano e rese attive">
 <!ENTITY remember_desktop.label "Ripristina ciascuna finestra sul desktop originale">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Utilizzare un'icona di appindicatore">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "Mostra l'icona solo se una finestra è nascosta">
 <!ENTITY show_icon_on_hide.accesskey "O">
 <!ENTITY app_icon_type "Icona dell'applicazione">

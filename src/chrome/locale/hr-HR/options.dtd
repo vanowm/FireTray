@@ -24,6 +24,9 @@
 <!ENTITY show_activates.tooltip "Obnovljeni prozori se vraćaju na vrh i u fokus">
 <!ENTITY remember_desktop.label "Obnovi prozore na njihovu izvornu radnu površinu">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Use an appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "Prikaži traku sustava samo ako je prozor sakriven">
 <!ENTITY show_icon_on_hide.accesskey "w">
 <!ENTITY app_icon_type "Vrsta ikone aplikacije">
