@@ -453,17 +453,24 @@ var firetrayUIOptions = {
     for (let folderType in FLDRS_UNINTERESTING) {
       let localizedFolderType = this.strings.getString(folderType);
       let folderTypeVal = FLDRS_UNINTERESTING[folderType];
-      let item = excludedFoldersList.appendItem(localizedFolderType, folderTypeVal);
-      item.setAttribute("observes", "broadcaster-notification-disabled");
+      
+      let li = document.createElement("richlistitem");
+      let desc = document.createElement("description");
+      let txt = document.createTextNode(localizedFolderType); 
+      desc.appendChild(txt);
+      li.appendChild(desc);
+      li.value = folderTypeVal;
+      excludedFoldersList.appendChild(li);
+      li.setAttribute("observes", "broadcaster-notification-disabled");
       let folderTypeSet = (folderTypeVal & prefExcludedFoldersFlags);
       log.debug("folder: "+folderType+" folderTypeVal="+folderTypeVal+" folderTypeSet="+folderTypeSet);
       if (!folderTypeSet) {
-        excludedFoldersList.ensureElementIsVisible(item); // bug 326445
-        excludedFoldersList.addItemToSelection(item); // does trigger onselect...
+        excludedFoldersList.ensureElementIsVisible(li); // bug 326445
+        excludedFoldersList.addItemToSelection(li); // does trigger onselect...
       }
     }
 
-    // ...so we add onselect handler after the listbox is populated. 'select'
+    // ...so we add onselect handler after the richlistbox is populated. 'select'
     // also fired on unselect.
     let listener = {evt:'select', fn:firetrayUIOptions.userChangedValue, cap:true};
     this.addListener(excludedFoldersList, listener);

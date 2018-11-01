@@ -272,7 +272,7 @@
                      observes="broadcaster-notification-disabled" />
             </caption>
 
-            <listbox id="excluded_folders_list" rows="7" flex="1" seltype="multiple"
+            <richlistbox id="excluded_folders_list" rows="7" flex="1" seltype="multiple"
                      tooltiptext="&excluded_folders_list.tooltip;"
                      preference="pref_excluded_folders_flags"
                      onsynctopreference="return firetrayUIOptions.saveExcludedFoldersFlags(this);"
