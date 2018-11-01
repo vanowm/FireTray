@@ -13,6 +13,7 @@
     }
   },
   "icons": {
-    "32": "chrome://firetray/skin/icons/firetray48.png"
+    "48": "chrome/skin/icons/firetray48.png",
+    "64": "chrome/skin/icons/firetray64.png"
   }
 }
