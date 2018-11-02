@@ -68,6 +68,9 @@ license := LICENSE
 # The install.rdf file.
 install_rdf := install.rdf
 
+# The manifest.json file.
+manifest_json := manifest.json
+
 # The install.rdf file.
 bootstrap := bootstrap.js
 
@@ -126,6 +129,7 @@ components_sources := $(wildcard $(components_dir)/*.js)
 # Makefiles.
 xpi_includes := $(license) \
              $(install_rdf) \
+             $(manifest_json) \
              $(chrome_manifest) \
              $(bootstrap) \
              $(chrome_sources) \
