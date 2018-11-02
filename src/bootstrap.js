@@ -89,6 +89,8 @@ function startup(data,reason) {
     
 //  myModule.startup();  // Do whatever initial startup stuff you need to do
 
+  Components.utils.import("chrome://firetray/content/overlay.js");
+  
   forEachOpenWindow(loadIntoWindow);
   Services.wm.addListener(WindowListener);
 }

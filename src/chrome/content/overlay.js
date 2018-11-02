@@ -1,6 +1,8 @@
 /* -*- Mode: js2; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
 "use strict";
 
+var EXPORTED_SYMBOLS = [ "firetrayChrome" ];
+
 Components.utils.import("chrome://firetray/content/modules/commons.js");
 Components.utils.import("chrome://firetray/content/modules/FiretrayHandler.jsm");
 
@@ -18,7 +20,7 @@ var firetrayChrome = { // each new window gets a new firetrayChrome !
   winId: null,
 
   onLoad: function(win) {
-    this.strings = document.getElementById("firetray-strings"); // chrome-specific
+    this.strings = win.document.getElementById("firetray-strings"); // chrome-specific
 
     firetray_log.debug("Handler initialized: "+firetray.Handler.initialized);
     let init = firetray.Handler.initialized || firetray.Handler.init();
@@ -27,7 +29,7 @@ var firetrayChrome = { // each new window gets a new firetrayChrome !
     this.winId = firetray.Handler.registerWindow(win);
 
     win.addEventListener('close', firetrayChrome.onClose, true);
-    this.hijackTitlebarButtons();
+    this.hijackTitlebarButtons(win);
 
     firetray_log.debug('Firetray LOADED: ' + init);
     return true;
@@ -73,9 +75,9 @@ var firetrayChrome = { // each new window gets a new firetrayChrome !
    * which do not fire the events that we rely on (see Bug 827880). This is why
    * we override the fake buttons' default actions.
    */
-  hijackTitlebarButtons: function() {
+  hijackTitlebarButtons: function(win) {
     Object.keys(this.titlebarDispatch).forEach(function(id) {
-      if (firetrayChrome.replaceCommand(id, this.titlebarDispatch[id])) {
+      if (firetrayChrome.replaceCommand(win,id, this.titlebarDispatch[id])) {
         firetray_log.debug('replaced command='+id);
       }
     }, this);
@@ -90,8 +92,8 @@ var firetrayChrome = { // each new window gets a new firetrayChrome !
     }
   },
 
-  replaceCommand: function(eltId, gotHidden) {
-    let elt = document.getElementById(eltId);
+  replaceCommand: function(win,eltId, gotHidden) {
+    let elt = win.document.getElementById(eltId);
     if (!elt) {
       firetray_log.debug("Element '"+eltId+"' not found. Command not replaced.");
       return false;
@@ -129,6 +131,7 @@ var firetrayChrome = { // each new window gets a new firetrayChrome !
 // should be sufficient for a delayed Startup (no need for window.setTimeout())
 // https://developer.mozilla.org/en/XUL_School/JavaScript_Object_Management.html
 // https://developer.mozilla.org/en/Extensions/Performance_best_practices_in_extensions#Removing_Event_Listeners
+/*
 window.addEventListener(
   'load', function removeOnloadListener(e) {
     removeEventListener('load', removeOnloadListener, true);
@@ -139,3 +142,4 @@ window.addEventListener(
     removeEventListener('unload', removeOnUnloadListener, true);
     firetrayChrome.onQuit(this); },
   false);
+*/
