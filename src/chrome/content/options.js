@@ -40,7 +40,7 @@ var firetrayUIOptions = {
       ]);
     } else if (firetray.AppIndicator) {
       this.hideUnsupportedOptions([
-        'app_icon_default', 
+        'app_icon_default',
         'newmail_icon_names'
       ]);
     } else {
@@ -66,6 +66,12 @@ var firetrayUIOptions = {
       this.removePrefPane("pref-pane-chat");
     };
 
+    if (!firetray.Handler.canAppind) {
+      this.hideUnsupportedOptions([
+        'ui_use_appindicator_icon'
+      ]);
+    }
+    
     window.sizeToContent();
   },
 

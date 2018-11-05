@@ -38,6 +38,7 @@ firetray.Handler = {
   appHasChat: false,
   appStarted: false,
   useAppind: false,             // initialized in StatusIcon
+  canAppind: false,             // initialized in StatusIcon
   windows: {},
   get windowsCount() {return Object.keys(this.windows).length;},
   get visibleWindowsCount() {
