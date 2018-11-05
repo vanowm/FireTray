@@ -29,6 +29,7 @@ firetray.StatusIcon = {
   prefNewMailIconNames: null,
   defaultAppIconName: null,
   defaultNewMailIconName: null,
+  canAppind: false,
 
   init: function() {
     this.defineIconNames();
@@ -110,11 +111,11 @@ firetray.StatusIcon = {
       return false;
     }
 
-    let canAppIndicator = (appind.available() &&
+    this.canAppind = (appind.available() &&
                            this.dbusNotificationWatcherReady());
 
     return (firetray.Utils.prefService.getBoolPref('with_appindicator') &&
-            canAppIndicator && isAppindDesktop);
+            this.canAppind && isAppindDesktop);
   },
 
   getDesktop: function() {
@@ -223,6 +224,7 @@ firetray.StatusIcon = {
 
 
 firetray.Handler.useAppind = firetray.StatusIcon.appindEnable();
+firetray.Handler.canAppind = firetray.StatusIcon.canAppind;
 
 firetray.Handler.setIconTooltipDefault = function() {
   if (!this.app.name)
