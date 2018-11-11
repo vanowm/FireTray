@@ -9,10 +9,6 @@
 
   <script type="application/x-javascript" src="chrome://firetray/content/options.js" />
 
-  <stringbundleset id="stringbundleset">
-    <stringbundle id="firetray-options-strings" src="chrome://firetray/locale/options.properties"/>
-  </stringbundleset>
-
   <broadcasterset>
     <broadcaster id="broadcaster-notification-disabled" disabled="false" />
     <broadcaster id="broadcaster-chat-icon-disabled" disabled="false" />

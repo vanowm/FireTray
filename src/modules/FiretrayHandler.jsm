@@ -468,8 +468,7 @@ firetray.Handler = {
       }
     }
     else {
-      var SBS = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
-      var configBundle = SBS.createBundle(firetray.Handler._getBrowserProperties());
+      var configBundle = Services.strings.createBundle(firetray.Handler._getBrowserProperties());
       url = configBundle.GetStringFromName(prefDomain);
     }
 

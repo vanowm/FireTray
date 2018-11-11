@@ -24,7 +24,7 @@ var firetrayUIOptions = {
 
   onLoad: function(e) {
     log.debug("FULL FEATURED="+firetray.Handler.support['full_feat']);
-    this.strings = document.getElementById("firetray-options-strings");
+    this.strings = Services.strings.createBundle("chrome://firetray/locale/options.properties"),
     this.prefwindow = document.getElementById("firetray-preferences");
     if (!this.prefwindow)
       log.error("pref window not found");
