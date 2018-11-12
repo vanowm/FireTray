@@ -23,7 +23,7 @@ const PREFS = {
   scroll_hides: true,
   scroll_mode: "down_hides",
   middle_click: 0,
-  chat_icon_enable: true,
+  chat_icon_enable: false,
   chat_icon_blink: true,
   chat_icon_blink_style: 0,
 
