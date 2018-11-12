@@ -18,7 +18,7 @@ var firetrayChrome = { // each new window gets a new firetrayChrome !
   winId: null,
 
   onLoad: function(win) {
-    this.strings = Services.strings.createBundle("chrome://firetray/locale/overlay.properties"),
+    this.strings = Services.strings.createBundle("chrome://firetray/locale/overlay.properties");
 
     firetray_log.debug("Handler initialized: "+firetray.Handler.initialized);
     let init = firetray.Handler.initialized || firetray.Handler.init();
