@@ -458,7 +458,7 @@ var firetrayUIOptions = {
       .getIntPref("excluded_folders_flags");
     log.debug("prefExcludedFoldersFlags="+prefExcludedFoldersFlags.toString(16));
     for (let folderType in FLDRS_UNINTERESTING) {
-      let localizedFolderType = this.strings.getString(folderType);
+      let localizedFolderType = this.strings.GetStringFromName(folderType);
       let folderTypeVal = FLDRS_UNINTERESTING[folderType];
       
       let li = document.createElement("richlistitem");
