@@ -57,7 +57,7 @@ var firetrayUIOptions = {
       } else {
         Cu.import("resource:///modules/mailServices.js");
       }
-      Cu.import("resource://firetray/FiretrayMessaging.jsm");
+      Cu.import("chrome://firetray/content/modules/FiretrayMessaging.jsm");
       this.initMailControls();
     } else {
       this.removePrefPane("pref-pane-mail");
