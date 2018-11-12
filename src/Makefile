@@ -68,9 +68,6 @@ license := LICENSE
 # The install.rdf file.
 install_rdf := install.rdf
 
-# The manifest.json file.
-manifest_json := manifest.json
-
 # The install.rdf file.
 bootstrap := bootstrap.js
 
@@ -85,9 +82,6 @@ xpi_deployed := $(extension_name).xpi
 
 # The chrome.manifest file.
 chrome_manifest := chrome.manifest
-
-# The manifest.json file.
-manifest_json := manifest.json
 
 # The root of the chrome sources.
 chrome_source_root := chrome
@@ -132,10 +126,8 @@ components_sources := $(wildcard $(components_dir)/*.js)
 # Makefiles.
 xpi_includes := $(license) \
              $(install_rdf) \
-             $(manifest_json) \
              $(chrome_manifest) \
              $(bootstrap) \
-             $(manifest_json) \
              $(chrome_sources) \
              $(modules_sources) \
              $(components_sources)
