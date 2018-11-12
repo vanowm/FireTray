@@ -21,6 +21,7 @@ var firetrayUIOptions = {
   strings: null,
   prefwindow: null,
   listeners: {},
+  mutationObserver: null,
 
   onLoad: function(e) {
     log.debug("FULL FEATURED="+firetray.Handler.support['full_feat']);
