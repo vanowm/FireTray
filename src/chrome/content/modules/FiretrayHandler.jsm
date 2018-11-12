@@ -117,7 +117,7 @@ firetray.Handler = {
         } else {
           Cu.import("resource:///modules/mailServices.js");
         }
-        Cu.import("resource://firetray/FiretrayMessaging.jsm");
+        Cu.import("chrome://firetray/content/modules/FiretrayMessaging.jsm");
         if (firetray.Utils.prefService.getBoolPref("mail_notification_enabled")) {
           firetray.Messaging.init();
           firetray.Messaging.updateMsgCountWithCb();
