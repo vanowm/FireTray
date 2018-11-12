@@ -21,10 +21,11 @@ var firetrayUIOptions = {
   strings: null,
   prefwindow: null,
   listeners: {},
+  mutationObserver: null,
 
   onLoad: function(e) {
     log.debug("FULL FEATURED="+firetray.Handler.support['full_feat']);
-    this.strings = document.getElementById("firetray-options-strings");
+    this.strings = Services.strings.createBundle("chrome://firetray/locale/options.properties");
     this.prefwindow = document.getElementById("firetray-preferences");
     if (!this.prefwindow)
       log.error("pref window not found");
@@ -34,18 +35,13 @@ var firetrayUIOptions = {
     this.initAppIconType();
     if (firetray.Handler.support['winnt']) {
       this.hideUnsupportedOptions([
-        'ui_show_activates', 'ui_remember_desktop', 'app_icon_default',
+        'ui_show_activates', 'ui_remember_desktop', 'ui_use_appindicator_icon', 'app_icon_default',
         'ui_show_icon_on_hide', 'ui_scroll_hides', 'ui_radiogroup_scroll',
         'ui_scroll_hides', 'ui_middle_click', 'newmail_icon_names'
       ]);
     } else if (firetray.AppIndicator) {
-      //this.hideUnsupportedOptions([
-      //  'app_icon_default', 
-		//  'ui_mail_notification_unread_count',
-      //  'newmail_icon_names'
-      //]);
       this.hideUnsupportedOptions([
-        'app_icon_default', 
+        'app_icon_default',
         'newmail_icon_names'
       ]);
     } else {
@@ -53,10 +49,15 @@ var firetrayUIOptions = {
       if (firetray.Handler.inMailApp)
         this.initNewMailIconNames();
     }
-
+    
+    Cu.import("resource://gre/modules/Services.jsm");
     if (firetray.Handler.inMailApp) {
-      Cu.import("resource:///modules/mailServices.js");
-      Cu.import("chrome://firetray/content/modules/FiretrayMessaging.jsm");
+      if (Services.appinfo.version >= 63.0) {
+        Cu.import("resource:///modules/MailServices.jsm");
+      } else {
+        Cu.import("resource:///modules/mailServices.js");
+      }
+      Cu.import("resource://firetray/FiretrayMessaging.jsm");
       this.initMailControls();
     } else {
       this.removePrefPane("pref-pane-mail");
@@ -71,6 +72,12 @@ var firetrayUIOptions = {
       this.removePrefPane("pref-pane-chat");
     };
 
+    if (!firetray.Handler.canAppind) {
+      this.hideUnsupportedOptions([
+        'ui_use_appindicator_icon'
+      ]);
+    }
+    
     window.sizeToContent();
   },
 
@@ -87,6 +94,7 @@ var firetrayUIOptions = {
         // windows prefs
       case 'ui_show_activates':
       case 'ui_remember_desktop':
+      case 'ui_use_appindicator_icon':
         // icon prefs
       case 'app_icon_default':
       case 'ui_show_icon_on_hide':
@@ -450,19 +458,26 @@ var firetrayUIOptions = {
       .getIntPref("excluded_folders_flags");
     log.debug("prefExcludedFoldersFlags="+prefExcludedFoldersFlags.toString(16));
     for (let folderType in FLDRS_UNINTERESTING) {
-      let localizedFolderType = this.strings.getString(folderType);
+      let localizedFolderType = this.strings.GetStringFromName(folderType);
       let folderTypeVal = FLDRS_UNINTERESTING[folderType];
-      let item = excludedFoldersList.appendItem(localizedFolderType, folderTypeVal);
-      item.setAttribute("observes", "broadcaster-notification-disabled");
+      
+      let li = document.createElement("richlistitem");
+      let desc = document.createElement("description");
+      let txt = document.createTextNode(localizedFolderType); 
+      desc.appendChild(txt);
+      li.appendChild(desc);
+      li.value = folderTypeVal;
+      excludedFoldersList.appendChild(li);
+      li.setAttribute("observes", "broadcaster-notification-disabled");
       let folderTypeSet = (folderTypeVal & prefExcludedFoldersFlags);
       log.debug("folder: "+folderType+" folderTypeVal="+folderTypeVal+" folderTypeSet="+folderTypeSet);
       if (!folderTypeSet) {
-        excludedFoldersList.ensureElementIsVisible(item); // bug 326445
-        excludedFoldersList.addItemToSelection(item); // does trigger onselect...
+        excludedFoldersList.ensureElementIsVisible(li); // bug 326445
+        excludedFoldersList.addItemToSelection(li); // does trigger onselect...
       }
     }
 
-    // ...so we add onselect handler after the listbox is populated. 'select'
+    // ...so we add onselect handler after the richlistbox is populated. 'select'
     // also fired on unselect.
     let listener = {evt:'select', fn:firetrayUIOptions.userChangedValue, cap:true};
     this.addListener(excludedFoldersList, listener);

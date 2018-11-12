@@ -24,6 +24,9 @@
 <!ENTITY show_activates.tooltip "las ventanas restauradas siempre encima y con foco">
 <!ENTITY remember_desktop.label "Recordar escritorio (por ventana)">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Utilizar un icono de appindicator">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "Mostrar el icono de bandeja solo si una ventana esta oculta">
 <!ENTITY show_icon_on_hide.accesskey "t">
 <!ENTITY app_icon_type "Tipo de icono para la aplicación">

@@ -1,0 +1,26 @@
+-- 0.6.3 - 5 Nov 2018
+
+One version to rule them all (Linux/Windows)
+
+* Make appindicator / GTK status icon a preference if appindicator is installed.
+
+
+-- 0.6.1 - 29 Sep 2018
+
+Update for Thunderbird 60 (Linux/Windows)
+
+ * Make the unread message count for every theme an option. 
+ * Use GTK status icon for linux.
+
+
+-- 0.6.1-appindicator - 29 Sep 2018
+
+Update for Thunderbird 60 (Linux/Windows)
+
+ * Make the unread message count for every theme an option. 
+ * Use appindicator for linux.
+
+
+-- 0.6.0 - 12 Oct 2015
+
+ Old branch

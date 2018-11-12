@@ -24,6 +24,9 @@
 <!ENTITY show_activates.tooltip "les fenêtres restaurées se déploient depuis le haut et sont au premier plan">
 <!ENTITY remember_desktop.label "Se souvenir du bureau">
 <!ENTITY remember_desktop.accesskey "b">
+<!ENTITY use_appindicator_icon.label "Utiliser une icône appindicator">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "Afficher l'icône de la zone de notification uniquement quand une fenêtre est masquée">
 <!ENTITY show_icon_on_hide.accesskey "i">
 <!ENTITY app_icon_type "Type d'icône de l'application">

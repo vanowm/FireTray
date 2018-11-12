@@ -38,6 +38,7 @@ firetray.Handler = {
   appHasChat: false,
   appStarted: false,
   useAppind: false,             // initialized in StatusIcon
+  canAppind: false,             // initialized in StatusIcon
   windows: {},
   get windowsCount() {return Object.keys(this.windows).length;},
   get visibleWindowsCount() {
@@ -111,8 +112,12 @@ firetray.Handler = {
 
     if (this.inMailApp) {
       try {
-        Cu.import("resource:///modules/mailServices.js");
-        Cu.import("chrome://firetray/content/modules/FiretrayMessaging.jsm");
+        if (Services.appinfo.version >= 63.0) {
+          Cu.import("resource:///modules/MailServices.jsm");
+        } else {
+          Cu.import("resource:///modules/mailServices.js");
+        }
+        Cu.import("resource://firetray/FiretrayMessaging.jsm");
         if (firetray.Utils.prefService.getBoolPref("mail_notification_enabled")) {
           firetray.Messaging.init();
           firetray.Messaging.updateMsgCountWithCb();
@@ -463,8 +468,7 @@ firetray.Handler = {
       }
     }
     else {
-      var SBS = Cc["@mozilla.org/intl/stringbundle;1"].getService(Ci.nsIStringBundleService);
-      var configBundle = SBS.createBundle(firetray.Handler._getBrowserProperties());
+      var configBundle = Services.strings.createBundle(firetray.Handler._getBrowserProperties());
       url = configBundle.GetStringFromName(prefDomain);
     }
 
@@ -800,13 +804,6 @@ firetray.VersionChangeHandler = {
   },
 
   correctMailNotificationType: function() {
-    let msgCountType = firetray.Utils.prefService.getIntPref('message_count_type');
-    let mailUnreadCountEnabled = firetray.Utils.prefService.getIntPref('mail_unread_count_enabled');
-    if (msgCountType === FIRETRAY_MESSAGE_COUNT_TYPE_NEW && mailUnreadCountEnabled) {
-      firetray.Utils.prefService.setIntPref('mail_notification_type',
-        FIRETRAY_NOTIFICATION_NEWMAIL_ICON);
-      log.warn("mail notification type set to newmail icon.");
-    }
   },
 
   correctMailServerTypes: function() {

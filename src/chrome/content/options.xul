@@ -7,11 +7,7 @@
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
             title="&prefwindow.title;" minwidth="360px">
 
-  <script type="application/x-javascript" src="options.js" />
-
-  <stringbundleset id="stringbundleset">
-    <stringbundle id="firetray-options-strings" src="chrome://firetray/locale/options.properties"/>
-  </stringbundleset>
+  <script type="application/x-javascript" src="chrome://firetray/content/options.js" />
 
   <broadcasterset>
     <broadcaster id="broadcaster-notification-disabled" disabled="false" />
@@ -29,6 +25,7 @@
       <preference id="pref_start_hidden" name="extensions.firetray.start_hidden" type="bool"/>
       <preference id="pref_show_activates" name="extensions.firetray.show_activates" type="bool"/>
       <preference id="pref_remember_desktop" name="extensions.firetray.remember_desktop" type="bool"/>
+      <preference id="pref_appindicator_icon" name="extensions.firetray.with_appindicator" type="bool"/>
     </preferences>
 
     <vbox pack="start" align="left" flex="1">
@@ -59,6 +56,12 @@
                 label="&remember_desktop.label;"
                 accesskey="&remember_desktop.accesskey;"/>
 
+    </vbox>
+
+    <vbox pack="start" align="left" flex="1">
+      <checkbox id="ui_use_appindicator_icon" preference="pref_appindicator_icon"
+                label="&use_appindicator_icon.label;"
+                accesskey="&use_appindicator_icon.accesskey;"/>
     </vbox>
 
   </prefpane>
@@ -265,7 +268,7 @@
                      observes="broadcaster-notification-disabled" />
             </caption>
 
-            <listbox id="excluded_folders_list" rows="7" flex="1" seltype="multiple"
+            <richlistbox id="excluded_folders_list" rows="7" flex="1" seltype="multiple"
                      tooltiptext="&excluded_folders_list.tooltip;"
                      preference="pref_excluded_folders_flags"
                      onsynctopreference="return firetrayUIOptions.saveExcludedFoldersFlags(this);"

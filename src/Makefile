@@ -86,6 +86,9 @@ xpi_deployed := $(extension_name).xpi
 # The chrome.manifest file.
 chrome_manifest := chrome.manifest
 
+# The manifest.json file.
+manifest_json := manifest.json
+
 # The root of the chrome sources.
 chrome_source_root := chrome
 
@@ -132,6 +135,7 @@ xpi_includes := $(license) \
              $(manifest_json) \
              $(chrome_manifest) \
              $(bootstrap) \
+             $(manifest_json) \
              $(chrome_sources) \
              $(modules_sources) \
              $(components_sources)

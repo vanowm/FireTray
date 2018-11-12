@@ -25,6 +25,8 @@
 <!ENTITY show_activates.tooltip "Przywrócone okna wyłonią się na wierzch i będą aktywne.">
 <!ENTITY remember_desktop.label "Przywracaj okna na ich ówczesne pulpity">
 <!ENTITY remember_desktop.accesskey "P">
+<!ENTITY use_appindicator_icon.label "Use an appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
 
 <!ENTITY show_icon_on_hide.label "Pokazuj ikonę w zasobniku tylko jeśli okno jest ukryte">
 <!ENTITY show_icon_on_hide.accesskey "o">
