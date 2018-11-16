@@ -419,7 +419,8 @@ firetray.Handler = {
 
   /** nsIBaseWindow, nsIXULWindow, ... */
   getWindowInterface: function(win, iface) {
-    let winInterface, winOut;
+    let winInterface;
+    let winOut;
     try {                       // thx Neil Deakin !!
       winInterface =  win.QueryInterface(Ci.nsIInterfaceRequestor)
         .getInterface(Ci.nsIWebNavigation)

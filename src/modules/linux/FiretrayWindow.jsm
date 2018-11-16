@@ -210,7 +210,8 @@ firetray.Window.getWindowsFromChromeWindow = function(win) {
   let baseWin = firetray.Handler.getWindowInterface(win, "nsIBaseWindow");
   let nativeHandle = baseWin.nativeHandle; // Moz' private pointer to the GdkWindow
   log.debug("nativeHandle="+nativeHandle);
-  let gtkWin, gdkWin;
+  let gtkWin;
+  let gdkWin;
   if (nativeHandle) { // Gecko 17+
     gdkWin = firetray.Window.getGdkWindowFromNativeHandle(nativeHandle);
     gtkWin = firetray.Window.getGtkWindowFromGdkWindow(gdkWin);

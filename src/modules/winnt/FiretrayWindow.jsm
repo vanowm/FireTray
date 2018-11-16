@@ -217,7 +217,8 @@ firetray.Handler.registerWindow = function(win) {
   });
   log.debug("window "+wid+" registered");
 
-  let proc, map;
+  let proc;
+  let map;
   if (!firetray.Handler.appStarted &&
       firetray.Utils.prefService.getBoolPref('start_hidden')) {
     let startupInfo = new kernel32.STARTUPINFO;
