@@ -11,7 +11,6 @@ Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/ctypes.jsm");
 Cu.import("resource://firetray/commons.js");
 Cu.import("resource://firetray/PrefListener.jsm");
-Cu.import("resource://firetray/VersionChange.jsm");
 
 /**
  * firetray namespace.
@@ -162,17 +161,6 @@ firetray.Handler = {
     }
 
     this.disablePrefsTmp();
-
-    VersionChange.init(FIRETRAY_ID, FIRETRAY_VERSION, FIRETRAY_PREF_BRANCH);
-    let vc = VersionChange, vch = firetray.VersionChangeHandler;
-    vc.addHook(["install", "upgrade", "reinstall"], vch.showReleaseNotes);
-    vc.addHook(["upgrade", "reinstall"], vch.deleteOrRenameOldOptions);
-    vc.addHook(["upgrade", "reinstall"], vch.correctMailNotificationType);
-    vc.addHook(["upgrade", "reinstall"], vch.correctMailServerTypes);
-    if (this.inMailApp) {
-      vc.addHook(["upgrade", "reinstall"], firetray.Messaging.cleanExcludedAccounts);
-    }
-    vc.applyHooksAndWatchUninstall();
 
     this.initialized = true;
     return true;
@@ -675,147 +663,3 @@ firetray.MailChatPrefListener = new PrefListener(
     default:
     }
   });
-
-firetray.VersionChangeHandler = {
-
-  showReleaseNotes: function() {
-    firetray.VersionChangeHandler.openTab(FIRETRAY_SPLASH_PAGE+"#release-notes");
-  },
-
-  openTab: function(url) {
-    log.info("app.id="+firetray.Handler.app.id);
-    if (firetray.Handler.app.id === FIRETRAY_APP_DB['thunderbird']['id'])
-      this.openMailTab(url);
-
-    else if (firetray.Handler.app.id === FIRETRAY_APP_DB['firefox']['id'] ||
-             firetray.Handler.app.id === FIRETRAY_APP_DB['seamonkey']['id'])
-      this.openBrowserTab(url);
-
-    else if (firetray.Handler.app.id === FIRETRAY_APP_DB['zotero']['id']) {
-      let win = null;
-      if (win = Services.wm.getMostRecentWindow("zotero:basicViewer")) {
-        win.loadURI(uri);
-      } else if (win = Services.wm.getMostRecentWindow("navigator:browser")) {
-        win.openDialog("chrome://zotero/content/standalone/basicViewer.xul",
-                       "basicViewer",
-                       "chrome,resizable,centerscreen,menubar,scrollbars", url);
-      } else
-        log.error("Zotero main-window not found");
-
-    } else {
-      this.openSystemBrowser(url);
-    }
-  },
-
-  openMailTab: function(url) {
-    let mail3PaneWindow = Services.wm.getMostRecentWindow("mail:3pane");
-    if (mail3PaneWindow) {
-      var tabmail = mail3PaneWindow.document.getElementById("tabmail");
-      mail3PaneWindow.focus();
-    }
-
-    if (tabmail) {
-      firetray.Handler.timers['open-mail-tab'] =
-        firetray.Utils.timer(FIRETRAY_DELAY_STARTUP_MILLISECONDS,
-          Ci.nsITimer.TYPE_ONE_SHOT, function() {
-            log.debug("openMailTab");
-            tabmail.openTab("contentTab", {contentPage: url});
-          });
-    }
-  },
-
-  openBrowserTab: function(url) {
-    let win = Services.wm.getMostRecentWindow("navigator:browser");
-    log.debug("WIN="+win);
-    if (win) {
-      var mainWindow = win.QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-            .getInterface(Components.interfaces.nsIWebNavigation)
-            .QueryInterface(Components.interfaces.nsIDocShellTreeItem)
-            .rootTreeItem
-            .QueryInterface(Components.interfaces.nsIInterfaceRequestor)
-            .getInterface(Components.interfaces.nsIDOMWindow);
-
-      mainWindow.setTimeout(function(win){
-        log.debug("openBrowser");
-        mainWindow.gBrowser.selectedTab = mainWindow.gBrowser.addTab(url);
-      }, 1000);
-    }
-  },
-
-  openSystemBrowser: function(url) {
-    log.debug("openSystemBrowser");
-    try {
-      var uri = Services.io.newURI(url, null, null);
-      var handler = Cc['@mozilla.org/uriloader/external-protocol-service;1']
-            .getService(Ci.nsIExternalProtocolService)
-            .getProtocolHandlerInfo('http');
-      handler.preferredAction = Ci.nsIHandlerInfo.useSystemDefault;
-      handler.launchWithURI(uri, null);
-    } catch (e) {log.error(e);}
-  },
-
-  deleteOrRenameOldOptions: function() {
-    let v0_3_Opts = [
-      "close_to_tray", "minimize_to_tray", "start_minimized", "confirm_exit",
-      "restore_to_next_unread", "mail_count_type", "show_mail_count",
-      "dont_count_spam", "dont_count_archive", "dont_count_drafts",
-      "dont_count_sent", "dont_count_templates", "show_mail_notification",
-      "show_icon_only_minimized", "use_custom_normal_icon",
-      "use_custom_special_icon", "custom_normal_icon", "custom_special_icon",
-      "text_color", "scroll_to_hide", "scroll_action", "grab_multimedia_keys",
-      "hide_show_mm_key", "accounts_to_exclude" ];
-    let v0_4_0b2_Opts = [ 'mail_notification' ];
-    let oldOpts = v0_3_Opts.concat(v0_4_0b2_Opts);
-
-    for (let i=0, len=oldOpts.length; i<len; ++i) {
-      try {
-        let option = oldOpts[i];
-        firetray.Utils.prefService.clearUserPref(option);
-      } catch (x) {}
-    }
-
-    let v0_5_0b1_Renames = {
-      'mail_urgency_hint': 'mail_get_attention',
-      'app_icon_filename': 'app_icon_custom',
-      'custom_mail_icon': 'mail_icon_custom'
-    };
-    oldOpts = v0_5_0b1_Renames;
-
-    let prefSrv = firetray.Utils.prefService;
-    for (let opt in oldOpts) {
-      log.debug("opt rename: "+opt);
-      if (prefSrv.prefHasUserValue(opt)) {
-        let prefType = prefSrv.getPrefType(opt);
-        switch (prefType) {
-        case Ci.nsIPrefBranch.PREF_STRING:
-          prefSrv.setCharPref(oldOpts[opt], prefSrv.getCharPref(opt));
-          break;
-        case Ci.nsIPrefBranch.PREF_INT:
-          prefSrv.setIntPref(oldOpts[opt], prefSrv.getIntPref(opt));
-          break;
-        case Ci.nsIPrefBranch.PREF_BOOL:
-          prefSrv.setBoolPref(oldOpts[opt], prefSrv.getBoolPref(opt));
-          break;
-        default:
-          log.error("Unknow pref type: "+prefType);
-        }
-      }
-      try { prefSrv.clearUserPref(opt); } catch (x) {}
-    }
-  },
-
-  correctMailNotificationType: function() {
-  },
-
-  correctMailServerTypes: function() {
-    let mailAccounts = firetray.Utils.getObjPref('mail_accounts');
-    let serverTypes = mailAccounts["serverTypes"];
-    if (!serverTypes["exquilla"]) {
-      serverTypes["exquilla"] = {"order":6,"excluded":true};
-      let prefObj = {"serverTypes":serverTypes, "excludedAccounts":mailAccounts["excludedAccounts"]};
-      firetray.Utils.setObjPref('mail_accounts', prefObj);
-      log.warn("mail server types corrected");
-    }
-  }
-
-};
