@@ -43,8 +43,6 @@ firetray.Handler = {
     chromeWin: null,
     basewin: null,
     
-    visible: null,
-    
     startupFilterCb: null,
     filterWindowCb: null,
   
@@ -63,8 +61,8 @@ firetray.Handler = {
   get windowsCount() {return Object.keys(this.windows).length;},
   get visibleWindowsCount() {
     let count = 0;
-    for (let wid in firetray.Handler.windows) {
-      if (firetray.Handler.windows[wid].visible) count += 1;
+    for (let win in firetray.Handler.windowsMap.values()) {
+      if (win.visible) count += 1;
     }
     return count;
   },
@@ -368,15 +366,15 @@ firetray.Handler = {
 
   showAllWindows: function() {
     log.debug("showAllWindows");
-    for (let [winId,window] of firetray.Handler.windowsMap) {
-      if (!value.visible)
+    for (let [winId,win] of firetray.Handler.windowsMap) {
+      if (!win.visible)
         firetray.Handler.showWindow(winId);
     }
   },
   hideAllWindows: function() {
     log.debug("hideAllWindows");
-    for (let [winId,window] of firetray.Handler.windowsMap) {
-      if (window.visible)
+    for (let [winId,win] of firetray.Handler.windowsMap) {
+      if (win.visible)
         firetray.Handler.hideWindow(winId);
     }
   },

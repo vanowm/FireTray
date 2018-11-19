@@ -208,7 +208,9 @@ firetray.Handler.registerWindow = function(win) {
   let window = this.window;
   window.chromeWin = win;
   window.baseWin = baseWin;
-  window.visible = firetray.Window.getVisibility(wid);
+  Object.defineProperties(window, {
+    "visible": { get: function(){return firetray.Window.getVisibility(wid);} }
+  });
   this.windowsMap.set(wid,window); 
   
   log.debug("window "+wid+" registered");
