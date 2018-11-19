@@ -249,7 +249,7 @@ firetray.Handler = {
       } catch(x) {}
       if (!initialState) return null;
 
-      return  initialState.windowsMap.size;
+      return  initialState.windows.length;
     }
     return null;
   },
