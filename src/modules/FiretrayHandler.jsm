@@ -61,7 +61,7 @@ firetray.Handler = {
   get windowsCount() {return Object.keys(this.windows).length;},
   get visibleWindowsCount() {
     let count = 0;
-    for (let win in firetray.Handler.windowsMap.values()) {
+    for (let win of firetray.Handler.windowsMap.values()) {
       if (win.visible) count += 1;
     }
     return count;
