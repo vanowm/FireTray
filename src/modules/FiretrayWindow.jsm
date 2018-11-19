@@ -18,14 +18,14 @@ function FiretrayWindow () {}
 FiretrayWindow.prototype = {
 
   getRegisteredWinIdFromChromeWindow: function(win) {
-    for (let wid in firetray.Handler.windows)
-      if (firetray.Handler.windows[wid].chromeWin === win) return wid;
+    for (let [wid,window] of firetray.Handler.windowsMap)
+      if (window.chromeWin === win) return wid;
     log.error("unknown window while lookup");
     return null;
   },
 
   getWindowTitle: function(wid) {
-    let title = firetray.Handler.windows[wid].baseWin.title;
+    let title = firetray.Handler.windowsMap.get(wid).baseWin.title;
     log.debug("|baseWin.title="+title+"|");
     // FIXME: we should be able to compute the base title from the XUL window
     // attributes.

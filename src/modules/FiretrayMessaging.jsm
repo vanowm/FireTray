@@ -188,7 +188,7 @@ firetray.Messaging = {
 
           let getAttention = firetray.Utils.prefService.getBoolPref("mail_get_attention");
           if (getAttention && (newMsgCount > currentMsgCount))
-            for (let winId in firetray.Handler.windows)
+            for (let winId of firetray.Handler.windowsMap.keys())
               firetray.Handler.windowGetAttention(winId);
         }
       };

@@ -139,7 +139,7 @@ firetray.PopupMenu = {
 
   processMenuItem: function(itemId) {
     let wid = firetray.Win32.hwndToHexStr(win32.HWND(itemId));
-    if (firetray.Handler.windows[wid]) {
+    if (firetray.Handler.windowsMap.has(wid)) {
       firetray.Handler.showWindow(wid);
       return;
     }
