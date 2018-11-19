@@ -26,9 +26,9 @@ const FIRETRAY_XWINDOW_MAXIMIZED = 1 << 1;
 
 // We need to keep long-living references to wndProcs callbacks. As they also
 // happen to be ctypes pointers, we store them into real ctypes arrays.
-firetray.Handler.wndProcs        = new ctypesMap(win32.LONG_PTR);
-firetray.Handler.wndProcsOrig    = new ctypesMap(win32.LONG_PTR);
-firetray.Handler.wndProcsStartup = new ctypesMap(win32.LONG_PTR);
+firetray.Handler.wndProcs        = new Map();
+firetray.Handler.wndProcsOrig    = new Map();
+firetray.Handler.wndProcsStartup = new Map();
 
 
 firetray.Window = new FiretrayWindow();
@@ -113,7 +113,7 @@ firetray.Window.wndProcStartup = function(hWnd, uMsg, wParam, lParam) {
           mapNew: firetray.Handler.wndProcs,
           mapBak: null
         });
-        firetray.Handler.wndProcsStartup.remove(wid);
+        firetray.Handler.wndProcsStartup.delete(wid);
 
         if (firetray.Window.startup.showSpecial) {
           let placement = new user32.WINDOWPLACEMENT;
@@ -131,25 +131,17 @@ firetray.Window.wndProcStartup = function(hWnd, uMsg, wParam, lParam) {
   return user32.CallWindowProcW(user32.WNDPROC(procPrev), hWnd, uMsg, wParam, lParam);
 };
 
-// https://social.msdn.microsoft.com/Forums/en-US/4eb3bad0-caf3-45ca-bfe8-7bc257af986a/getwindowlongsetwindowlong-on-gwlwndproc-crashes-in-compact-2013?forum=winembmngdapp
-var procNat = null;
-firetray.Window.NativeWndProc = function(hWnd, uMsg, wParam, lParam) {
-  return user32.CallWindowProcW(user32.WNDPROC(procNat), hWnd, uMsg, wParam, lParam);
-}
-
 // procInfo = {wid, hwnd, jsProc, mapNew, mapBak}
 firetray.Window.attachWndProc = function(procInfo) {
   try {
     let wndProc = ctypes.cast(user32.WNDPROC(procInfo.jsProc), win32.LONG_PTR);
     log.debug("proc="+wndProc);
-    procInfo.mapNew.insert(procInfo.wid, wndProc);
-//    let procPrev = user32.SetWindowLongW(procInfo.hwnd, user32.GWLP_WNDPROC, wndProc);
-    this.procNat = wndProc;
-    let procPrev = user32.SetWindowLongW(procInfo.hwnd, user32.GWLP_WNDPROC, this.procNat);
+    procInfo.mapNew.set(procInfo.wid, wndProc);
+    let procPrev = user32.SetWindowLongW(procInfo.hwnd, user32.GWLP_WNDPROC, wndProc);
     log.debug("procPrev="+procPrev+" winLastError="+ctypes.winLastError);
     /* we can't store WNDPROC callbacks (JS ctypes objects) with SetPropW(), as
      we need long-living refs. */
-    if (procInfo.mapBak) procInfo.mapBak.insert(procInfo.wid, procPrev);
+    if (procInfo.mapBak) procInfo.mapBak.set(procInfo.wid, procPrev);
 
   } catch (x) {
     if (x.name === "RangeError") { // instanceof not working :-(
@@ -175,8 +167,8 @@ firetray.Window.detachWndProc = function(procInfo) {
   let procPrev = user32.SetWindowLongW(hwnd, user32.GWLP_WNDPROC, procBak);
   firetray.js.assert(firetray.js.strEquals(procPrev, procNew),
                      "Wrong WndProc replaced.");
-  procInfo.mapNew.remove(wid);
-  procInfo.mapBak.remove(wid);
+  procInfo.mapNew.delete(wid);
+  procInfo.mapBak.delete(wid);
 };
 
 
