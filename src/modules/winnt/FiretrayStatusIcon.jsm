@@ -13,7 +13,6 @@ Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/ctypes.jsm");
 Cu.import("resource://gre/modules/osfile.jsm");
-Cu.import("resource://firetray/ctypes/ctypesMap.jsm");
 Cu.import("resource://firetray/ctypes/winnt/win32.jsm");
 Cu.import("resource://firetray/ctypes/winnt/gdi32.jsm");
 Cu.import("resource://firetray/ctypes/winnt/kernel32.jsm");
@@ -37,8 +36,8 @@ firetray.StatusIcon = {
   hwndProxy: null,
   WNDCLASS_NAME: "FireTrayHiddenWindowClass",
   WNDCLASS_ATOM: null,
-  icons: (function(){return new ctypesMap(win32.HICON);})(),
-  bitmaps: (function(){return new ctypesMap(win32.HBITMAP);})(),
+  icons: (function(){return new Map();})(),
+  bitmaps: (function(){return new Map();})(),
   IMG_TYPES: {
     ico: { win_t: win32.HICON,   load_const: user32.IMAGE_ICON,   map: 'icons' },
     bmp: { win_t: win32.HBITMAP, load_const: user32.IMAGE_BITMAP, map: 'bitmaps' }
@@ -77,7 +76,7 @@ firetray.StatusIcon = {
       Services.wm.getMostRecentWindow(null), "nsIBaseWindow");
     let hwnd = firetray.Win32.hexStrToHwnd(topmost.nativeHandle);
     log.debug("topmost or hiddenWin hwnd="+hwnd);
-    this.icons.insert('app', this.getIconFromWindow(hwnd));
+    this.icons.set('app', this.getIconFromWindow(hwnd));
     ['app_icon_custom', 'mail_icon_custom'].forEach(function(elt) {
       firetray.StatusIcon.loadImageCustom(elt);
     });
@@ -105,7 +104,7 @@ firetray.StatusIcon = {
         log.debug("Img Type: "+img['type']);
         log.debug("Img hImg: "+img['himg']);
 
-        this[this.IMG_TYPES[img['type']]['map']].insert(imgName, img['himg']);
+        this[this.IMG_TYPES[img['type']]['map']].set(imgName, img['himg']);
       }
     }
   },
@@ -123,7 +122,7 @@ firetray.StatusIcon = {
       hicon = this.HBITMAPToHICON(img['himg']);
     let name = this.PREF_TO_ICON_NAME[prefname];
     log.debug("    name="+name);
-    this.icons.insert(name, hicon);
+    this.icons.set(name, hicon);
   },
 
   loadImageFromFile: function(path) {
@@ -174,7 +173,7 @@ firetray.StatusIcon = {
       let keys = map.keys;
       for (let i=0, len=keys.length; i<len; ++i) {
         let imgName = keys[i];
-        map.remove(imgName);
+        map.delete(imgName);
       }
     });
         
