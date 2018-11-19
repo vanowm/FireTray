@@ -215,7 +215,7 @@ firetray.Chat = {
   },
 
   getSelectedConv: function(activeWin) {
-    if (!firetray.Handler.windows[activeWin]) return null;
+    if (!firetray.Handler.windowsMap.has(activeWin)) return null;
     log.debug("getSelectedConv *");
 
     let activeChatTab = this.findSelectedChatTab(activeWin);
@@ -234,7 +234,7 @@ firetray.Chat = {
   },
 
   findSelectedChatTab: function(xid) {
-    let win = firetray.Handler.windows[xid].chromeWin;
+    let win = firetray.Handler.windowsMap.get(xid).chromeWin;
     let tabmail = win.document.getElementById("tabmail");
     let chatTabs = tabmail.tabModes.chat.tabs;
     for (let tab of chatTabs)
@@ -243,7 +243,7 @@ firetray.Chat = {
   },
 
   findSelectedConv: function(xid) {
-    let win = firetray.Handler.windows[xid].chromeWin;
+    let win = firetray.Handler.windowsMap.get(xid).chromeWin;
     let selectedItem = win.document.getElementById("contactlistbox").selectedItem;
     if (!selectedItem || selectedItem.localName != "imconv") return null;
     return selectedItem.conv;
@@ -252,8 +252,8 @@ firetray.Chat = {
   /* there can potentially be multiple windows, each with a Chat tab and the
    same conv open... so we need to handle urgency for all windows */
   setUrgencyMaybe: function(conv) {
-    for (let xid in firetray.Handler.windows) {
-      let win = firetray.Handler.windows[xid].chromeWin;
+    for (let xid of firetray.Handler.windowsMap.keys()) {
+      let win = firetray.Handler.windowsMap.get(xid).chromeWin;
       let contactlist = win.document.getElementById("contactlistbox");
       for (let i=0; i<contactlist.itemCount; ++i) {
         let item = contactlist.getItemAtIndex(i);

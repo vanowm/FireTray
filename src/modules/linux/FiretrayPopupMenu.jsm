@@ -194,8 +194,8 @@ firetray.PopupMenu = {
   },
 
   showAllWindowItemsOnlyVisibleWindows: function() {
-    for (let xid in firetray.Handler.windows)
-      if (!firetray.Handler.windows[xid].visible)
+    for (let xid of firetray.Handler.windowsMap.keys())
+      if (!firetray.Handler.windowsMap.get(xid).visible)
         this.showWindowItem(xid);
   },
 
@@ -221,7 +221,7 @@ firetray.PopupMenu = {
   },
 
   hideAllWindowItems: function() {
-    for (let xid in firetray.Handler.windows)
+    for (let xid of firetray.Handler.windowsMap.keys())
       this.hideWindowItemAndSeparator(xid);
   },
 

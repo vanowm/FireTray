@@ -272,7 +272,7 @@ firetray.Handler.unregisterWindow = function(win) {
   if (!delete firetray.Handler.windows[wid])
     throw new DeleteError();
 
-  if (!delete firetray.Handler.windowsMap.delete(wid))
+  if (!firetray.Handler.windowsMap.delete(wid))
     throw new DeleteError();
 
   firetray.Handler.dumpWindows();
