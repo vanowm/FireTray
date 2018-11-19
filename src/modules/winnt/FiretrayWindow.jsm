@@ -29,7 +29,6 @@ firetray.Handler.wndProcs        = new Map();
 firetray.Handler.wndProcsOrig    = new Map();
 firetray.Handler.wndProcsStartup = new Map();
 
-
 firetray.Window = new FiretrayWindow();
 
 firetray.Window.init = function() {
@@ -123,7 +122,6 @@ firetray.Window.wndProcStartup = function(hWnd, uMsg, wParam, lParam) {
         }
       }
     }
-
   }
 
   let procPrev = firetray.Handler.wndProcsOrig.get(wid);
@@ -176,7 +174,7 @@ firetray.Window.detachWndProc = function(procInfo) {
 /** debug facility */
 firetray.Handler.dumpWindows = function() {
   let dumpStr = ""+firetray.Handler.windowsCount;
-  for (let wid in firetray.Handler.windows) {
+  for (let wid of firetray.Handler.windowsMap.keys()) {
     dumpStr += " "+wid;
   }
   log.info(dumpStr);
@@ -194,7 +192,7 @@ firetray.Handler.registerWindow = function(win) {
   let hwnd = firetray.Win32.hexStrToHwnd(wid);
   log.debug("=== hwnd="+hwnd+" wid="+wid+" win.document.title: "+win.document.title);
 
-  if (this.windows.hasOwnProperty(wid)) {
+  if (this.windowsMap.has(wid)) {
     let msg = "Window ("+wid+") already registered.";
     log.error(msg);
     Cu.reportError(msg);
@@ -206,6 +204,13 @@ firetray.Handler.registerWindow = function(win) {
   Object.defineProperties(this.windows[wid], {
     "visible": { get: function(){return firetray.Window.getVisibility(wid);} }
   });
+  
+  let window = this.window;
+  window.chromeWin = win;
+  window.baseWin = baseWin;
+  window.visible = firetray.Window.getVisibility(wid);
+  this.windowsMap.set(wid,window); 
+  
   log.debug("window "+wid+" registered");
 
   let proc;
@@ -240,7 +245,7 @@ firetray.Handler.unregisterWindow = function(win) {
   log.debug("unregister window");
 
   let wid = firetray.Window.getRegisteredWinIdFromChromeWindow(win);
-  if (!firetray.Handler.windows.hasOwnProperty(wid)) {
+  if (!firetray.Handler.windowsMap.has(wid)) {
     log.error("can't unregister unknown window "+wid);
     return false;
   }
@@ -265,6 +270,9 @@ firetray.Handler.unregisterWindow = function(win) {
   if (!delete firetray.Handler.windows[wid])
     throw new DeleteError();
 
+  if (!delete firetray.Handler.windowsMap.delete(wid))
+    throw new DeleteError();
+
   firetray.Handler.dumpWindows();
   log.debug("window "+wid+" unregistered");
   return true;
@@ -280,13 +288,13 @@ firetray.Handler.hideWindow = function(wid) {
 };
 
 firetray.Handler.windowGetAttention = function(wid) { // see nsWindow.cpp
-  for (var first in this.windows) break;
+  for (var first of this.windowsMap.keys()) break;
   wid = wid || first;
   let hwnd = firetray.Win32.hexStrToHwnd(wid);
   let fgWnd = user32.GetForegroundWindow();
   log.debug(hwnd+" === "+fgWnd);
   if (firetray.js.strEquals(hwnd, fgWnd) ||
-      !this.windows[wid].visible)
+      !this.windowsMap.get(wid).visible)
     return;
 
   let defaultCycleCount = new win32.DWORD;

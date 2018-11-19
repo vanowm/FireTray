@@ -38,6 +38,27 @@ firetray.Handler = {
   appStarted: false,
   useAppind: false,             // initialized in StatusIcon
   canAppind: false,             // initialized in StatusIcon
+
+  window: {
+    chromeWin: null,
+    basewin: null,
+    
+    visible: null,
+    
+    startupFilterCb: null,
+    filterWindowCb: null,
+  
+    savedX: null,
+    savedY: null,
+    savedWidth: null,
+    savedHeight: null,
+    
+    savedStates:null,
+    
+    savedDesktop: null
+  },
+  windowsMap: (function(){return new Map();})(),
+  
   windows: {},
   get windowsCount() {return Object.keys(this.windows).length;},
   get visibleWindowsCount() {
@@ -228,7 +249,7 @@ firetray.Handler = {
       } catch(x) {}
       if (!initialState) return null;
 
-      return  initialState.windows.length;
+      return  initialState.windowsMap.size;
     }
     return null;
   },
@@ -311,13 +332,13 @@ firetray.Handler = {
 
     if (enabled) {
       firetray.Chat.init();
-      for (let winId in firetray.Handler.windows) {
-        firetray.Chat.attachSelectListeners(firetray.Handler.windows[winId].chromeWin);
+      for (let window of firetray.Handler.windowsMap.values()) {
+        firetray.Chat.attachSelectListeners(window.chromeWin);
       }
 
     } else {
-      for (let winId in firetray.Handler.windows) {
-        firetray.Chat.detachSelectListeners(firetray.Handler.windows[winId].chromeWin);
+      for (let window in firetray.Handler.windowsMap.values()) {
+        firetray.Chat.detachSelectListeners(window.chromeWin);
       }
       firetray.Chat.shutdown();
     }
@@ -347,15 +368,15 @@ firetray.Handler = {
 
   showAllWindows: function() {
     log.debug("showAllWindows");
-    for (let winId in firetray.Handler.windows) {
-      if (!firetray.Handler.windows[winId].visible)
+    for (let [winId,window] of firetray.Handler.windowsMap) {
+      if (!value.visible)
         firetray.Handler.showWindow(winId);
     }
   },
   hideAllWindows: function() {
     log.debug("hideAllWindows");
-    for (let winId in firetray.Handler.windows) {
-      if (firetray.Handler.windows[winId].visible)
+    for (let [winId,window] of firetray.Handler.windowsMap) {
+      if (window.visible)
         firetray.Handler.hideWindow(winId);
     }
   },
@@ -467,9 +488,9 @@ firetray.Handler = {
   openPrefWindow: function() {
     if (null == firetray.Handler._preferencesWindow ||
         firetray.Handler._preferencesWindow.closed) {
-      for(var first in firetray.Handler.windows) break;
+      for(var first of firetray.Handler.windowsMap.values()) break;
       firetray.Handler._preferencesWindow =
-        firetray.Handler.windows[first].chromeWin.openDialog(
+        first.chromeWin.openDialog(
           "chrome://firetray/content/options.xul", null,
           "chrome,titlebar,toolbar,centerscreen", null);
     }
@@ -487,8 +508,8 @@ firetray.Handler = {
       firetray.Handler.timers['open-browser-window'] =
         firetray.Utils.timer(FIRETRAY_DELAY_NOWAIT_MILLISECONDS,
           Ci.nsITimer.TYPE_ONE_SHOT, function() {
-            for(var first in firetray.Handler.windows) break;
-            firetray.Handler.windows[first].chromeWin.open(home);
+            for(var first of firetray.Handler.windowsMap.values()) break;
+            first.chromeWin.open(home);
           });
     } catch (x) { log.error(x); }
   },
