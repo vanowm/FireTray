@@ -52,6 +52,7 @@ firetray.Window.setVisibility = function(wid, visible) {
   log.debug("setVisibility="+visible);
   let hwnd = firetray.Win32.hexStrToHwnd(wid);
   let ret = user32.ShowWindow(hwnd, visible ? user32.SW_SHOW : user32.SW_HIDE);
+  if (visible) user32.SetForegroundWindow(hwnd);
   log.debug("  ShowWindow="+ret+" winLastError="+ctypes.winLastError);
 };
 
