@@ -133,8 +133,8 @@ firetray.StatusIcon = {
     }
     let imgTypeRec = this.IMG_TYPES[imgType];
     let himg = ctypes.cast(
-      user32.LoadImageW(null, path, imgTypeRec['load_const'], 0, 0,
-                        user32.LR_DEFAULTSIZE|user32.LR_LOADFROMFILE|user32.LR_SHARED),
+      user32.LoadImageW(null, path, imgTypeRec['load_const'], 16, 16,
+                        user32.LR_LOADFROMFILE|user32.LR_SHARED),
       imgTypeRec['win_t']);
     if (himg.isNull()) {
       log.error("Could not load '"+path+"'="+himg+" winLastError="+ctypes.winLastError);
