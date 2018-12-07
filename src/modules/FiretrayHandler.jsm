@@ -529,8 +529,11 @@ firetray.Handler = {
   prefsDisable: [
     {cond: function(){return firetray.Handler.inBrowserApp;},
      branch: "browser.tabs.", pref: "warnOnClose", bak:null},
+//Let the user control if they want new mail icon or not.
+/*
     {cond: function(){return firetray.Handler.inMailApp;},
      branch: "mail.biff.", pref: "show_tray_icon", bak:null}
+*/
   ],
   disablePrefsTmp: function() {
     this.prefsDisable.forEach(function(pref){
