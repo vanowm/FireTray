@@ -120,6 +120,7 @@ function user32_defines(lib) {
   lib.lazy_bind("DestroyWindow", win32.BOOL, win32.HWND);
   lib.lazy_bind("ShowWindow", win32.BOOL, win32.HWND, ctypes.int);
   lib.lazy_bind("IsWindowVisible", win32.BOOL, win32.HWND);
+  lib.lazy_bind("IsIconic", win32.BOOL, win32.HWND);
 
   this.SW_HIDE            = 0;
   this.SW_SHOWNORMAL      = 1;
