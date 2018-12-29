@@ -51,9 +51,15 @@ firetray.Window.getVisibility = function(wid) {
 firetray.Window.setVisibility = function(wid, visible) {
   log.debug("setVisibility="+visible);
   let hwnd = firetray.Win32.hexStrToHwnd(wid);
+	if (user32.IsIconic(hwnd))
+	{
+		user32.ShowWindow(hwnd, user32.SW_RESTORE);
+		visible = true;
+	}
   let ret = user32.ShowWindow(hwnd, visible ? user32.SW_SHOW : user32.SW_HIDE);
   if (visible) user32.SetForegroundWindow(hwnd);
   log.debug("  ShowWindow="+ret+" winLastError="+ctypes.winLastError);
+  return visible;
 };
 
 firetray.Window.wndProc = function(hWnd, uMsg, wParam, lParam) { // filterWindow
@@ -280,12 +286,16 @@ firetray.Handler.unregisterWindow = function(win) {
 };
 
 firetray.Handler.showWindow = function(wid) {
-  firetray.Handler.removePopupMenuWindowItemAndSeparatorMaybe(wid);
-  return firetray.Window.setVisibility(wid, true);
+  let r = firetray.Window.setVisibility(wid, true);
+  if (r)
+    firetray.Handler.removePopupMenuWindowItemAndSeparatorMaybe(wid);
+  return r;
 };
 firetray.Handler.hideWindow = function(wid) {
-  firetray.Handler.addPopupMenuWindowItemAndSeparatorMaybe(wid);
-  return firetray.Window.setVisibility(wid, false);
+  let r = firetray.Window.setVisibility(wid, false);
+  if (!r)
+    firetray.Handler.addPopupMenuWindowItemAndSeparatorMaybe(wid);
+  return r;
 };
 
 firetray.Handler.windowGetAttention = function(wid) { // see nsWindow.cpp
