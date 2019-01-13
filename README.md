@@ -1,8 +1,6 @@
 FireTray
 =======
 
-
-Please switch to the feature-tb60 branch for the latest source.  
 New releases have been tested with:  
 
 Working:
