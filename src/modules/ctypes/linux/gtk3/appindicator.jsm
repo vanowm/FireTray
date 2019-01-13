@@ -56,6 +56,9 @@ function appindicator_defines(lib) {
 
   this.OnScrollCb_t = ctypes.FunctionType(
     ctypes.default_abi, ctypes.void_t, [this.AppIndicator.ptr, gobject.gint, gobject.guint, gobject.gpointer]).ptr;
+
+  this.OnActivateCb_t = ctypes.FunctionType(
+    ctypes.default_abi, ctypes.void_t, [this.AppIndicator.ptr, gobject.gint, gobject.gint, gobject.gpointer]).ptr;
 };
 
 var appind = new ctypes_library(APPINDICATOR_LIBNAME, APPINDICATOR_ABIS, appindicator_defines, this);

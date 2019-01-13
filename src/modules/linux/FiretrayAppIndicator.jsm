@@ -79,6 +79,11 @@ firetray.AppIndicator = {
       firetray.AppIndicator.onScroll); // void return, no sentinel
     gobject.g_signal_connect(this.indicator, "scroll-event",
                              firetray.AppIndicator.callbacks.onScroll, null);
+
+    this.callbacks.onActivate = appind.OnActivateCb_t(
+      firetray.AppIndicator.onActivate); // void return, no sentinel
+    gobject.g_signal_connect(this.indicator, "activate-event",
+                             firetray.AppIndicator.callbacks.onActivate, null);
   },
 
   attachMiddleClickCallback: function() {
@@ -110,6 +115,11 @@ firetray.AppIndicator = {
   onScroll: function(indicator, delta, direction, data) { // AppIndicator*, gint, GdkScrollDirection, gpointer
     log.debug("onScroll: "+direction);
     firetray.StatusIcon.onScroll(direction);
+  },
+
+  onActivate: function(indicator, directoin_x, direction_y, data) {
+    log.debug("AppIndicator activate: x="+directoin_x+" y="+direction_y);
+    firetray.Handler.showHideAllWindows();
   },
 
 };  // AppIndicator

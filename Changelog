@@ -1,3 +1,23 @@
+-- 0.6.4 - 13 Jan 2019
+
+- Added left click action for libindicator icon (Thank you for the tip @PlagueCZ)
+  
+    This "activate" event needs a specially patched version of libappindicator.
+    For openSuSE, you can find it here:
+    
+    https://build.opensuse.org/project/show/home:Ximi1970:branches:X11:Unity
+    
+    Repositories:
+    https://download.opensuse.org/repositories/home:/Ximi1970:/branches:/X11:/Unity/
+    
+    The patch used for libappindicator can be found here:
+    
+    The original patch can be found here (for an old version?);
+    https://github.com/yuyichao/arch-pkg/blob/facba16172ef6caa7fddd1babb21a9d2d5137f32/pkg/all/libappindicator/activate.patch
+    
+    My modfied version here:
+    https://build.opensuse.org/package/view_file/home:Ximi1970:branches:X11:Unity/libappindicator/libappindicator-activate-support.patch?expand=1
+  
 -- 0.6.3 - 13 Jan 2019
 
 - Update Russian translation (@vantu5z)
