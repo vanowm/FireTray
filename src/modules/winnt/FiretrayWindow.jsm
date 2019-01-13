@@ -57,7 +57,8 @@ firetray.Window.setVisibility = function(wid, visible) {
 		visible = true;
 	}
   let ret = user32.ShowWindow(hwnd, visible ? user32.SW_SHOW : user32.SW_HIDE);
-  if (visible) user32.SetForegroundWindow(hwnd);
+  if (firetray.Utils.prefService.getBoolPref('show_activates'))
+    if (visible) user32.SetForegroundWindow(hwnd);
   log.debug("  ShowWindow="+ret+" winLastError="+ctypes.winLastError);
   return visible;
 };

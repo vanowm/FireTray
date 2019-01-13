@@ -34,7 +34,7 @@ var firetrayUIOptions = {
     this.initAppIconType();
     if (firetray.Handler.support['winnt']) {
       this.hideUnsupportedOptions([
-        'ui_show_activates', 'ui_remember_desktop', 'ui_use_appindicator_icon', 'app_icon_default',
+        'ui_remember_desktop', 'ui_use_appindicator_icon', 'app_icon_default',
         'ui_show_icon_on_hide', 'ui_scroll_hides', 'ui_radiogroup_scroll',
         'ui_scroll_hides', 'ui_middle_click', 'newmail_icon_names'
       ]);
