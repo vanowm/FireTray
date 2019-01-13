@@ -1,4 +1,11 @@
--- 0.6.3 - 5 Nov 2018
+-- 0.6.3 - 13 Jan 2019
+
+- Update Russion translation (@vantu5z)
+- Windows fixed (@vanowm):
+    * Fix window restore
+    * Fix icon selection
+
+-- 0.6.2 - 5 Nov 2018
 
 One version to rule them all (Linux/Windows)
 
