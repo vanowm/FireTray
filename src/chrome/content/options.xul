@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
 <?xml-stylesheet href="chrome://firetray/skin/overlay.css" type="text/css"?>
+<?xml-stylesheet type="text/css" href="chrome://messenger/skin/preferences/preferences.css"?>
 <!DOCTYPE prefwindow SYSTEM "chrome://firetray/locale/options.dtd">
 <prefwindow id="firetray-preferences"
             xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
@@ -28,6 +29,7 @@
       <preference id="pref_start_hidden" name="extensions.firetray.start_hidden" type="bool"/>
       <preference id="pref_show_activates" name="extensions.firetray.show_activates" type="bool"/>
       <preference id="pref_remember_desktop" name="extensions.firetray.remember_desktop" type="bool"/>
+      <preference id="pref_appindicator_icon" name="extensions.firetray.with_appindicator" type="bool"/>
     </preferences>
 
     <vbox pack="start" align="left" flex="1">
@@ -59,7 +61,11 @@
                 accesskey="&remember_desktop.accesskey;"/>
 
     </vbox>
-
+    <vbox pack="start" align="left" flex="1">
+      <checkbox id="ui_use_appindicator_icon" preference="pref_appindicator_icon"
+                label="&use_appindicator_icon.label;"
+                accesskey="&use_appindicator_icon.accesskey;"/>
+    </vbox>
   </prefpane>
 
   <prefpane id="pref-pane-icon" label="&icon_options;"
@@ -140,6 +146,7 @@
     <preferences>
       <preference id="pref_mail_notification_enabled" name="extensions.firetray.mail_notification_enabled" type="bool" />
       <preference id="pref_mail_notification_type" name="extensions.firetray.mail_notification_type" type="int" />
+      <preference id="pref_mail_unread_count_enabled" name="extensions.firetray.mail_unread_count_enabled" type="bool" />
       <preference id="pref_message_count_type" name="extensions.firetray.message_count_type" type="int" />
       <preference id="pref_icon_text_color" name="extensions.firetray.icon_text_color" type="string" />
       <preference id="pref_mail_icon_custom" name="extensions.firetray.mail_icon_custom" type="string" />
@@ -164,19 +171,39 @@
                     accesskey="&mail_notification_enabled.accesskey;"
                     preference="pref_mail_notification_enabled"
                     oncommand="firetrayUIOptions.toggleNotifications(this.checked)"/>
-
-          <radiogroup id="ui_message_count_type" preference="pref_message_count_type"
+            
+          <groupbox id="ui_mail_unread_count" flex="1">
+            <hbox>
+              <checkbox id="ui_mail_unread_count_enabled"
+                    label="&mail_notification_unread_count.label;"
+                    accesskey="&mail_notification_unread_count.accesskey;"
+                    preference="pref_mail_unread_count_enabled"
+                    oncommand="firetrayUIOptions.updateNotificationSettings()"
+                    observes="broadcaster-notification-disabled"/>
+              <hbox id="icon_text_color" align="center">
+                <label value="&icon_text_color;" accesskey="&icon_text_color.accesskey;"
+                         control="btn_icon_text_color"
+                         observes="broadcaster-notification-disabled"/>
+                <colorpicker id="btn_icon_text_color" type="button"
+                               preference="pref_icon_text_color"
+                               onchange="firetray.Messaging.updateIcon();"
+                               observes="broadcaster-notification-disabled"/>
+              </hbox>
+            </hbox>
+            <radiogroup id="ui_message_count_type" preference="pref_message_count_type"
                       oncommand="firetrayUIOptions.updateMessageCountSettings()">
-            <hbox align="center" flex="1">
-              <label control="ui_message_count_type" observes="broadcaster-notification-disabled"
+              <hbox align="center" flex="1">
+                <label control="ui_message_count_type" observes="broadcaster-notification-disabled"
                      value="&message_count_type.label;" accesskey="&message_count_type.accesskey;" />
-              <radio id="ui_message_count_type_unread" label="&message_count_type_unread;"
+                <radio id="ui_message_count_type_unread" label="&message_count_type_unread;"
                      observes="broadcaster-notification-disabled"/>
-              <radio id="ui_message_count_type_new" label="&message_count_type_new;"
+                <radio id="ui_message_count_type_new" label="&message_count_type_new;"
                      tooltiptext="&message_count_type_new.tooltip;"
                      observes="broadcaster-notification-disabled"/>
-            </hbox>
-          </radiogroup>
+              </hbox>
+            </radiogroup>
+          </groupbox>
+
 
           <groupbox id="ui_mail_notification" flex="1">
             <caption>
@@ -187,20 +214,11 @@
             </caption>
 
             <radiogroup id="ui_radiogroup_mail_notification" preference="pref_mail_notification_type">
-              <hbox id="ui_mail_notification_unread_count">
-                <radio id="ui_radio_mail_notification_unread_count" label="&mail_notification_unread_count.label;"
-                       accesskey="&mail_notification_unread_count.accesskey;"
+              <hbox>
+                <radio id="ui_radio_mail_notification_blank_icon" label="&mail_notification_blank_icon.label;"
+                       accesskey="&mail_notification_blank_icon.accesskey;"
                        oncommand="firetrayUIOptions.updateNotificationSettings()"
                        observes="broadcaster-notification-disabled" />
-                <hbox id="icon_text_color" align="center">
-                  <label value="&icon_text_color;" accesskey="&icon_text_color.accesskey;"
-                         control="btn_icon_text_color"
-                         observes="broadcaster-notification-disabled"/>
-                  <colorpicker id="btn_icon_text_color" type="button"
-                               preference="pref_icon_text_color"
-                               onchange="firetray.Messaging.updateIcon();"
-                               observes="broadcaster-notification-disabled"/>
-                </hbox>
               </hbox>
               <hbox>
                 <radio id="ui_radio_mail_notification_newmail_icon" label="&mail_notification_newmail_icon.label;"

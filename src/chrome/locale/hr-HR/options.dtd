@@ -24,6 +24,9 @@
 <!ENTITY show_activates.tooltip "Obnovljeni prozori se vraćaju na vrh i u fokus">
 <!ENTITY remember_desktop.label "Obnovi prozore na njihovu izvornu radnu površinu">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Use an appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "Prikaži traku sustava samo ako je prozor sakriven">
 <!ENTITY show_icon_on_hide.accesskey "w">
 <!ENTITY app_icon_type "Vrsta ikone aplikacije">
@@ -55,6 +58,8 @@
 <!ENTITY mail_notification_type.tooltip "Tzv. Biff">
 <!ENTITY mail_notification_unread_count.label "prikaži broj novih poruke">
 <!ENTITY mail_notification_unread_count.accesskey "U">
+<!ENTITY mail_notification_blank_icon.label "pokažite praznu ikonu">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "prikaži ikonu pristigle pošte">
 <!ENTITY mail_notification_newmail_icon.accesskey "N">
 <!ENTITY mail_notification_mail_icon_custom.label "prikaži prilagođenu ikonu">

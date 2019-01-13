@@ -237,7 +237,7 @@ firetray.Chat = {
     let win = firetray.Handler.windows[xid].chromeWin;
     let tabmail = win.document.getElementById("tabmail");
     let chatTabs = tabmail.tabModes.chat.tabs;
-    for each (let tab in chatTabs)
+    for (let tab of chatTabs)
       if (tab.tabNode.selected) return tab;
     return null;
   },
@@ -320,10 +320,6 @@ firetray.Chat = {
       log.debug("globalConnected="+globalConnected);
       return globalConnected;
 
-    } catch (e if e instanceof Components.Exception &&
-             e.result === Components.results.NS_ERROR_XPC_JAVASCRIPT_ERROR_WITH_DETAILS &&
-             /_items is undefined/.test(e.message)) {
-      return false;             // ignore
     } catch(e) {
       log.error(e); return false;
     }

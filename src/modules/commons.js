@@ -8,7 +8,7 @@ var EXPORTED_SYMBOLS =
     "FIRETRAY_APPLICATION_ICON_TYPE_THEMED",
     "FIRETRAY_APPLICATION_ICON_TYPE_CUSTOM",
     "FIRETRAY_MIDDLE_CLICK_ACTIVATE_LAST", "FIRETRAY_MIDDLE_CLICK_SHOW_HIDE",
-    "FIRETRAY_NOTIFICATION_MESSAGE_COUNT",
+    "FIRETRAY_NOTIFICATION_BLANK_ICON",
     "FIRETRAY_NOTIFICATION_NEWMAIL_ICON", "FIRETRAY_NOTIFICATION_CUSTOM_ICON",
     "FIRETRAY_IM_STATUS_AVAILABLE", "FIRETRAY_IM_STATUS_AWAY",
     "FIRETRAY_IM_STATUS_BUSY", "FIRETRAY_IM_STATUS_OFFLINE",
@@ -25,7 +25,7 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://firetray/logging.jsm");
 
-const FIRETRAY_VERSION     = "0.6.1-p20171006"; // needed for sync call of onVersionChange() :(
+const FIRETRAY_VERSION     = "0.6.4"; // needed for sync call of onVersionChange() :(
 const FIRETRAY_OS_SUPPORT  = ['freebsd', 'linux', 'winnt']; // install.rdf sync :(
 const FIRETRAY_ID          = "{9533f794-00b4-4354-aa15-c2bbda6989f8}";
 const FIRETRAY_PREF_BRANCH = "extensions.firetray.";
@@ -40,7 +40,7 @@ const FIRETRAY_MIDDLE_CLICK_SHOW_HIDE     = 1;
 const FIRETRAY_MESSAGE_COUNT_TYPE_UNREAD  = 0;
 const FIRETRAY_MESSAGE_COUNT_TYPE_NEW     = 1;
 
-const FIRETRAY_NOTIFICATION_MESSAGE_COUNT = 0;
+const FIRETRAY_NOTIFICATION_BLANK_ICON    = 0;
 const FIRETRAY_NOTIFICATION_NEWMAIL_ICON  = 1;
 const FIRETRAY_NOTIFICATION_CUSTOM_ICON   = 2;
 
@@ -183,7 +183,7 @@ firetray.Utils = {
   },
 
   QueryInterfaces: function(obj) {
-    for each (i in Components.interfaces)
+    for (i of Components.interfaces)
       try {
         if (obj instanceof i) log.debug (i);
       } catch(x) {}
@@ -230,24 +230,23 @@ firetray.Utils = {
   XPath: function(ref, xpath) {
     var doc = ref.ownerDocument || ref;
 
-    const XPathResult = Ci.nsIDOMXPathResult;
     try {
       let that = this;
       var result = doc.evaluate(xpath, ref, that._nsResolver,
-                                XPathResult.ANY_TYPE, null);
+                                0, null);
     } catch (x) {
       log.error(x);
     }
     log.debug("XPathResult="+result.resultType);
 
     switch (result.resultType) {
-    case XPathResult.NUMBER_TYPE:
+    case result.NUMBER_TYPE:
       return result.numberValue;
-    case XPathResult.BOOLEAN_TYPE:
-      return result.booleanValue;
-    case XPathResult.STRING_TYPE:
+    case result.STRING_TYPE:
       return result.stringValue;
-    } // else XPathResult.UNORDERED_NODE_ITERATOR_TYPE:
+    case result.BOOLEAN_TYPE:
+      return result.booleanValue;
+    } // else 4, UNORDERED_NODE_ITERATOR_TYPE
 
     var list = [];
     try {

@@ -93,14 +93,12 @@ chrome_sources := $(chrome_sources_js)								\
                $(wildcard $(chrome_source_root)/content/*.xml)					\
                $(wildcard $(chrome_source_root)/content/*.css)					\
                $(wildcard $(chrome_source_root)/skin/*.css)					\
+               $(wildcard $(chrome_source_root)/skin/icons/*.bmp)				\
                $(wildcard $(chrome_source_root)/skin/icons/*.gif)				\
                $(wildcard $(chrome_source_root)/skin/icons/*.png)				\
-               $(wildcard $(chrome_source_root)/skin/icons/unread/*.png)				\
-               $(wildcard $(chrome_source_root)/skin/icons/unread/*.svg)				\
                $(wildcard $(chrome_source_root)/skin/icons/*.svg)				\
                $(wildcard $(chrome_source_root)/skin/icons/linux/hicolor/22x22/*/*.png)		\
                $(wildcard $(chrome_source_root)/skin/icons/winnt/*.bmp)				\
-               $(wildcard $(chrome_source_root)/skin/icons/winnt/*.ico)				\
                $(wildcard $(chrome_source_root)/locale/*/*.dtd)					\
                $(wildcard $(chrome_source_root)/locale/*/*.properties)
 
@@ -114,6 +112,7 @@ modules_sources := $(wildcard $(modules_dir)/*.js)			\
 		$(wildcard $(modules_dir)/ctypes/linux/*.jsm)		\
 		$(wildcard $(modules_dir)/ctypes/linux/gtk?/*.jsm)	\
 		$(wildcard $(modules_dir)/ctypes/winnt/*.jsm)		\
+		$(wildcard $(modules_dir)/icons/*.jsm)			\
 		$(wildcard $(modules_dir)/linux/*.jsm)			\
 		$(wildcard $(modules_dir)/winnt/*.jsm)
 

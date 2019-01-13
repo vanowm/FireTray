@@ -89,7 +89,7 @@ firetray.Messaging = {
     // build current list of account server keys
     let accounts = MailServices.accounts.accounts;
     let accountServerKeys = [];
-    for (let account in fixIterator(MailServices.accounts, Ci.nsIMsgAccount)) {
+    for (let account of fixIterator(MailServices.accounts, Ci.nsIMsgAccount)) {
       accountServerKeys.push(account.incomingServer.key);
     }
 
@@ -227,12 +227,15 @@ firetray.Messaging = {
       firetray.Handler.setIconTooltipDefault();
 
     } else if (msgCount > 0) {
+      let prefMailUnreadCountEnabled = firetray.Utils.prefService.getBoolPref('mail_unread_count_enabled');
       let prefMailNotification = firetray.Utils.prefService.getIntPref('mail_notification_type');
+      
+      log.debug("msgCount prefMailUnreadCount="+prefMailUnreadCountEnabled);
       log.debug("msgCount prefMailNotification="+prefMailNotification);
+ 
       switch (prefMailNotification) {
-      case FIRETRAY_NOTIFICATION_MESSAGE_COUNT:
-        let prefIconTextColor = firetray.Utils.prefService.getCharPref("icon_text_color");
-        firetray.Handler.setIconText(msgCount.toString(), prefIconTextColor);
+      case FIRETRAY_NOTIFICATION_BLANK_ICON:
+        firetray.Handler.setIconImageBlank();
         break;
       case FIRETRAY_NOTIFICATION_NEWMAIL_ICON:
         firetray.Handler.setIconImageNewMail();
@@ -242,6 +245,11 @@ firetray.Messaging = {
         break;
       default:
         log.error("Unknown notification mode: "+prefMailNotification);
+      }
+     
+      if (prefMailUnreadCountEnabled) {
+        let prefIconTextColor = firetray.Utils.prefService.getCharPref("icon_text_color");
+        firetray.Handler.setIconText(msgCount.toString(), prefIconTextColor);
       }
 
       firetray.Handler.setIconTooltip(localizedTooltip);
@@ -263,8 +271,8 @@ firetray.Messaging = {
     let excludedAccounts = mailAccounts["excludedAccounts"];
 
     this.newMsgCount = 0;
-    let accounts = new this.Accounts();
-    for (let accountServer in accounts) { // nsIMsgIncomingServer
+    let accounts = firetray.Messaging.Accounts();
+    for (let accountServer of accounts) { // nsIMsgIncomingServer
 
       if (accountServer.type === FIRETRAY_ACCOUNT_SERVER_TYPE_IM) {
         continue;               // IM messages are counted elsewhere
@@ -365,32 +373,27 @@ firetray.Messaging = {
  * @param sortByTypeAndName: boolean
  * @return a generator over all nsIMsgIncomingServer including hidden and IM ones
  */
-firetray.Messaging.Accounts = function(sortByTypeAndName) {
-  if (typeof(sortByTypeAndName) == "undefined") {
-    this.sortByTypeAndName = false;
-    return;
-  }
-  if (typeof(sortByTypeAndName) !== "boolean")
+firetray.Messaging.Accounts = function*(sortByTypeAndName) {
+  if (typeof(sortByTypeAndName) === "undefined") {
+    sortByTypeAndName = false;
+  } else if (typeof(sortByTypeAndName) !== "boolean") {
     throw new TypeError();
+  }
 
-  this.sortByTypeAndName = sortByTypeAndName;
-};
-
-firetray.Messaging.Accounts.prototype.__iterator__ = function() {
-  log.debug("sortByTypeAndName="+this.sortByTypeAndName);
+  log.debug("sortByTypeAndName=" + sortByTypeAndName);
 
   /* NOTE: sort() not provided by nsIMsgAccountManager.accounts
    (nsISupportsArray or nsIArray if xulrunner >= 20.0). Should be OK to
    re-build a JS-Array for few accounts */
   let accountServers = [];
-  for (let accountServer in fixIterator(MailServices.accounts.accounts,
+  for (let accountServer of fixIterator(MailServices.accounts.accounts,
                                         Ci.nsIMsgAccount)) {
     accountServers.push(accountServer.incomingServer);
   }
 
   let mailAccounts = firetray.Utils.getObjPref('mail_accounts');
   let serverTypes = mailAccounts["serverTypes"];
-  if (this.sortByTypeAndName) {
+  if (sortByTypeAndName) {
     accountServers.sort(function(a,b) {
       if (serverTypes[a.type].order
           < serverTypes[b.type].order)
@@ -419,8 +422,8 @@ firetray.Messaging.Accounts.prototype.__iterator__ = function() {
  */
 firetray.Messaging.accountsByServerType = function() {
   let accountsByServerType = {};
-  let accounts = new firetray.Messaging.Accounts(false);
-  for (let accountServer in accounts) {
+  let accounts = firetray.Messaging.Accounts(false);
+  for (let accountServer of accounts) {
     let accountServerKey = accountServer.key.toString();
     let accountServerName = accountServer.prettyName;
     let accountServerType = accountServer.type;

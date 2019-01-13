@@ -30,6 +30,7 @@ var win32 = new function() {
   this.LPDWORD   = this.DWORD.ptr;
   this.PVOID     = ctypes.voidptr_t;
   this.LPVOID    = ctypes.voidptr_t;
+  this.LPCVOID   = ctypes.voidptr_t;
   this.LONG      = ctypes.long;
   this.LONG_PTR  = is64bit ? ctypes.int64_t  : ctypes.long;
   this.ULONG_PTR = is64bit ? ctypes.uint64_t : ctypes.unsigned_long;
@@ -205,6 +206,14 @@ var win32 = new function() {
     { "bottom": this.LONG }
   ]);
   this.PRECT = this.RECT.ptr;
+
+  this.OVERLAPPED = ctypes.StructType("OVERLAPPED", [
+    { "Internal": this.ULONG_PTR },
+    { "InternalHigh": this.ULONG_PTR },
+    { "Pointer": this.PVOID },
+    { "hEvent": this.HANDLE }
+  ]);
+  this.LPOVERLAPPED = this.OVERLAPPED.ptr;
 
 };
 

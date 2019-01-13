@@ -25,6 +25,8 @@
 <!ENTITY show_activates.tooltip "restored windows raise on top and get focus">
 <!ENTITY remember_desktop.label "Restore windows to their original desktop">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Use appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
 
 <!ENTITY show_icon_on_hide.label "Show tray icon only if a window is hidden">
 <!ENTITY show_icon_on_hide.accesskey "w">
@@ -59,6 +61,8 @@
 <!ENTITY mail_notification_type.tooltip "aka. Biff">
 <!ENTITY mail_notification_unread_count.label "display new message count">
 <!ENTITY mail_notification_unread_count.accesskey "U">
+<!ENTITY mail_notification_blank_icon.label "display blank icon">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "display newmail icon">
 <!ENTITY mail_notification_newmail_icon.accesskey "N">
 <!ENTITY mail_notification_mail_icon_custom.label "display custom icon">

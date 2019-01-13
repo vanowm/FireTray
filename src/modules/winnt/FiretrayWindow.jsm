@@ -51,8 +51,15 @@ firetray.Window.getVisibility = function(wid) {
 firetray.Window.setVisibility = function(wid, visible) {
   log.debug("setVisibility="+visible);
   let hwnd = firetray.Win32.hexStrToHwnd(wid);
+	if (user32.IsIconic(hwnd))
+	{
+		user32.ShowWindow(hwnd, user32.SW_RESTORE);
+		visible = true;
+	}
   let ret = user32.ShowWindow(hwnd, visible ? user32.SW_SHOW : user32.SW_HIDE);
+  if (visible) user32.SetForegroundWindow(hwnd);
   log.debug("  ShowWindow="+ret+" winLastError="+ctypes.winLastError);
+  return visible;
 };
 
 firetray.Window.wndProc = function(hWnd, uMsg, wParam, lParam) { // filterWindow
@@ -131,13 +138,21 @@ firetray.Window.wndProcStartup = function(hWnd, uMsg, wParam, lParam) {
   return user32.CallWindowProcW(user32.WNDPROC(procPrev), hWnd, uMsg, wParam, lParam);
 };
 
+// https://social.msdn.microsoft.com/Forums/en-US/4eb3bad0-caf3-45ca-bfe8-7bc257af986a/getwindowlongsetwindowlong-on-gwlwndproc-crashes-in-compact-2013?forum=winembmngdapp
+var procNat = null;
+firetray.Window.NativeWndProc = function(hWnd, uMsg, wParam, lParam) {
+  return user32.CallWindowProcW(user32.WNDPROC(procNat), hWnd, uMsg, wParam, lParam);
+}
+
 // procInfo = {wid, hwnd, jsProc, mapNew, mapBak}
 firetray.Window.attachWndProc = function(procInfo) {
   try {
     let wndProc = ctypes.cast(user32.WNDPROC(procInfo.jsProc), win32.LONG_PTR);
     log.debug("proc="+wndProc);
     procInfo.mapNew.insert(procInfo.wid, wndProc);
-    let procPrev = user32.SetWindowLongW(procInfo.hwnd, user32.GWLP_WNDPROC, wndProc);
+//    let procPrev = user32.SetWindowLongW(procInfo.hwnd, user32.GWLP_WNDPROC, wndProc);
+    this.procNat = wndProc;
+    let procPrev = user32.SetWindowLongW(procInfo.hwnd, user32.GWLP_WNDPROC, this.procNat);
     log.debug("procPrev="+procPrev+" winLastError="+ctypes.winLastError);
     /* we can't store WNDPROC callbacks (JS ctypes objects) with SetPropW(), as
      we need long-living refs. */
@@ -271,12 +286,16 @@ firetray.Handler.unregisterWindow = function(win) {
 };
 
 firetray.Handler.showWindow = function(wid) {
-  firetray.Handler.removePopupMenuWindowItemAndSeparatorMaybe(wid);
-  return firetray.Window.setVisibility(wid, true);
+  let r = firetray.Window.setVisibility(wid, true);
+  if (r)
+    firetray.Handler.removePopupMenuWindowItemAndSeparatorMaybe(wid);
+  return r;
 };
 firetray.Handler.hideWindow = function(wid) {
-  firetray.Handler.addPopupMenuWindowItemAndSeparatorMaybe(wid);
-  return firetray.Window.setVisibility(wid, false);
+  let r = firetray.Window.setVisibility(wid, false);
+  if (!r)
+    firetray.Handler.addPopupMenuWindowItemAndSeparatorMaybe(wid);
+  return r;
 };
 
 firetray.Handler.windowGetAttention = function(wid) { // see nsWindow.cpp

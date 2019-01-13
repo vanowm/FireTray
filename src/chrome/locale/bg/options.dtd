@@ -25,6 +25,8 @@
 <!ENTITY show_activates.tooltip "Прозорците минават на преден план и на фокус след като бъдат показани">
 <!ENTITY remember_desktop.label "Показване на прозорците на работния плот, на който са били">
 <!ENTITY remember_desktop.accesskey "р">
+<!ENTITY use_appindicator_icon.label "използвайте икона на appindicator">
+<!ENTITY use_appindicator_icon.accesskey "i">
 
 <!ENTITY show_icon_on_hide.label "Показване на иконката в панела само ако имо скрит прозорец">
 <!ENTITY show_icon_on_hide.accesskey "и">
@@ -59,6 +61,8 @@
 <!ENTITY mail_notification_type.tooltip "Известие">
 <!ENTITY mail_notification_unread_count.label "показване на броя на новите съобщения">
 <!ENTITY mail_notification_unread_count.accesskey "с">
+<!ENTITY mail_notification_blank_icon.label "показване на празна икона">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "показване на иконката за ново писмо">
 <!ENTITY mail_notification_newmail_icon.accesskey "н">
 <!ENTITY mail_notification_mail_icon_custom.label "показване на персонализирана иконка">

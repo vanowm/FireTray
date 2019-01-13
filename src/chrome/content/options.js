@@ -34,18 +34,13 @@ var firetrayUIOptions = {
     this.initAppIconType();
     if (firetray.Handler.support['winnt']) {
       this.hideUnsupportedOptions([
-        'ui_show_activates', 'ui_remember_desktop', 'app_icon_default',
+        'ui_show_activates', 'ui_remember_desktop', 'ui_use_appindicator_icon', 'app_icon_default',
         'ui_show_icon_on_hide', 'ui_scroll_hides', 'ui_radiogroup_scroll',
         'ui_scroll_hides', 'ui_middle_click', 'newmail_icon_names'
       ]);
     } else if (firetray.AppIndicator) {
-      //this.hideUnsupportedOptions([
-      //  'app_icon_default', 
-		//  'ui_mail_notification_unread_count',
-      //  'newmail_icon_names'
-      //]);
       this.hideUnsupportedOptions([
-        'app_icon_default', 
+        'app_icon_default',
         'newmail_icon_names'
       ]);
     } else {
@@ -71,6 +66,12 @@ var firetrayUIOptions = {
       this.removePrefPane("pref-pane-chat");
     };
 
+    if (!firetray.Handler.canAppind) {
+      this.hideUnsupportedOptions([
+        'ui_use_appindicator_icon'
+      ]);
+    }
+    
     window.sizeToContent();
   },
 
@@ -87,6 +88,7 @@ var firetrayUIOptions = {
         // windows prefs
       case 'ui_show_activates':
       case 'ui_remember_desktop':
+      case 'ui_use_appindicator_icon':
         // icon prefs
       case 'app_icon_default':
       case 'ui_show_icon_on_hide':
@@ -258,8 +260,8 @@ var firetrayUIOptions = {
   },
 
   initNotificationSettings: function() {
-    document.getElementById("ui_radio_mail_notification_unread_count").value =
-      FIRETRAY_NOTIFICATION_MESSAGE_COUNT;
+    document.getElementById("ui_radio_mail_notification_blank_icon").value =
+      FIRETRAY_NOTIFICATION_BLANK_ICON;
     document.getElementById("ui_radio_mail_notification_newmail_icon").value =
       FIRETRAY_NOTIFICATION_NEWMAIL_ICON;
     document.getElementById("ui_radio_mail_notification_mail_icon_custom").value =
@@ -325,15 +327,11 @@ var firetrayUIOptions = {
   updateMessageCountSettings: function() {
     let radioMessageCountType = document.getElementById("ui_message_count_type");
     let messageCountType = +radioMessageCountType.getItemAtIndex(radioMessageCountType.selectedIndex).value;
-    this.disableMessageCountMaybe(messageCountType);
+//    this.disableMessageCountMaybe(messageCountType);
   },
 
   disableNotificationMaybe: function(notificationSetting) {
     log.debug("disableNotificationMaybe: "+notificationSetting);
-
-    let iconTextColor = document.getElementById("icon_text_color");
-    this.disableChildren(iconTextColor,
-      (notificationSetting !== FIRETRAY_NOTIFICATION_MESSAGE_COUNT));
 
     if (firetray.Handler.support['winnt']) {
       let newMailIconNames = document.getElementById("newmail_icon_names");
@@ -355,7 +353,7 @@ var firetrayUIOptions = {
 
     let mailNotifyRadio = document.getElementById("ui_radiogroup_mail_notification");
     let mailNotificationType = +mailNotifyRadio.getItemAtIndex(mailNotifyRadio.selectedIndex).value;
-    if (msgCountTypeIsNewMessages && (mailNotificationType === FIRETRAY_NOTIFICATION_MESSAGE_COUNT)) {
+    if (msgCountTypeIsNewMessages && (mailNotificationType === FIRETRAY_NOTIFICATION_BLANK_ICON)) {
       mailNotifyRadio.selectedIndex = this.radioGetIndexByValue(mailNotifyRadio, FIRETRAY_NOTIFICATION_NEWMAIL_ICON);
       if (firetray.Handler.support['winnt']) {
         let newMailIconNames = document.getElementById("newmail_icon_names");
@@ -374,7 +372,7 @@ var firetrayUIOptions = {
 
       let radioMessageCountType = document.getElementById("ui_message_count_type");
       let messageCountType = +radioMessageCountType.getItemAtIndex(radioMessageCountType.selectedIndex).value;
-      this.disableMessageCountMaybe(messageCountType);
+//      this.disableMessageCountMaybe(messageCountType);
 
     } else {
       document.getElementById("broadcaster-notification-disabled")
@@ -676,7 +674,7 @@ var firetrayUIOptions = {
   },
 
   removeListeners: function() {
-    for (id in this.listeners) {
+    for (let id in this.listeners) {
       let listener = this.listeners[id];
       document.getElementById(id)
         .removeEventListener(listener['evt'], listener['fn'], listener['cap']);

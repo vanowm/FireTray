@@ -38,6 +38,7 @@ firetray.Handler = {
   appHasChat: false,
   appStarted: false,
   useAppind: false,             // initialized in StatusIcon
+  canAppind: false,             // initialized in StatusIcon
   windows: {},
   get windowsCount() {return Object.keys(this.windows).length;},
   get visibleWindowsCount() {
@@ -59,14 +60,6 @@ firetray.Handler = {
     OS: Services.appinfo.OS.toLowerCase(), // "WINNT", "Linux", "Darwin"
     widgetTk: Services.appinfo.widgetToolkit,
   };})(),
-  addonRootDir: (function(){
-    let uri = Services.io.newURI(Components.stack.filename, null, null);
-    if (uri instanceof Ci.nsIFileURL) {
-      log.debug("_directory="+uri.file.parent.parent.path);
-      return uri.file.parent.parent;
-    }
-    throw new Error("not resolved");
-  })(),
   support: {chat: false, winnt: false},
 
   init: function() {            // does creates icon
@@ -254,8 +247,8 @@ firetray.Handler = {
   // [nsISimpleEnumerator::hasMoreElements]"), and we're unsure if we should
   // initAccounts() ourselves...
   existsChatAccount: function() {
-    let accounts = new firetray.Messaging.Accounts();
-    for (let accountServer in accounts)
+    let accounts = firetray.Messaging.Accounts();
+    for (let accountServer of accounts)
       if (accountServer.type === FIRETRAY_ACCOUNT_SERVER_TYPE_IM)  {
         log.debug("found im server: "+accountServer.prettyName);
         return true;
@@ -342,6 +335,7 @@ firetray.Handler = {
   loadIcons: function() {},
   loadImageCustom: function(prefname) {},
   setIconImageDefault: function() {},
+  setIconImageBlank: function() {},
   setIconImageNewMail: function() {},
   setIconImageCustom: function(prefname) {},
   setIconText: function(text, color) {},
@@ -807,14 +801,6 @@ firetray.VersionChangeHandler = {
   },
 
   correctMailNotificationType: function() {
-    let msgCountType = firetray.Utils.prefService.getIntPref('message_count_type');
-    let mailNotificationType = firetray.Utils.prefService.getIntPref('mail_notification_type');
-    if (msgCountType === FIRETRAY_MESSAGE_COUNT_TYPE_NEW &&
-        mailNotificationType === FIRETRAY_NOTIFICATION_MESSAGE_COUNT) {
-      firetray.Utils.prefService.setIntPref('mail_notification_type',
-        FIRETRAY_NOTIFICATION_NEWMAIL_ICON);
-      log.warn("mail notification type set to newmail icon.");
-    }
   },
 
   correctMailServerTypes: function() {

@@ -12,6 +12,7 @@ const Cu = Components.utils;
 Cu.import("resource://gre/modules/Services.jsm");
 Cu.import("resource://gre/modules/XPCOMUtils.jsm");
 Cu.import("resource://gre/modules/ctypes.jsm");
+Cu.import("resource://gre/modules/osfile.jsm");
 Cu.import("resource://firetray/ctypes/ctypesMap.jsm");
 Cu.import("resource://firetray/ctypes/winnt/win32.jsm");
 Cu.import("resource://firetray/ctypes/winnt/gdi32.jsm");
@@ -20,23 +21,13 @@ Cu.import("resource://firetray/ctypes/winnt/shell32.jsm");
 Cu.import("resource://firetray/ctypes/winnt/user32.jsm");
 Cu.import("resource://firetray/winnt/FiretrayWin32.jsm");
 Cu.import("resource://firetray/commons.js");
+Cu.import("resource://firetray/icons.jsm");
 firetray.Handler.subscribeLibsForClosing([gdi32, kernel32, shell32, user32]);
 
 let log = firetray.Logging.getLogger("firetray.StatusIcon");
 
 if ("undefined" == typeof(firetray.Handler))
   log.error("This module MUST be imported from/after FiretrayHandler !");
-
-const ICON_CHROME_PATH = "chrome://firetray/skin/icons/winnt";
-const ICON_CHROME_FILES = {
-  'blank-icon': { use:'tray', path:ICON_CHROME_PATH+"/blank-icon.bmp" },
-  'mail-unread': { use:'tray', path:ICON_CHROME_PATH+"/mail-unread.ico" },
-  'prefs': { use:'menu', path:ICON_CHROME_PATH+"/gtk-preferences.bmp" },
-  'quit': { use:'menu', path:ICON_CHROME_PATH+"/application-exit.bmp" },
-  'new-wnd': { use:'menu', path:ICON_CHROME_PATH+"/document-new.bmp" },
-  'new-msg': { use:'menu', path:ICON_CHROME_PATH+"/gtk-edit.bmp" },
-  'reset': { use:'menu', path:ICON_CHROME_PATH+"/gtk-apply.bmp" },
-};
 
 
 firetray.StatusIcon = {
@@ -93,16 +84,29 @@ firetray.StatusIcon = {
 
     /* we'll take the first icon in the .ico file. To get the icon count in the
      file, pass ctypes.cast(ctypes.int(-1), win32.UINT); */
-    for (let imgName in ICON_CHROME_FILES) {
-      let path = firetray.Utils.chromeToPath(ICON_CHROME_FILES[imgName].path);
+    for (let imgName in EMBEDDED_ICON_FILES) {
+      let path = OS.Path.join(OS.Constants.Path.tmpDir, imgName+'.'+EMBEDDED_ICON_FILES[imgName].type);
+      log.debug("Path: "+path);
+    
+      let byte_buf = ctypes.unsigned_char.array()(EMBEDDED_ICON_FILES[imgName].bin);
+      let hFile = kernel32.CreateFileW(path, kernel32.GENERIC_WRITE, 0, null, kernel32.CREATE_ALWAYS, kernel32.FILE_ATTRIBUTE_NORMAL, null);
+      let written = new win32.DWORD;
+      let status = kernel32.WriteFile(hFile, byte_buf, byte_buf.length, written.address(), null);
+      status = kernel32.CloseHandle(hFile);
+
       let img = this.loadImageFromFile(path);
-      if (img && ICON_CHROME_FILES[imgName].use == 'menu')
+
+      if (img && EMBEDDED_ICON_FILES[imgName].use == 'menu')
         /* Ideally we should rebuild the menu each time it is shown as the menu
          color may change. But let's just consider it's not worth it for
          now. */
         img.himg = this.makeBitMapTransparent(img.himg);
-      if (img)
+      if (img) {
+        log.debug("Img Type: "+img['type']);
+        log.debug("Img hImg: "+img['himg']);
+
         this[this.IMG_TYPES[img['type']]['map']].insert(imgName, img['himg']);
+      }
     }
   },
 
@@ -129,7 +133,7 @@ firetray.StatusIcon = {
     }
     let imgTypeRec = this.IMG_TYPES[imgType];
     let himg = ctypes.cast(
-      user32.LoadImageW(null, path, imgTypeRec['load_const'], 0, 0,
+      user32.LoadImageW(null, path, imgTypeRec['load_const'], 16, 16,
                         user32.LR_LOADFROMFILE|user32.LR_SHARED),
       imgTypeRec['win_t']);
     if (himg.isNull()) {
@@ -173,13 +177,19 @@ firetray.StatusIcon = {
         map.remove(imgName);
       }
     });
+        
+    for (let imgName in EMBEDDED_ICON_FILES) {
+      let path = OS.Path.join(OS.Constants.Path.tmpDir, imgName+'.'+EMBEDDED_ICON_FILES[imgName].type);
+      kernel32.DeleteFileW(path);
+    }
+
     log.debug("Icons destroyed");
   },
 
   create: function() {
     let hwnd_hidden = this.createProxyWindow();
 
-    nid = new shell32.NOTIFYICONDATAW();
+    let nid = new shell32.NOTIFYICONDATAW();
     nid.cbSize = shell32.NOTIFYICONDATAW_SIZE();
     log.debug("SIZE="+nid.cbSize);
     nid.szTip = firetray.Handler.app.name;
@@ -191,7 +201,7 @@ firetray.StatusIcon = {
     nid.uVersion = shell32.NOTIFYICON_VERSION_4;
 
     // Install the icon
-    rv = shell32.Shell_NotifyIconW(shell32.NIM_ADD, nid.address());
+    let rv = shell32.Shell_NotifyIconW(shell32.NIM_ADD, nid.address());
     log.debug("Shell_NotifyIcon ADD="+rv+" winLastError="+ctypes.winLastError); // ERROR_INVALID_WINDOW_HANDLE(1400)
     rv = shell32.Shell_NotifyIconW(shell32.NIM_SETVERSION, nid.address());
     log.debug("Shell_NotifyIcon SETVERSION="+rv+" winLastError="+ctypes.winLastError);
@@ -354,14 +364,36 @@ firetray.StatusIcon = {
   createTextIcon: function(hWnd, text, color) {
     log.debug("createTextIcon hWnd="+hWnd+" text="+text+" color="+color);
 
-    let blank = this.bitmaps.get('blank-icon');
+    let icon = null;
+    let pref = firetray.Utils.prefService.getIntPref("mail_notification_type");
+    switch (pref) {
+      case FIRETRAY_NOTIFICATION_BLANK_ICON:
+        log.debug("setIconText, Name: blank-icon-bmp");
+        icon = this.bitmaps.get('blank-icon-bmp');
+
+        break;
+      case FIRETRAY_NOTIFICATION_NEWMAIL_ICON:
+        log.debug("setIconText, Name: mail-unread-bmp");
+        icon = this.bitmaps.get('mail-unread-bmp');
+
+        break;
+      case FIRETRAY_NOTIFICATION_CUSTOM_ICON:
+        log.debug("setIconText, Name: custom-icon");
+        icon = this.bitmaps.get('mail-custom');
+
+        break;
+     default:
+        log.error("Unknown notification mode: "+pref);
+        return;
+    }
+
     let bitmap = new win32.BITMAP();
-    let err = gdi32.GetObjectW(blank, win32.BITMAP.size, bitmap.address()); // get bitmap info
+    let err = gdi32.GetObjectW(icon, win32.BITMAP.size, bitmap.address()); // get bitmap info
     let width = bitmap.bmWidth, height = bitmap.bmHeight;
 
     let hdc = user32.GetDC(hWnd); // get device context (DC) for hWnd
     let hdcMem = gdi32.CreateCompatibleDC(hdc); // creates a memory device context (DC) compatible with hdc (need a bitmap)
-    let hBitmap = user32.CopyImage(blank, user32.IMAGE_BITMAP, width, height, 0);
+    let hBitmap = user32.CopyImage(icon, user32.IMAGE_BITMAP, width, height, 0);
     let hBitmapMask = gdi32.CreateCompatibleBitmap(hdc, width, height);
     user32.ReleaseDC(hWnd, hdc);
 
@@ -474,6 +506,11 @@ firetray.Handler.setIconImageDefault = function() {
   else if (appIconType === FIRETRAY_APPLICATION_ICON_TYPE_CUSTOM) {
     firetray.StatusIcon.setIcon({hicon:firetray.StatusIcon.getIconSafe('app-custom')});
   }
+};
+
+firetray.Handler.setIconImageBlank = function() {
+  log.debug("setIconImageBlank");
+  firetray.StatusIcon.setIcon({hicon:firetray.StatusIcon.icons.get('blank-icon')});
 };
 
 firetray.Handler.setIconImageNewMail = function() {

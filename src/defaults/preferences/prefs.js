@@ -30,6 +30,7 @@ pref("extensions.firetray.mail_get_attention", true);
 pref("extensions.firetray.nomail_hides_icon", false);
 pref("extensions.firetray.message_count_type", 0);
 pref("extensions.firetray.mail_notification_enabled", true);
+pref("extensions.firetray.mail_unread_count_enabled", true);
 pref("extensions.firetray.mail_notification_type", 0);
 pref("extensions.firetray.icon_text_color", "#000000");
 pref("extensions.firetray.mail_icon_custom", "");
@@ -41,4 +42,4 @@ pref("extensions.firetray.excluded_folders_flags", 1077956384);
 pref("extensions.firetray.mail_accounts", '{ "serverTypes": {"pop3":{"order":1,"excluded":false}, "imap":{"order":1,"excluded":false}, "movemail":{"order":2,"excluded":true}, "none":{"order":3,"excluded":false}, "rss":{"order":4,"excluded":true}, "nntp":{"order":5,"excluded":true}, "exquilla":{"order":6,"excluded":true}}, "excludedAccounts": [] }'); // JSON
 pref("extensions.firetray.only_favorite_folders", false);
 
-pref("extensions.firetray.with_appindicator", false);
+pref("extensions.firetray.with_appindicator", true);

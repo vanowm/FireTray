@@ -22,6 +22,9 @@
 <!ENTITY show_activates.tooltip "恢復的視窗會提至最上層並取得輸入焦點">
 <!ENTITY remember_desktop.label "記憶桌面（各個視窗）">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Use an appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "有視窗隱藏時顯示系統列圖示">
 <!ENTITY show_icon_on_hide.accesskey "W">
 <!ENTITY app_icon_type "程式圖示類型">
@@ -53,6 +56,8 @@
 <!ENTITY mail_notification_type.tooltip "aka. Biff">
 <!ENTITY mail_notification_unread_count.label "顯示新訊息數量">
 <!ENTITY mail_notification_unread_count.accesskey "U">
+<!ENTITY mail_notification_blank_icon.label "顯示空白圖標">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "顯示新郵件圖示">
 <!ENTITY mail_notification_newmail_icon.accesskey "N">
 <!ENTITY mail_notification_mail_icon_custom.label "顯示自訂圖示">

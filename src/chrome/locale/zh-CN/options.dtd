@@ -24,6 +24,9 @@
 <!ENTITY show_activates.tooltip "恢复窗口到顶层并获得焦点">
 <!ENTITY remember_desktop.label "恢复窗口到它原来的桌面">
 <!ENTITY remember_desktop.accesskey "R">
+<!ENTITY use_appindicator_icon.label "Use an appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "仅当有窗口被隐藏时显示托盘图标">
 <!ENTITY show_icon_on_hide.accesskey "w">
 <!ENTITY app_icon_type "应用程序图标类型">
@@ -55,6 +58,8 @@
 <!ENTITY mail_notification_type.tooltip "又名 Biff">
 <!ENTITY mail_notification_unread_count.label "显示新消息数量">
 <!ENTITY mail_notification_unread_count.accesskey "U">
+<!ENTITY mail_notification_blank_icon.label "显示空白图标">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "显示新邮件图标">
 <!ENTITY mail_notification_newmail_icon.accesskey "N">
 <!ENTITY mail_notification_mail_icon_custom.label "显示自定义图标">

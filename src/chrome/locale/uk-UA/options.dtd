@@ -22,6 +22,9 @@
 <!ENTITY show_activates.tooltip "відновлені вікна підняти вгору та показати">
 <!ENTITY remember_desktop.label "Відновити вікна у їх вихідному робочому столі">
 <!ENTITY remember_desktop.accesskey "р">
+<!ENTITY use_appindicator_icon.label "Use an appindicator icon">
+<!ENTITY use_appindicator_icon.accesskey "i">
+
 <!ENTITY show_icon_on_hide.label "Показувати піктограму у треї тільки коли вікно приховане">
 <!ENTITY show_icon_on_hide.accesskey "ї">
 <!ENTITY app_icon_type "Тип значку розширення">
@@ -53,6 +56,8 @@
 <!ENTITY mail_notification_type.tooltip "aka. Biff">
 <!ENTITY mail_notification_unread_count.label "показувати лічильник нових повідомлень">
 <!ENTITY mail_notification_unread_count.accesskey "н">
+<!ENTITY mail_notification_blank_icon.label "показати порожню піктограму">
+<!ENTITY mail_notification_blank_icon.accesskey "b">
 <!ENTITY mail_notification_newmail_icon.label "показувати значок нових повідомлень">
 <!ENTITY mail_notification_newmail_icon.accesskey "з">
 <!ENTITY mail_notification_mail_icon_custom.label "показувати вибраний значок">

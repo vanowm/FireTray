@@ -200,6 +200,8 @@ function gdk23_defines(lib) {
     ctypes.default_abi, this.GdkFilterReturn,
     [this.GdkXEvent.ptr, this.GdkEvent.ptr, gobject.gpointer]).ptr;
 
+  this.GdkPixbufLoader = ctypes.StructType("GdkPixbufLoader");
+
   lib.lazy_bind("gdk_flush", ctypes.void_t);
   lib.lazy_bind("gdk_error_trap_push", ctypes.void_t);
   lib.lazy_bind("gdk_error_trap_pop", gobject.gint);
@@ -228,7 +230,13 @@ function gdk23_defines(lib) {
   lib.lazy_bind("gdk_pixbuf_get_rowstride", ctypes.int, this.GdkPixbuf.ptr);
   lib.lazy_bind("gdk_pixbuf_get_byte_length", gobject.gsize, this.GdkPixbuf.ptr);
   lib.lazy_bind("gdk_pixbuf_copy", this.GdkPixbuf.ptr, this.GdkPixbuf.ptr);
-
+  lib.lazy_bind("gdk_pixbuf_save", gobject.gboolean, this.GdkPixbuf.ptr, gobject.gchar.ptr, gobject.gchar.ptr, glib.GError.ptr.ptr, gobject.gchar.ptr);
+  lib.lazy_bind("gdk_pixbuf_loader_new", this.GdkPixbufLoader.ptr);
+  lib.lazy_bind("gdk_pixbuf_loader_write", gobject.gboolean, this.GdkPixbufLoader.ptr, gobject.guchar.ptr, gobject.gsize, glib.GError.ptr.ptr);
+  lib.lazy_bind("gdk_pixbuf_loader_write_bytes", gobject.gboolean, this.GdkPixbufLoader.ptr, glib.GBytes.ptr, glib.GError.ptr.ptr);
+  lib.lazy_bind("gdk_pixbuf_loader_get_pixbuf", this.GdkPixbuf.ptr, this.GdkPixbufLoader.ptr);
+  lib.lazy_bind("gdk_pixbuf_loader_close", gobject.gboolean, this.GdkPixbufLoader.ptr, glib.GError.ptr.ptr);
+  
   lib.lazy_bind("gdk_screen_get_system_visual", this.GdkVisual.ptr, this.GdkScreen.ptr);
   lib.lazy_bind("gdk_screen_get_system_colormap", this.GdkColormap.ptr, this.GdkScreen.ptr);
   lib.lazy_bind("gdk_colormap_get_visual", this.GdkVisual.ptr, this.GdkColormap.ptr);

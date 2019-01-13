@@ -109,7 +109,6 @@ function gobject_defines(lib) {
   this.GFunc_t = ctypes.FunctionType(
     ctypes.default_abi, ctypes.void_t, [this.gpointer, this.gpointer]).ptr;
 
-  lib.lazy_bind("g_object_unref", ctypes.void_t, this.gpointer);
   lib.lazy_bind("g_signal_connect_data", this.gulong, this.gpointer, this.gchar.ptr, this.GCallback, this.gpointer, this.GClosureNotify, this.GConnectFlags);
 
   this.g_signal_connect = function(instance, detailed_signal, handler, data) {
@@ -120,6 +119,7 @@ function gobject_defines(lib) {
   };
 
   lib.lazy_bind("g_free", ctypes.void_t, this.gpointer);
+  lib.lazy_bind("g_object_ref", this.gpointer, this.gpointer);
   lib.lazy_bind("g_object_unref", ctypes.void_t, this.gpointer);
   lib.lazy_bind("g_list_free", ctypes.void_t, this.GList.ptr);
   lib.lazy_bind("g_list_length", this.guint, this.GList.ptr);

@@ -7,16 +7,18 @@ const Ci = Components.interfaces;
 const Cu = Components.utils;
 
 Cu.import("resource://gre/modules/ctypes.jsm");
+Cu.import("resource://gre/modules/osfile.jsm");
 Cu.import("resource://firetray/commons.js"); // first for Handler.app !
-Cu.import("resource://firetray/ctypes/linux/cairo.jsm");
-Cu.import("resource://firetray/ctypes/linux/gio.jsm");
+Cu.import("resource://firetray/icons.jsm");
 Cu.import("resource://firetray/ctypes/linux/gobject.jsm");
 Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gdk.jsm");
 Cu.import("resource://firetray/ctypes/linux/"+firetray.Handler.app.widgetTk+"/gtk.jsm");
+Cu.import("resource://firetray/ctypes/linux/cairo.jsm");
+Cu.import("resource://firetray/ctypes/linux/gio.jsm");
 Cu.import("resource://firetray/ctypes/linux/pango.jsm");
 Cu.import("resource://firetray/ctypes/linux/pangocairo.jsm");
 Cu.import("resource://firetray/linux/FiretrayGtkIcons.jsm");
-firetray.Handler.subscribeLibsForClosing([cairo, gdk, gio, gobject, gtk, pango,
+firetray.Handler.subscribeLibsForClosing([gobject, gdk, gtk, cairo, gio, pango,
   pangocairo]);
 
 let log = firetray.Logging.getLogger("firetray.GtkStatusIcon");
@@ -27,8 +29,7 @@ if ("undefined" == typeof(firetray.Handler))
 
 firetray.GtkStatusIcon = {
   MIN_FONT_SIZE: 4,
-  FILENAME_BLANK: null,
-  GTK_THEME_ICON_PATH: null,
+  tempfile: null,
 
   initialized: false,
   callbacks: {},
@@ -37,8 +38,7 @@ firetray.GtkStatusIcon = {
   themedIconNewMail: null,
 
   init: function() {
-    this.FILENAME_BLANK = firetray.Utils.chromeToPath(
-      "chrome://firetray/skin/icons/blank-icon.png");
+    this.tempfile = OS.Path.join( OS.Constants.Path.tmpDir, 'thunderbird-unread.png' );
 
     firetray.GtkIcons.init();
     this.loadThemedIcons();
@@ -198,6 +198,24 @@ firetray.Handler.setIconImageDefault = function() {
   }
 };
 
+firetray.Handler.setIconImageBlank = function() {
+  log.debug("setIconImageBlank");
+  let byte_buf = gobject.guchar.array()(EMBEDDED_ICON_FILES['blank-icon'].bin);
+  let loader = gdk.gdk_pixbuf_loader_new();
+  if (loader != null) {
+    gdk.gdk_pixbuf_loader_write(loader,byte_buf,byte_buf.length,null);
+    gdk.gdk_pixbuf_loader_close(loader,null);
+    let dest = gdk.gdk_pixbuf_loader_get_pixbuf(loader);
+    if (dest != null) {
+      gtk.gtk_status_icon_set_from_pixbuf(firetray.GtkStatusIcon.trayIcon, dest);
+     } else {
+      firetray.Handler.setIconImageDefault();     
+    }
+  } else {
+      firetray.Handler.setIconImageDefault();    
+  }
+};
+
 firetray.Handler.setIconImageNewMail = function() {
   firetray.GtkStatusIcon.setIconImageFromGIcon(
     firetray.GtkStatusIcon.themedIconNewMail);
@@ -227,12 +245,51 @@ firetray.Handler.setIconText = function(text, color) {
     throw new TypeError();
 
   try {
-    // build background from image
-    let specialIcon = gdk.gdk_pixbuf_new_from_file(
-      firetray.GtkStatusIcon.FILENAME_BLANK, null); // GError **error);
-    let dest = gdk.gdk_pixbuf_copy(specialIcon);
-    let w = gdk.gdk_pixbuf_get_width(specialIcon);
-    let h = gdk.gdk_pixbuf_get_height(specialIcon);
+    let dest = null;
+    let pref = firetray.Utils.prefService.getIntPref("mail_notification_type");
+    switch (pref) {
+      case FIRETRAY_NOTIFICATION_BLANK_ICON:
+        log.debug("setIconText, Name: blank-icon");
+
+        let byte_buf = gobject.guchar.array()(EMBEDDED_ICON_FILES['blank-icon'].bin);
+        let loader = gdk.gdk_pixbuf_loader_new();
+        gdk.gdk_pixbuf_loader_write(loader,byte_buf,byte_buf.length,null);
+        gdk.gdk_pixbuf_loader_close(loader,null);
+        dest = gdk.gdk_pixbuf_loader_get_pixbuf(loader);
+        
+        break;
+      case FIRETRAY_NOTIFICATION_NEWMAIL_ICON:
+        log.debug("setIconText, Name: " + firetray.StatusIcon.defaultNewMailIconName);
+       
+        let icon_theme = gtk.gtk_icon_theme_get_for_screen(gdk.gdk_screen_get_default());
+        let arry = gobject.gchar.ptr.array()(2);
+        arry[0] = gobject.gchar.array()(firetray.StatusIcon.defaultNewMailIconName);
+        arry[1] = null;
+        let icon_info = gtk.gtk_icon_theme_choose_icon(icon_theme, arry, 22, gtk.GTK_ICON_LOOKUP_FORCE_SIZE);
+        dest = gdk.gdk_pixbuf_copy(gtk.gtk_icon_info_load_icon(icon_info, null));
+
+        break;
+      case FIRETRAY_NOTIFICATION_CUSTOM_ICON:
+        log.debug("setIconText, Name: custom-icon");
+
+        let custom_icon = firetray.Utils.prefService.getCharPref("mail_icon_custom");
+        log.debug("setIconText, Custom path: "+custom_icon);
+
+        dest = gdk.gdk_pixbuf_new_from_file(custom_icon,null);
+
+        break;
+     default:
+        log.error("Unknown notification mode: "+pref);
+        return;
+    }
+ 
+    if (dest == null) {
+      log.error("Cannot load icon");
+      return;
+    }
+
+    let w = gdk.gdk_pixbuf_get_width(dest);
+    let h = gdk.gdk_pixbuf_get_height(dest);
 
     // prepare colors/alpha
 /* FIXME: draw everything with cairo when dropping gtk2 support. Use
