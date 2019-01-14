@@ -221,8 +221,14 @@ firetray.StatusIcon = {
     log.debug("CreateWindow="+!hwnd_hidden.isNull()+" winLastError="+ctypes.winLastError);
 
     this.callbacks.proxyWndProc = user32.WNDPROC(firetray.StatusIcon.proxyWndProc);
-    let procPrev = user32.SetWindowLongW(hwnd_hidden, user32.GWLP_WNDPROC,
-      ctypes.cast(this.callbacks.proxyWndProc, win32.LONG_PTR));
+    let procPrev;
+    if (firetray.Handler.app.ABI == "x86_64-msvc") {
+      procPrev = user32.SetWindowLongPtrW(hwnd_hidden, user32.GWLP_WNDPROC,
+                      ctypes.cast(this.callbacks.proxyWndProc, win32.LONG_PTR));
+    } else {
+      procPrev = user32.SetWindowLongW(hwnd_hidden, user32.GWLP_WNDPROC,
+                      ctypes.cast(this.callbacks.proxyWndProc, win32.LONG_PTR));
+    }
     log.debug("procPrev="+procPrev+" winLastError="+ctypes.winLastError);
 
     firetray.Win32.acceptAllMessages(hwnd_hidden);
@@ -241,7 +247,7 @@ firetray.StatusIcon = {
   },
 
   proxyWndProc: function(hWnd, uMsg, wParam, lParam) {
-    // log.debug("ProxyWindowProc CALLED: hWnd="+hWnd+", uMsg="+uMsg+", wParam="+wParam+", lParam="+lParam);
+    log.debug("ProxyWindowProc CALLED: hWnd="+hWnd+", uMsg="+uMsg+", wParam="+wParam+", lParam="+lParam);
 
     // FIXME: WM_TASKBARCREATED is needed in case of explorer crash
     // http://twigstechtips.blogspot.fr/2011/02/c-detect-when-windows-explorer-has.html

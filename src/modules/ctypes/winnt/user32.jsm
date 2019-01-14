@@ -75,6 +75,10 @@ function user32_defines(lib) {
   lib.lazy_bind("SetWindowLongW", win32.LONG_PTR , win32.HWND, ctypes.int, win32.LONG_PTR);
   // SetWindowLongPtrW aliases SetWindowLongW with the correct signature thank
   // win32.LONG_PTR
+  //
+  // x86_64 needs GetWindowLongPtrW instead of SetWindowLongW
+  lib.lazy_bind("GetWindowLongPtrW", win32.LONG_PTR, win32.HWND, ctypes.int);
+  lib.lazy_bind("SetWindowLongPtrW", win32.LONG_PTR, win32.HWND, ctypes.int, win32.LONG_PTR);
   this.GWLP_WNDPROC   = -4;
   this.GWLP_HINSTANCE = -6;
   this.GWLP_ID        = -12;
@@ -98,6 +102,9 @@ function user32_defines(lib) {
 
   lib.lazy_bind("CallWindowProcW", win32.LRESULT, this.WNDPROC, win32.HWND, win32.UINT, win32.WPARAM, win32.LPARAM);
   lib.lazy_bind("DefWindowProcW", win32.LRESULT, win32.HWND, win32.UINT, win32.WPARAM, win32.LPARAM);
+
+  lib.lazy_bind("CallWindowProc", win32.LRESULT, this.WNDPROC, win32.HWND, win32.UINT, win32.WPARAM, win32.LPARAM);
+  lib.lazy_bind("DefWindowProc", win32.LRESULT, win32.HWND, win32.UINT, win32.WPARAM, win32.LPARAM);
 
   this.WNDCLASSEXW = ctypes.StructType("WNDCLASSEXW", [
     { "cbSize": win32.UINT },
