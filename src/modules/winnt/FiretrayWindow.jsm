@@ -43,7 +43,12 @@ firetray.Window.shutdown = function() {
 
 firetray.Window.getVisibility = function(wid) {
   let hwnd = firetray.Win32.hexStrToHwnd(wid);
-  let style = user32.GetWindowLongW(hwnd, user32.GWL_STYLE);
+  let style;
+  if (firetray.Handler.app.ABI == "x86_64-msvc") {
+    style = user32.GetWindowLongPtrW(hwnd, user32.GWL_STYLE);
+  } else {
+    style = user32.GetWindowLongW(hwnd, user32.GWL_STYLE);
+  }
   return ((style & user32.WS_VISIBLE) != 0); // user32.IsWindowVisible(hwnd);
 };
 
