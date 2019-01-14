@@ -53,3 +53,8 @@ To install icons on Kubuntu:
 	cp ./src/chrome/skin/icons/unread/*.svg /usr/share/icons/breeze/actions/16/
 	cp ./src/chrome/skin/icons/unread/*.svg /usr/share/icons/breeze/actions/22/
 	cp ./src/chrome/skin/icons/unread/*.svg /usr/share/icons/breeze/actions/24/
+
+## Donations
+To support this project, you can make a donation to its current maintainer:  
+
+[![paypal](https://github.com/Ximi1970/Donate/blob/master/paypal_btn_donateCC_LG_1.gif)](https://paypal.me/Ximi1970)
