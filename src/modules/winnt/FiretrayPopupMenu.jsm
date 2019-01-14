@@ -145,11 +145,26 @@ firetray.PopupMenu = {
     }
 
     switch (itemId) {
-    case IDM_PREF: firetray.Handler.openPrefWindow(); break;
-    case IDM_QUIT: firetray.Handler.quitApplication(); break;
-    case IDM_NEW_MSG: firetray.Handler.openMailMessage(); break;
-    case IDM_NEW_WND: firetray.Handler.openBrowserWindow(); break;
-    case IDM_RESET: firetray.Handler.setIconImageDefault(); break;
+    case IDM_PREF:
+      log.debug("IDM_PREF");
+      firetray.Handler.openPrefWindow();
+      break;
+    case IDM_QUIT:
+      log.debug("IDM_QUIT");
+      firetray.Handler.quitApplication();
+      break;
+    case IDM_NEW_MSG:
+      log.debug("IDM_NEW_MSG");
+      firetray.Handler.openMailMessage();
+      break;
+    case IDM_NEW_WND:
+      log.debug("IDM_NEW_WND");
+      firetray.Handler.openBrowserWindow();
+      break;
+    case IDM_RESET:
+      log.debug("IDM_RESET");
+      firetray.Handler.setIconImageDefault();
+      break;
     default:
       log.error("no action for itemId ("+itemId+")");
     }
