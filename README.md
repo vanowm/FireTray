@@ -5,8 +5,9 @@ New releases have been tested with:
 
 Working:
 
-Windows 10 x64, Thunderbird win32 52.9.1 and 60.0  
-openSuSE Leap 15.0, KDE, Thunderbird 52.9.1 and 60.0  
+Windows 10 x64, Thunderbird win32 52.9.1 and 60.4.0  
+Windows 10 x64, Thunderbird win64 52.9.1 and 60.4.0  
+openSuSE Leap 15.0, KDE, Thunderbird 52.9.1 and 60.3.0  
 
 Linux Mint 18.3 Sylvia  
 Linux Mint 19 Tara and Thunderbird 60.2.1  
@@ -19,7 +20,6 @@ Thank you for testing !!!
 
 Not working:  
 
-Windows 10 x64, Thunderbird win64 60.* (icon visibible but no menu, no show/hide on click)  
 (K)ubuntu 16.04, Thunderbird (very small icon with GTK)  
 
 

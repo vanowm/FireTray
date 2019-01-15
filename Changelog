@@ -1,9 +1,8 @@
--- 0.6.5 - ? Jan 2019
+-- 0.6.5 - 15 Jan 2019
 
 - Make foreground restore for Windows optional, just like Linux.
   (Settings->Windows->Activate restored windows)
-
-  
+- Fix add-on for win64
 
 -- 0.6.4 - 13 Jan 2019
 
