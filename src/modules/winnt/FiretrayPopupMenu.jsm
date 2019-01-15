@@ -144,7 +144,7 @@ firetray.PopupMenu = {
       return;
     }
 
-    switch (itemId) {
+    switch (win32.LOWORD(itemId)) {
     case IDM_PREF:
       log.debug("IDM_PREF");
       firetray.Handler.openPrefWindow();
