@@ -522,9 +522,15 @@ firetray.Handler = {
 
   prefsDisable: [
     {cond: function(){return firetray.Handler.inBrowserApp;},
-     branch: "browser.tabs.", pref: "warnOnClose", bak:null},
+     branch: "browser.tabs.", pref: "warnOnClose", bak:null}
+/*
+  Why do we need disable new email tray icon?
+  Users can disable it themselves if so desired
+*/
+/*
     {cond: function(){return firetray.Handler.inMailApp;},
      branch: "mail.biff.", pref: "show_tray_icon", bak:null}
+*/
   ],
   disablePrefsTmp: function() {
     this.prefsDisable.forEach(function(pref){
